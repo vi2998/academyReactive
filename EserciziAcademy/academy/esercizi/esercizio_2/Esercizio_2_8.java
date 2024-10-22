@@ -1,4 +1,4 @@
-package academy.esercizi;
+package academy.esercizi.esercizio_2;
 
 import java.util.Random;
 
