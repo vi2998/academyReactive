@@ -4,6 +4,9 @@ import java.util.Scanner;
 
 public class Esercizio_9_1 {
     public static void main(String[] args) {
+
+        // In questo esercizio non avevamo ancora fatto i BigDecimal
+
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Inserire nazionalità italiana o americana:");
