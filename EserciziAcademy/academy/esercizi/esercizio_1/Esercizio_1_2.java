@@ -7,12 +7,12 @@ public class Esercizio_1_2 {
         */
 
         double saldo = 1000;
-        double interesse = 0.05;
+        final double INTERESSE = 0.05;
         int anni = 3;
 
         System.out.print("Saldo attuale: " + saldo + "\n");
         for (int i = 1; i <= anni; i++){
-            saldo += saldo * interesse;
+            saldo += saldo * INTERESSE;
             System.out.printf("Saldo dopo il %d sarà: %.2f \n", anni, saldo);
         }
 

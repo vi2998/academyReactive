@@ -3,13 +3,17 @@ package academy.esercizi.esercizio_2;
 import java.util.Random;
 
 public class Esercizio_2_8 {
+    // Costanti
+    public static final int MESCOLA_DADO = 1000;
+    public static final int NUM_FACCE = 6;
+
     public static void main(String[] args) {
-        int[] facceDado = new int[6];
+        int[] facceDado = new int[NUM_FACCE]; // Usa la costante NUM_FACCE
 
         Random random = new Random();
 
-        for (int i = 0; i < 1000; i++) {
-            int lancio = random.nextInt(6) + 1;
+        for (int i = 0; i < MESCOLA_DADO; i++) { // Usa la costante MESCOLA_DADO
+            int lancio = random.nextInt(NUM_FACCE) + 1; // Usa la costante NUM_FACCE
             facceDado[lancio - 1]++;
         }
 
