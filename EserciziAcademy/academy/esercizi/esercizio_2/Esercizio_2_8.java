@@ -8,12 +8,12 @@ public class Esercizio_2_8 {
     public static final int NUM_FACCE = 6;
 
     public static void main(String[] args) {
-        int[] facceDado = new int[NUM_FACCE]; // Usa la costante NUM_FACCE
+        int[] facceDado = new int[NUM_FACCE];
 
         Random random = new Random();
 
-        for (int i = 0; i < MESCOLA_DADO; i++) { // Usa la costante MESCOLA_DADO
-            int lancio = random.nextInt(NUM_FACCE) + 1; // Usa la costante NUM_FACCE
+        for (int i = 0; i < MESCOLA_DADO; i++) {
+            int lancio = random.nextInt(NUM_FACCE) + 1;
             facceDado[lancio - 1]++;
         }
 
