@@ -15,7 +15,7 @@ public class Esercizio_2_6 {
 
         numeriRandom[numeriRandom.length - 1] = 0;
 
-        System.out.print("\nArray dopo la rimozione dell'elemento in posizione 4: ");
+        System.out.print("\nArray dopo la rimozione dell'elemento in posizione 4: \n");
         for (int valore : numeriRandom) {
             System.out.print(valore + " ");
         }
