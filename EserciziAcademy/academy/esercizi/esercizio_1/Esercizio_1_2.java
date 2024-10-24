@@ -13,7 +13,7 @@ public class Esercizio_1_2 {
         System.out.print("Saldo attuale: " + saldo + "\n");
         for (int i = 1; i <= anni; i++){
             saldo += saldo * INTERESSE;
-            System.out.printf("Saldo dopo il %d sarà: %.2f \n", anni, saldo);
+            System.out.printf("Saldo dopo il %d sarà: %.2f \n", i, saldo);
         }
 
     }
