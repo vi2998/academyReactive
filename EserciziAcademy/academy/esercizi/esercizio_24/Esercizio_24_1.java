@@ -24,8 +24,8 @@ public class Esercizio_24_1 {
         while (numeroBiglieTotali > 1) {
             if (turnoGiocatore) { // turno utente
                 System.out.println("Quante biglie vuoi prelevare? (1 - " + numeroBiglieTotali / 2 + ")");
-                int bigliePrelevate = scanner.nextInt(); // numero valido: compreso tra 1 e n/2
-                if (bigliePrelevate >= 1 && bigliePrelevate <= numeroBiglieTotali / 2) {
+                int bigliePrelevate = scanner.nextInt();
+                if (bigliePrelevate >= 1 && bigliePrelevate <= numeroBiglieTotali / 2) {  // numero valido: compreso tra 1 e n/2
                     numeroBiglieTotali -= bigliePrelevate;
                     System.out.println("Hai preso " + bigliePrelevate + " biglie. Rimangono " + numeroBiglieTotali + " biglie.");
                     turnoGiocatore = false; // cambia turno
