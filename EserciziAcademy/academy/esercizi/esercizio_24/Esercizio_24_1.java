@@ -11,42 +11,46 @@ public class Esercizio_24_1 {
         // Generazione del mucchietto: tra 10 e 100.
         int numeroBiglieTotali = random.nextInt(91) + 10;
 
-        // Decide chi inizia: 0 per il giocatore, 1 per il computer.
-        boolean turnoGiocatore = random.nextInt(2) == 0; // true: giocatore - false: pc
+        // Decide chi inizia: PC o UTENTE.
+        Turno turnoGiocatore = random.nextInt(2) == 0 ? Turno.UTENTE : Turno.PC;
 
-        // Decide se il computer giocherà in modo intelligente o stupido.
-        boolean modalitaGiocoPc = random.nextInt(2) == 0; // true: "modalità stupida" - false: "modalità intelligente"
+        // Decide la difficoltà del computer: STUPIDA o INTELLIGENTE.
+        DifficoltaPc difficoltaPc = random.nextInt(2) == 0 ? DifficoltaPc.STUPIDA : DifficoltaPc.INTELLIGENTE;
 
         System.out.println("Gioco di Nim");
         System.out.println("--------");
         System.out.println("Biglie iniziali: " + numeroBiglieTotali);
 
-        while (numeroBiglieTotali > 1) {
-            if (turnoGiocatore) { // turno utente
+        do {
+            if (turnoGiocatore == Turno.UTENTE) { // turno utente
                 System.out.println("Quante biglie vuoi prelevare? (1 - " + numeroBiglieTotali / 2 + ")");
                 int bigliePrelevate = scanner.nextInt();
-                if (bigliePrelevate >= 1 && bigliePrelevate <= numeroBiglieTotali / 2) {  // numero valido: compreso tra 1 e n/2
+                if (bigliePrelevate >= 1 && bigliePrelevate <= numeroBiglieTotali / 2) { // numero valido: compreso tra 1 e n/2
                     numeroBiglieTotali -= bigliePrelevate;
                     System.out.println("Hai preso " + bigliePrelevate + " biglie. Rimangono " + numeroBiglieTotali + " biglie.");
-                    turnoGiocatore = false; // cambia turno
+                    turnoGiocatore = Turno.PC; // cambia turno
                 } else {
                     System.out.println("Numero non valido. Riprova.");
                 }
             } else { // turno PC
                 int bigliePrelevate;
-                if (modalitaGiocoPc) { // modalità stupida
+                if (difficoltaPc == DifficoltaPc.STUPIDA) { // modalità stupida
                     bigliePrelevate = modalitaStupida(numeroBiglieTotali);
                 } else { // modalità intelligente
                     bigliePrelevate = modalitaIntelligente(numeroBiglieTotali);
+                    // Se non ci sono mosse intelligenti, gioca in modo stupido
+                    if (bigliePrelevate == -1) {
+                        bigliePrelevate = modalitaStupida(numeroBiglieTotali);
+                    }
                 }
                 numeroBiglieTotali -= bigliePrelevate;
                 System.out.println("Il computer ha preso " + bigliePrelevate + " biglie. Rimangono " + numeroBiglieTotali + " biglie.");
-                turnoGiocatore = true; // cambia turno
+                turnoGiocatore = Turno.UTENTE; // cambia turno
             }
-        }
+        } while (numeroBiglieTotali > 1);
 
         // Vincitore
-        if (!turnoGiocatore) {
+        if (turnoGiocatore == Turno.PC) {
             System.out.println("Il computer ha preso l'ultima biglia. Hai vinto!");
         } else {
             System.out.println("Hai preso l'ultima biglia. Il computer ha vinto!");
@@ -54,7 +58,11 @@ public class Esercizio_24_1 {
     }
 
     private static int modalitaStupida(int biglieTotali) {
-        return new Random().nextInt(Math.min(biglieTotali / 2, biglieTotali - 1)) + 1;
+        // Limite massimo per le biglie che possono essere prelevate. (biglieTotali - 1) per lasciare almeno 1 biglia da prelevare.
+        // Uso il .min che assicura che non si possa prelevar più della metà delle biglie e che ci sia sempre almeno una biglia rimanente.
+        int massimoPrelevabile = Math.min(biglieTotali / 2, biglieTotali - 1);
+        int bigliePrelevate = new Random().nextInt(massimoPrelevabile) + 1; // numero tra 1 e il massimo prelevabile
+        return bigliePrelevate;
     }
 
     private static int modalitaIntelligente(int biglieTotali) {
