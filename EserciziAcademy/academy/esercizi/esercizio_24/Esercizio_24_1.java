@@ -35,12 +35,9 @@ public class Esercizio_24_1 {
             } else { // turno PC
                 int bigliePrelevate;
                 if (modalitaGiocoPc) { // modalità stupida
-                    bigliePrelevate = random.nextInt(Math.min(numeroBiglieTotali / 2, numeroBiglieTotali - 1)) + 1;
+                    bigliePrelevate = modalitaStupida(numeroBiglieTotali);
                 } else { // modalità intelligente
                     bigliePrelevate = modalitaIntelligente(numeroBiglieTotali);
-                    if (bigliePrelevate == -1 || (numeroBiglieTotali == 3 || numeroBiglieTotali == 7 || numeroBiglieTotali == 15 || numeroBiglieTotali == 31 || numeroBiglieTotali == 63)) {
-                        bigliePrelevate = random.nextInt(Math.min(numeroBiglieTotali / 2, numeroBiglieTotali - 1)) + 1;
-                    }
                 }
                 numeroBiglieTotali -= bigliePrelevate;
                 System.out.println("Il computer ha preso " + bigliePrelevate + " biglie. Rimangono " + numeroBiglieTotali + " biglie.");
@@ -54,6 +51,10 @@ public class Esercizio_24_1 {
         } else {
             System.out.println("Hai preso l'ultima biglia. Il computer ha vinto!");
         }
+    }
+
+    private static int modalitaStupida(int biglieTotali) {
+        return new Random().nextInt(Math.min(biglieTotali / 2, biglieTotali - 1)) + 1;
     }
 
     private static int modalitaIntelligente(int biglieTotali) {
