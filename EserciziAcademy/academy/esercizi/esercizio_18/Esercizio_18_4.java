@@ -7,7 +7,7 @@ public class Esercizio_18_4 {
     public static void main(String[] args) {
         System.out.println("Inserire saldo conto corrente:");
         Scanner scanner = new Scanner(System.in);
-        ContoCorrente saldoCCorrente = new ContoCorrente(scanner.nextInt());
+        Conto saldoCCorrente = new Conto(scanner.nextInt());
         System.out.println("Hai un saldo sul conto corrente di: " + saldoCCorrente.getSaldo());
         System.out.println("----------------------------------------");
         System.out.println("Inserire saldo conto risparmio:");

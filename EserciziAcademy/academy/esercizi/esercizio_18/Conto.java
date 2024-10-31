@@ -2,10 +2,10 @@ package academy.esercizi.esercizio_18;
 
 import java.math.BigDecimal;
 
-public class ContoCorrente {
+public class Conto {
     private BigDecimal saldo;
 
-    public ContoCorrente(int saldo) {
+    public Conto(int saldo) {
         if (saldo < 0) {
             System.out.println("Saldo non valido. Sono accettati solo valori positivi");
         } else {
@@ -29,7 +29,7 @@ public class ContoCorrente {
         }
     }
 
-    public void bonifico(BigDecimal soldiDaTrasferire, ContoRisparmio contoDestinazione) {
+    public void bonifico(BigDecimal soldiDaTrasferire, Conto contoDestinazione) {
         if (saldo.compareTo(soldiDaTrasferire) >= 0) {
             saldo = saldo.subtract(soldiDaTrasferire);
             contoDestinazione.versamento(soldiDaTrasferire);
