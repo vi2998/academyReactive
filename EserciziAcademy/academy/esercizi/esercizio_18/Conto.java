@@ -32,7 +32,7 @@ public class Conto {
     public void bonifico(BigDecimal soldiDaTrasferire, Conto contoDestinazione) {
         if (saldo.compareTo(soldiDaTrasferire) >= 0) {
             saldo = saldo.subtract(soldiDaTrasferire);
-            contoDestinazione.versamento(soldiDaTrasferire);
+            contoDestinazione.saldo = contoDestinazione.saldo.add(soldiDaTrasferire);
             System.out.println("Bonifico di " + soldiDaTrasferire + " effettuato al conto risparmio.");
         } else {
             System.out.println("Operazione non valida. Il saldo non può essere negativo");
