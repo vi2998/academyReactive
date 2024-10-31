@@ -24,7 +24,7 @@ public class Esercizio_25_3 {
        final int[] VALORE_ATTUALE = {1, 7, 2, 9};
        final int[] COMBINAZIONE_CORRETTA = {5, 7, 1, 4};
         stampaValoreAttuale(VALORE_ATTUALE);
-        stampaCombinazioneCooretta(COMBINAZIONE_CORRETTA);
+        stampaCombinazioneCorretta(COMBINAZIONE_CORRETTA);
         rotazioneAnelli(VALORE_ATTUALE, COMBINAZIONE_CORRETTA);
     }
 
@@ -60,7 +60,7 @@ public class Esercizio_25_3 {
         System.out.println();
     }
 
-    private static void stampaCombinazioneCooretta(int[] combinazioneCorretta) {
+    private static void stampaCombinazioneCorretta(int[] combinazioneCorretta) {
         for (int i = 0; i < combinazioneCorretta.length; i++) {
             System.out.print(combinazioneCorretta[i]);
         }
