@@ -29,9 +29,11 @@ public class ContoCorrente {
         }
     }
 
-    public void bonifico(BigDecimal soldiDaTrasferire) {
+    public void bonifico(BigDecimal soldiDaTrasferire, ContoRisparmio contoDestinazione) {
         if (saldo.compareTo(soldiDaTrasferire) >= 0) {
-            saldo = saldo.subtract(soldiDaTrasferire); // Sottrai l'importo dal saldo
+            saldo = saldo.subtract(soldiDaTrasferire);
+            contoDestinazione.versamento(soldiDaTrasferire);
+            System.out.println("Bonifico di " + soldiDaTrasferire + " effettuato al conto risparmio.");
         } else {
             System.out.println("Operazione non valida. Il saldo non può essere negativo");
         }
