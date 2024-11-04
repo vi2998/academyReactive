@@ -21,37 +21,37 @@ public class Esercizio_25_3 {
      */
 
     public static void main(String[] args) {
-       final int[] VALORE_ATTUALE = {1, 7, 2, 9};
-       final int[] COMBINAZIONE_CORRETTA = {5, 7, 1, 4};
+        final int[] VALORE_ATTUALE = {1, 7, 2, 9};
+        final int[] COMBINAZIONE_CORRETTA = {5, 7, 1, 4};
         stampaValoreAttuale(VALORE_ATTUALE);
         stampaCombinazioneCorretta(COMBINAZIONE_CORRETTA);
         rotazioneAnelli(VALORE_ATTUALE, COMBINAZIONE_CORRETTA);
     }
 
     private static void rotazioneAnelli(int[] valoreAttuale, int[] combinazioneCorretta) {
-        int rotazioni = 0;
-        int anello = 1;
-        String verso = "";
+        for (int i = 0; i < combinazioneCorretta.length; i++) {
+            int twistUp = ((combinazioneCorretta[i] - valoreAttuale[i] + 10) % 10);
+            int twistDown = ((valoreAttuale[i] - combinazioneCorretta[i] + 10) % 10);
 
-
-        for (int i = 0; i < valoreAttuale.length; i++) {
-            while (valoreAttuale[i] < combinazioneCorretta[i]) {
-                valoreAttuale[i]++;
-                rotazioni++;
-                verso = "orario";
+            if (twistUp < twistDown) {
+                if (twistUp == 1) {
+                    System.out.println("Ring " + (i + 1) + " Twist Up once");
+                } else {
+                    System.out.println("Ring " + (i + 1) + " Twist Up " + twistUp + " times");
+                }
+            } else if (twistUp == 0 && twistDown == 0) {
+                System.out.println("Ring " + (i + 1) + " no twist");
+            } else{
+                if (twistDown == 1) {
+                    System.out.println("Ring " + (i + 1) + " Twist Down once");
+                } else {
+                    System.out.println("Ring " + (i + 1) + " Twist Down " + twistDown + " times");
+                }
             }
-            while (valoreAttuale[i] > combinazioneCorretta[i]) {
-                valoreAttuale[i]--;
-                rotazioni++;
-                verso = "antiorario";
-            }
-            System.out.println(new StringBuilder().append("Anello ").append(anello).append(" ruotato ").append(rotazioni).append(" volte").append(" con il verso: ").append(verso).toString());
-            anello++;
-            rotazioni = 0;
         }
-
-
     }
+
+
 
     private static void stampaValoreAttuale(int[] valoreAttuale) {
         for (int i = 0; i < valoreAttuale.length; i++) {
