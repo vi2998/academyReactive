@@ -17,9 +17,14 @@ public class Esercizio_24_1 {
         // Decide la difficoltà del computer: STUPIDA o INTELLIGENTE.
         DifficoltaPc difficoltaPc = random.nextInt(2) == 0 ? DifficoltaPc.STUPIDA : DifficoltaPc.INTELLIGENTE;
 
+//        difficoltaPc = difficoltaPc.INTELLIGENTE;  // riga di test per sola mod intelligente
+//        turnoGiocatore = Turno.PC; // test per turno pc
+
+
         System.out.println("Gioco di Nim");
         System.out.println("--------");
         System.out.println("Biglie iniziali: " + numeroBiglieTotali);
+        System.out.println(difficoltaPc);
 
         do {
             if (turnoGiocatore == Turno.UTENTE) { // turno utente
@@ -34,7 +39,7 @@ public class Esercizio_24_1 {
                 }
             } else { // turno PC
                 int bigliePrelevate;
-                if (difficoltaPc == DifficoltaPc.STUPIDA) { // modalità stupida
+                if (difficoltaPc == DifficoltaPc.STUPIDA) { 
                     bigliePrelevate = modalitaStupida(numeroBiglieTotali);
                 } else { // modalità intelligente
                     bigliePrelevate = modalitaIntelligente(numeroBiglieTotali);
@@ -49,7 +54,6 @@ public class Esercizio_24_1 {
             }
         } while (numeroBiglieTotali > 1);
 
-        // Vincitore
         if (turnoGiocatore == Turno.PC) {
             System.out.println("Il computer ha preso l'ultima biglia. Hai vinto!");
         } else {
@@ -61,18 +65,20 @@ public class Esercizio_24_1 {
         // Limite massimo per le biglie che possono essere prelevate. (biglieTotali - 1) per lasciare almeno 1 biglia da prelevare.
         // Uso il .min che assicura che non si possa prelevar più della metà delle biglie e che ci sia sempre almeno una biglia rimanente.
         int massimoPrelevabile = Math.min(biglieTotali / 2, biglieTotali - 1);
-        int bigliePrelevate = new Random().nextInt(massimoPrelevabile) + 1; // numero tra 1 e il massimo prelevabile
+        int bigliePrelevate = new Random().nextInt(massimoPrelevabile) + 1;
         return bigliePrelevate;
     }
 
     private static int modalitaIntelligente(int biglieTotali) {
-        int[] potenzeMeno1 = {3, 7, 15, 31, 63};
+        int[] potenzeMeno1 = {63, 31, 15, 7, 3};
 
         for (int dimensioni : potenzeMeno1) {
-            if (biglieTotali > dimensioni) {
-                return biglieTotali - dimensioni; // restituisce il numero di biglie da prendere
+            if (biglieTotali  > dimensioni){
+                return biglieTotali - dimensioni;
+            } else if (biglieTotali == dimensioni) {
+               return modalitaStupida(biglieTotali);
             }
         }
-        return -1; // impossibilità di effettuare mossa intelligente
+        return -1;
     }
 }
