@@ -39,7 +39,7 @@ public class Esercizio_24_1 {
                 }
             } else { // turno PC
                 int bigliePrelevate;
-                if (difficoltaPc == DifficoltaPc.STUPIDA) { 
+                if (difficoltaPc == DifficoltaPc.STUPIDA) {
                     bigliePrelevate = modalitaStupida(numeroBiglieTotali);
                 } else { // modalità intelligente
                     bigliePrelevate = modalitaIntelligente(numeroBiglieTotali);
@@ -54,6 +54,7 @@ public class Esercizio_24_1 {
             }
         } while (numeroBiglieTotali > 1);
 
+        
         if (turnoGiocatore == Turno.PC) {
             System.out.println("Il computer ha preso l'ultima biglia. Hai vinto!");
         } else {
