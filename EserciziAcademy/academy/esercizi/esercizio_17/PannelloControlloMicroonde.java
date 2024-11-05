@@ -1,9 +1,7 @@
 package academy.esercizi.esercizio_17;
 
 public class PannelloControlloMicroonde {
-    //TODO RIORDINARE CLASSE!!
-    /*    TODO PULSANTE per cambiare il livello di potenza (che può avere i valori 1 o 2),
-     */
+    
     private int timer;
     private int powerLevel;
     private boolean acceso;
