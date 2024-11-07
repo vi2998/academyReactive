@@ -13,10 +13,6 @@ public class FillInQuestion extends Question {
     della domanda dovranno essere uguali alla stringa risposta per essere considerata corretta */
 
 
-    public void fillInText(String parolePerSostituzione) {
-
-    }
-
     @Override
     public boolean checkAnswer(String risposta) {
 
@@ -25,7 +21,7 @@ public class FillInQuestion extends Question {
 
         // Sostituisco i gruppi **** con le risposte
         for (int i = 0; i < risposteSeparate.length; i++) {
-            text = text.replaceFirst("\\*{4}", risposteSeparate[i]);
+            text = text.replaceFirst("\\*{4}", risposteSeparate[i].trim());
         }
         String testo = text;
         return getRisposta().contentEquals(testo);
