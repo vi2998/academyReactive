@@ -1,7 +1,5 @@
 package academy.esercizi.esercizio_30;
 
-import java.util.Scanner;
-
 public class Prova30 {
     public static void main(String[] args) {
 
