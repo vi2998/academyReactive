@@ -20,12 +20,13 @@ public class ChoiceQuestion extends Question {
         possibiliRisposte[indiceRisposta] = risposta;
         if (corretto){
             posizioneCorretta = indiceRisposta;
+            setRisposta(risposta);
         }
     }
 
     @Override
     public boolean checkAnswer(String risposta) {
-        return risposta.equalsIgnoreCase(possibiliRisposte[posizioneCorretta]);
+        return risposta.equalsIgnoreCase(getRisposta());
     }
 
     public void display() {
