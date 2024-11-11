@@ -9,7 +9,10 @@ public class Esercizio26 {
 
     private void test() {
         SolitarioBulgaro solitarioBulgaro = new SolitarioBulgaro();
-        solitarioBulgaro.gioca(8);  //FIXME DA CORREGGERE : SOMMA NON ESCE 45
-
+        solitarioBulgaro.gioca(5);
+        while (!solitarioBulgaro.finito()){
+            solitarioBulgaro.muovi();
+        }
+        System.out.println("Il gioco è stato completato in: " + solitarioBulgaro.getContaMosse() + " mosse");
     }
 }
