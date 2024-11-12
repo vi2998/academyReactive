@@ -5,51 +5,47 @@ import java.util.Scanner;
 
 public class Poker {
     static final int NUMERO_CARTE = 52;
-    String[] mazzoCarte = new String[NUMERO_CARTE];
-    String[] carteInMano = new String[5];
+    Carta[] mazzoCarte = new Carta[NUMERO_CARTE];
+    Carta[] carteInMano = new Carta[5];
 
-    public String determinaPunteggio() {
-        if (isScalaAndColore() && numeroPiuAltoNelMazzo() == 14){
-            return "Hai fatto scala reale";
-        }
-        else if (isScalaColore()){
-            return "Hai fatto scala colore";
-        }
-        else if(isPoker()){
-            return "Hai fatto poker";
-        } else if (isFull()) {
-            return "Hai fatto full";
-        }
-        else if (isColore()){
-            return "Hai fatto colore";
-        } else if (isScala()) {
-            return "Hai fatto colore";
-        } else if (isTris) {
-            return "Hai fatto tris";
-        } else if (isDoppiaCoppia) {
-            return "Hai fatto doppia coppia";
-        } else if (isCoppia()) {
-            return "Hai fatto coppia";
-        }
-        else {
-            return "Non hai fatto nessun punteggio";
-        }
-    }
+//    public String determinaPunteggio() {
+//        if (isScalaAndColore() && numeroPiuAltoNelMazzo() == 14){
+//            return "Hai fatto scala reale";
+//        }
+//        else if (isScalaColore()){
+//            return "Hai fatto scala colore";
+//        }
+//        else if(isPoker()){
+//            return "Hai fatto poker";
+//        } else if (isFull()) {
+//            return "Hai fatto full";
+//        }
+//        else if (isColore()){
+//            return "Hai fatto colore";
+//        } else if (isScala()) {
+//            return "Hai fatto colore";
+//        } else if (isTris()) {
+//            return "Hai fatto tris";
+//        } else if (isDoppiaCoppia()) {
+//            return "Hai fatto doppia coppia";
+//        } else if (isCoppia()) {
+//            return "Hai fatto coppia";
+//        }
+//        else {
+//            return "Non hai fatto nessun punteggio";
+//        }
+//    }
+//
+//    private boolean isScalaAndColore() {
+//        return isColore() && isScala();
+//    }
 
-    private boolean isScalaAndColore() {
-        return isColore() && isScala();
-    }
-
-
-    enum Semi {
-        CUORI("C"), QUADRI("Q"), FIORI("F"), PICCHE("P");
-        private String codice;
-
-        Semi(String codice) {
-            this.codice = codice;
-        }
-    }
-
+//    private boolean isColore() {
+//        // Cinque carte dello stesso seme, con valori non consecutivi
+//        for (int i = 0; i < carteInMano.length; i++) {
+//
+//        }
+//    }
     private Semi semi(int posizione) {
         for (Semi value : Semi.values()) {
             if (value.ordinal() == posizione) {
@@ -62,7 +58,7 @@ public class Poker {
     public String unioneNumeroSeme(int valoreCarta, int valoreSeme) {
         StringBuilder semeValore = new StringBuilder();
         semeValore.append(valoreCarta);
-        semeValore.append(semi(valoreSeme).codice);
+        semeValore.append(semi(valoreSeme).getCodice());
         return semeValore.toString();
     }
 
@@ -70,7 +66,8 @@ public class Poker {
         int numeroEnum = 0;
         int valoreCarta = 1;
         for (int i = 0; i < NUMERO_CARTE; i++) {
-            mazzoCarte[i] = unioneNumeroSeme(valoreCarta,numeroEnum);
+            // Crea una nuova carta con il valore e il seme appropriato
+            mazzoCarte[i] = new Carta(valoreCarta, Semi.values()[numeroEnum]);
             valoreCarta++;
             if (valoreCarta == 14) {
                 valoreCarta = 1;
@@ -84,15 +81,16 @@ public class Poker {
         stampaCarte(mazzoCarte);
     }
 
+
     private void mischia() {
         Random random = new Random();
         int i = 0;
         while (i < 26) {
             int indiceRandomico = random.nextInt(mazzoCarte.length);
-            String stringaAppoggio = mazzoCarte[indiceRandomico];
+            Carta cartaAppoggio = mazzoCarte[indiceRandomico];
             int indiceRandomicoSecondo = random.nextInt(mazzoCarte.length);
             mazzoCarte[indiceRandomico] = mazzoCarte[indiceRandomicoSecondo];
-            mazzoCarte[indiceRandomicoSecondo] = stringaAppoggio;
+            mazzoCarte[indiceRandomicoSecondo] = cartaAppoggio;
             i++;
         }
     }
@@ -106,9 +104,9 @@ public class Poker {
     }
 
     private void stampaCarteInMano() {
-        for (String carte : carteInMano) {
+        for (Carta carta : carteInMano) {
             System.out.print("Carte in mano: ");
-            System.out.println(carte);
+            System.out.println(carta);
         }
     }
 
@@ -126,8 +124,8 @@ public class Poker {
         stampaCarteInMano();
     }
 
-    public void stampaCarte(String [] carte) {
-        for (String carta : mazzoCarte) {
+    public void stampaCarte(Carta [] carte) {
+        for (Carta carta : carte) {
             System.out.print(carta + " | ");
         }
         System.out.println();
