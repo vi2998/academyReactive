@@ -1,0 +1,22 @@
+package academy.esercizi.esercizio_33;
+
+public class Esercizio_33 {
+    public static void main(String[] args) {
+        Esercizio_33 esercizio_33 = new Esercizio_33();
+        esercizio_33.test();
+
+    }
+
+    private void test() {
+        NumberFormatter numberFormatter = new DefaultFormatter();
+        int numeroDaConvertire = 5;
+        String numeroConverito = numberFormatter.format(numeroDaConvertire);
+        System.out.println("numeroConverito in stringa = " + numeroConverito + "\n");
+        System.out.println("-------------------------------- \n");
+
+        NumberFormatter DecimaleSeparatorFormatter = new DecimalSeparatorFormatter();
+        int numeroDaSeparare = 1000000;
+        String numeroSeparato = NumberFormatter.format(numeroDaSeparare);
+        System.out.println("numeroSeparato e passato a stringa = " + numeroSeparato);
+    }
+}
