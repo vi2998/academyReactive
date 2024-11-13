@@ -1,15 +1,17 @@
 package academy.esercizi.esercizio_27;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Poker {
     static final int NUMERO_CARTE = 52;
+    static final int CARTE_IN_MANO = 5;
     Carta[] mazzoCarte = new Carta[NUMERO_CARTE];
-    Carta[] carteInMano = new Carta[5];
+    Carta[] carteInMano = new Carta[CARTE_IN_MANO];
 
     public String determinaPunteggio() {
-        if (isScalaAndColore() && numeroPiuAltoNellaMano() == 14) {
+        if (isScalaAndColore() && cartaPiuAltaNellaMano() == 14) {
             return "Hai fatto scala reale";
         } else if (isScalaAndColore()) {
             return "Hai fatto scala colore";
@@ -36,14 +38,26 @@ public class Poker {
         return isColore() && isScala();
     }
 
-    private int numeroPiuAltoNellaMano() {
+    private int cartaPiuAltaNellaMano() {
         int maxValore = 0;
         for (int i = 0; i < carteInMano.length; i++) {
+            if (!presenzaCarteDueInMano() && carteInMano[i].getValore() == 1) {
+                maxValore = 14; // se non ho 2 in mano non posso fare scala da 1 a 5 ma posso farlo da 14 a 10
+            }
             if (carteInMano[i].getValore() > maxValore) {
                 maxValore = carteInMano[i].getValore();
             }
         }
         return maxValore;
+    }
+
+    private boolean presenzaCarteDueInMano() {
+        for (Carta carta : carteInMano) {
+            if (carta.getValore() == 2) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -70,21 +84,31 @@ public class Poker {
 
     // 5 carte dello stesso seme
     private boolean isColore() {
-        Semi seme = carteInMano[0].getSeme();
-        for (int i = 1; i < carteInMano.length; i++) {
-            if (carteInMano[i].getSeme() != seme) {
+        for (int i = 0; i < carteInMano.length - 2; i++) {
+            if (carteInMano[i].getSeme() != carteInMano[i + 1].getSeme()) {
                 return false;
             }
         }
         return true;
     }
 
-    // Cinque carte con valori consecutivi
+    // Cinque carte con valori consecutivi  FIXME
     private boolean isScala() {
-        for (int i = 0; i < carteInMano.length; i++) {
-            
+
+        for (int i = cartaPiuAltaNellaMano() - 1; i > cartaPiuAltaNellaMano() - 4; i--) {
+            boolean controllo = false;
+            for (Carta carta : carteInMano) {
+                if (carta.getValore() == i) {
+                    controllo = true;
+                }
+            }
+            if (!controllo) {
+                return false;
+            }
         }
+        return true;
     }
+
 
     // Tre carte dello stesso valore
     private boolean isTris() {
@@ -131,8 +155,7 @@ public class Poker {
         return coppie == 2;
     }
 
-
-    private Semi semi(int posizione) {
+    public Semi semi(int posizione) {
         for (Semi value : Semi.values()) {
             if (value.ordinal() == posizione) {
                 return value;
@@ -215,5 +238,14 @@ public class Poker {
             System.out.print(carta + " | ");
         }
         System.out.println();
+    }
+
+    //test per scala colore e scala reale
+    public void setCarteInMano() {
+        for (int i = 0; i < carteInMano.length-1; i++) {
+            carteInMano[i] = new Carta(13 - i, semi(0));
+        }
+        carteInMano[carteInMano.length-1] = new Carta(1,semi(0));
+        stampaCarte(carteInMano);
     }
 }
