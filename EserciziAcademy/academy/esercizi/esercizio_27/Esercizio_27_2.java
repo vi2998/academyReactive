@@ -13,7 +13,7 @@ public class Esercizio_27_2 {
         Poker poker = new Poker();
         poker.creaMazzo();
         poker.distribusciCarte();
-        //poker.determinaPunteggio();
+        poker.determinaPunteggio();
         System.out.println("Vuoi scartere delle carte?");
         Scanner scanner = new Scanner(System.in);
         boolean risposta = scanner.nextLine().equalsIgnoreCase("si");
@@ -22,7 +22,7 @@ public class Esercizio_27_2 {
         } else {
             System.out.println("hai scelto di non cambiare le carte");
         }
-        //poker.determinaPunteggio();
+        poker.determinaPunteggio();
     }
         /* In questo progetto realizzerete un simulatore del popolare gioco d’azzardo solitamente chiamato “video poker”.
         Il mazzo di carte ne contiene 52, 13 per ciascun seme, e viene mescolato all’inizio del gioco:

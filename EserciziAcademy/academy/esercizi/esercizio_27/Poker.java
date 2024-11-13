@@ -8,44 +8,83 @@ public class Poker {
     Carta[] mazzoCarte = new Carta[NUMERO_CARTE];
     Carta[] carteInMano = new Carta[5];
 
-//    public String determinaPunteggio() {
-//        if (isScalaAndColore() && numeroPiuAltoNelMazzo() == 14){
-//            return "Hai fatto scala reale";
-//        }
-//        else if (isScalaColore()){
-//            return "Hai fatto scala colore";
-//        }
-//        else if(isPoker()){
-//            return "Hai fatto poker";
-//        } else if (isFull()) {
-//            return "Hai fatto full";
-//        }
-//        else if (isColore()){
-//            return "Hai fatto colore";
-//        } else if (isScala()) {
-//            return "Hai fatto colore";
-//        } else if (isTris()) {
-//            return "Hai fatto tris";
-//        } else if (isDoppiaCoppia()) {
-//            return "Hai fatto doppia coppia";
-//        } else if (isCoppia()) {
-//            return "Hai fatto coppia";
-//        }
-//        else {
-//            return "Non hai fatto nessun punteggio";
-//        }
-//    }
-//
-//    private boolean isScalaAndColore() {
-//        return isColore() && isScala();
-//    }
+    public String determinaPunteggio() {
+        if (isScalaAndColore() && numeroPiuAltoNelMazzo() == 14) {
+            return "Hai fatto scala reale";
+        } else if (isScalaColore()) {
+            return "Hai fatto scala colore";
+        } else if (isPoker()) {
+            return "Hai fatto poker";
+        } else if (isFull()) {
+            return "Hai fatto full";
+        } else if (isColore()) {
+            return "Hai fatto colore";
+        } else if (isScala()) {
+            return "Hai fatto colore";
+        } else if (isTris()) {
+            return "Hai fatto tris";
+        } else {
+            String coppieRisultato = verificaCoppie();
+            if (!coppieRisultato.equals("Non hai coppie")) {
+                return coppieRisultato;
+            }
+        }
+        return "Non hai fatto nessun punteggio";
+    }
 
-//    private boolean isColore() {
-//        // Cinque carte dello stesso seme, con valori non consecutivi
-//        for (int i = 0; i < carteInMano.length; i++) {
-//
-//        }
-//    }
+    private boolean isScalaAndColore() {
+        return isColore() && isScala();
+    }
+
+    private int numeroPiuAltoNelMazzo() {
+    }
+
+    private boolean isScalaColore() {
+    }
+
+    private boolean isPoker() {
+    }
+
+    private boolean isFull() {
+    }
+
+    private boolean isColore() {
+        Semi seme = carteInMano[0].getSeme();
+        for (int i = 1; i < carteInMano.length; i++) {
+            if (carteInMano[i].getSeme() != seme) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isScala() {
+    }
+
+    private boolean isTris() {
+    }
+
+    private String verificaCoppie() {
+        int[] counts = new int[15];  // non tengo conto dello 0
+        for (Carta carta : carteInMano) {
+            counts[carta.getValore()]++;
+        }
+        int coppie = 0;
+        for (int count : counts) {
+            if (count == 2) {
+                coppie++;
+            }
+        }
+        if (coppie == 1) {
+            return "Hai fatto una coppia";
+        } else if (coppie == 2) {
+            return "Hai fatto doppia coppia";
+        } else {
+            return "Non hai coppie";
+        }
+    }
+
+
     private Semi semi(int posizione) {
         for (Semi value : Semi.values()) {
             if (value.ordinal() == posizione) {
@@ -104,11 +143,13 @@ public class Poker {
     }
 
     private void stampaCarteInMano() {
+        System.out.print("Carte in mano: ");
         for (Carta carta : carteInMano) {
-            System.out.print("Carte in mano: ");
-            System.out.println(carta);
+            System.out.print(carta + " | ");
         }
+        System.out.println();
     }
+
 
     public void cambiaCarte(Scanner scanner) {
         System.out.println("Inserisci quante carte cambiare:");
@@ -124,7 +165,7 @@ public class Poker {
         stampaCarteInMano();
     }
 
-    public void stampaCarte(Carta [] carte) {
+    public void stampaCarte(Carta[] carte) {
         for (Carta carta : carte) {
             System.out.print(carta + " | ");
         }
