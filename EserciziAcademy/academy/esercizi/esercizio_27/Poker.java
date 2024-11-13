@@ -9,9 +9,9 @@ public class Poker {
     Carta[] carteInMano = new Carta[5];
 
     public String determinaPunteggio() {
-        if (isScalaAndColore() && numeroPiuAltoNelMazzo() == 14) {
+        if (isScalaAndColore() && numeroPiuAltoNellaMano() == 14) {
             return "Hai fatto scala reale";
-        } else if (isScalaColore()) {
+        } else if (isScalaAndColore()) {
             return "Hai fatto scala colore";
         } else if (isPoker()) {
             return "Hai fatto poker";
@@ -20,34 +20,55 @@ public class Poker {
         } else if (isColore()) {
             return "Hai fatto colore";
         } else if (isScala()) {
-            return "Hai fatto colore";
+            return "Hai fatto scala";
         } else if (isTris()) {
             return "Hai fatto tris";
-        } else {
-            String coppieRisultato = verificaCoppie();
-            if (!coppieRisultato.equals("Non hai coppie")) {
-                return coppieRisultato;
-            }
+        } else if (isDoppiaCoppia()) {
+            return "Hai fatto doppia coppia";
+        } else if (isCoppia()) {
+            return "Hai fatto coppia";
         }
         return "Non hai fatto nessun punteggio";
     }
+
 
     private boolean isScalaAndColore() {
         return isColore() && isScala();
     }
 
-    private int numeroPiuAltoNelMazzo() {
+    private int numeroPiuAltoNellaMano() {
+        int maxValore = 0;
+        for (int i = 0; i < carteInMano.length; i++) {
+            if (carteInMano[i].getValore() > maxValore) {
+                maxValore = carteInMano[i].getValore();
+            }
+        }
+        return maxValore;
     }
 
-    private boolean isScalaColore() {
-    }
 
+    // Quattro carte con lo stesso valore
     private boolean isPoker() {
+        for (int i = 0; i < carteInMano.length; i++) {
+            int carteUguali = 1;  // Parto dalla prima carta
+            for (int j = i + 1; j < carteInMano.length; j++) {
+                if (carteInMano[i].getValore() == carteInMano[j].getValore()) {
+                    carteUguali++;
+                }
+            }
+            if (carteUguali == 4) {
+                return true;
+            }
+        }
+        return false;
     }
 
+    // un tris e una coppia
     private boolean isFull() {
+        return isTris() && isCoppia();
     }
 
+    // 5 carte dello stesso seme
     private boolean isColore() {
         Semi seme = carteInMano[0].getSeme();
         for (int i = 1; i < carteInMano.length; i++) {
@@ -58,30 +79,56 @@ public class Poker {
         return true;
     }
 
+    // Cinque carte con valori consecutivi
     private boolean isScala() {
+        for (int i = 0; i < carteInMano.length; i++) {
+            
+        }
     }
 
+    // Tre carte dello stesso valore
     private boolean isTris() {
+        for (int i = 0; i < carteInMano.length; i++) {
+            int carteUguali = 1;  // Parto dalla prima carta
+            for (int j = i + 1; j < carteInMano.length; j++) {
+                if (carteInMano[i].getValore() == carteInMano[j].getValore()) {
+                    carteUguali++;
+                }
+            }
+            if (carteUguali == 3) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    private String verificaCoppie() {
-        int[] counts = new int[15];  // non tengo conto dello 0
+
+    private boolean isCoppia() {
+        int[] arrayContaCarteInManoPerValore = new int[15];  // non devo tener conto della posizione 0
         for (Carta carta : carteInMano) {
-            counts[carta.getValore()]++;
+            arrayContaCarteInManoPerValore[carta.getValore()]++; // Incrementa il contatore per il valore della carta che ho
         }
         int coppie = 0;
-        for (int count : counts) {
+        for (int count : arrayContaCarteInManoPerValore) {
+            if (count == 2) { // count == 2 per vedere se di quella carta ne ho 2 --> quindi ho una coppia
+                coppie++;
+            }
+        }
+        return coppie == 1;
+    }
+
+    private boolean isDoppiaCoppia() {
+        int[] arrayContaCarteInManoPerValore = new int[15];  // non devo tener conto della posizione 0
+        for (Carta carta : carteInMano) {
+            arrayContaCarteInManoPerValore[carta.getValore()]++;
+        }
+        int coppie = 0;
+        for (int count : arrayContaCarteInManoPerValore) {
             if (count == 2) {
                 coppie++;
             }
         }
-        if (coppie == 1) {
-            return "Hai fatto una coppia";
-        } else if (coppie == 2) {
-            return "Hai fatto doppia coppia";
-        } else {
-            return "Non hai coppie";
-        }
+        return coppie == 2;
     }
 
 
@@ -95,10 +142,8 @@ public class Poker {
     }
 
     public String unioneNumeroSeme(int valoreCarta, int valoreSeme) {
-        StringBuilder semeValore = new StringBuilder();
-        semeValore.append(valoreCarta);
-        semeValore.append(semi(valoreSeme).getCodice());
-        return semeValore.toString();
+        String semeValore = valoreCarta + semi(valoreSeme).getCodice();
+        return semeValore;
     }
 
     public void creaMazzo() {
