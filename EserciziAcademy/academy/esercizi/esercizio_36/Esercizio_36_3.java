@@ -2,7 +2,7 @@ package academy.esercizi.esercizio_36;
 
 public class Esercizio_36_3 {
 
-    public static void main(String[] args) throws PlusMilleException {
+    public static void main(String[] args) throws PlusMilleException, SaldoNegativoException {
         Esercizio_36_3 esercizio_36_3 = new Esercizio_36_3();
         esercizio_36_3.test();
     }
