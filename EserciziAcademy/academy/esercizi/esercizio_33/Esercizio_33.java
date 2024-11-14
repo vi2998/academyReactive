@@ -25,7 +25,14 @@ public class Esercizio_33 {
         NumberFormatter accountingFormatter = new AccountingFormatter();
         int numeroNegativo = -1;
         String numeroConParentesi = accountingFormatter.format(numeroNegativo);
-        System.out.println("Da numero negativo a numero con parentesi: " + numeroConParentesi);;
+        System.out.println("Da numero negativo a numero con parentesi: " + numeroConParentesi);
+
+        System.out.println("--------------------------------");
+
+        NumberFormatter baseFormatter = new BaseFormatter(2);
+        int numero = 5;
+        String numeroInBase = baseFormatter.format(numero);
+        System.out.println("5 in base 2: " + numeroInBase);
 
     }
 }
