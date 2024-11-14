@@ -15,5 +15,17 @@ public class AccountingFormatter implements NumberFormatter{
         }
         numeroNegativoConParentesi.append(")");
         return numeroNegativoConParentesi.toString();
+
+        // OPPURE fatto in modo più semplice
+        /* @Override
+    public String format(int n) {
+        String number;
+        if (n < 0){
+           number = "(" + Math.abs(n) + ")";
+        }else {
+            number = Integer.toString(n);
+        }
+        return number;
+    }*/
     }
 }
