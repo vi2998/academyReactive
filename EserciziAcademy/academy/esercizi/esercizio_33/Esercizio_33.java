@@ -11,12 +11,12 @@ public class Esercizio_33 {
         NumberFormatter numberFormatter = new DefaultFormatter();
         int numeroDaConvertire = 5;
         String numeroConverito = numberFormatter.format(numeroDaConvertire);
-        System.out.println("numeroConverito in stringa = " + numeroConverito + "\n");
-        System.out.println("-------------------------------- \n");
+        System.out.println("numeroConverito in stringa = " + numeroConverito);
+        System.out.println("--------------------------------");
 
-        NumberFormatter DecimaleSeparatorFormatter = new DecimalSeparatorFormatter();
+        NumberFormatter decimaleSeparatorFormatter = new DecimalSeparatorFormatter();
         int numeroDaSeparare = 1000000;
-        String numeroSeparato = NumberFormatter.format(numeroDaSeparare);
+        String numeroSeparato = decimaleSeparatorFormatter.format(numeroDaSeparare);
         System.out.println("numeroSeparato e passato a stringa = " + numeroSeparato);
     }
 }
