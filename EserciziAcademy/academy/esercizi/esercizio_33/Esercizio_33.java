@@ -34,5 +34,10 @@ public class Esercizio_33 {
         String numeroInBase = baseFormatter.format(numero);
         System.out.println("5 in base 2: " + numeroInBase);
 
+
+        /* TODO: Scrivete un metodo che riceva come parametri un array di numeri intero
+            e un oggetto NumberFormatter e visualizzi ciascun numero su una riga separata,
+            dopo averlo trasformato in stringa usando l’oggetto NumberFormatter ricevuto.
+            I numeri visualizzati devono essere incolonnati a destra. */
     }
 }
