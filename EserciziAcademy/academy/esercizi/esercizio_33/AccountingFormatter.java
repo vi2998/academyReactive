@@ -1,31 +1,12 @@
 package academy.esercizi.esercizio_33;
 
-public class AccountingFormatter implements NumberFormatter{
+public class AccountingFormatter implements NumberFormatter {
+
     @Override
     public String format(int n) {
-        String numeroConveritoStringa = String.valueOf(n);
-        StringBuilder numeroNegativoConParentesi = new StringBuilder();
-        for (int i = 0; i < numeroConveritoStringa.length(); i++){
-            if (i == 0){
-                numeroNegativoConParentesi.append("(");
-            }
-            if (numeroConveritoStringa.charAt(i) != '-'){
-                numeroNegativoConParentesi.append(numeroConveritoStringa.charAt(i));
-            }
+        if (n < 0) {
+            return "(" + Math.abs(n) + ")";
         }
-        numeroNegativoConParentesi.append(")");
-        return numeroNegativoConParentesi.toString();
-
-        // OPPURE fatto in modo più semplice
-        /* @Override
-    public String format(int n) {
-        String number;
-        if (n < 0){
-           number = "(" + Math.abs(n) + ")";
-        }else {
-            number = Integer.toString(n);
-        }
-        return number;
-    }*/
+        return String.valueOf(n);
     }
 }
