@@ -18,7 +18,6 @@ public class Prova30 {
         System.out.println("Collaudo FillInQuestion");
         Question fraseDaRiempire = new FillInQuestion();
         fraseDaRiempire.setDomanda("La capitale dell'Italia è ****, si trova nella regione **** ed ha **** abitanti");
-        fraseDaRiempire.setDomanda("La capitale dell'Italia è ****, si trova nella regione **** ed ha **** abitanti");
         fraseDaRiempire.display();
         String testoCorretto = "La capitale dell'Italia è Roma, si trova nella regione Lazio ed ha 2800000 abitanti";
         fraseDaRiempire.setRisposta(testoCorretto);
