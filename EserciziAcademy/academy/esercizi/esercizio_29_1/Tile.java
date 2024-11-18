@@ -1,9 +1,10 @@
 package academy.esercizi.esercizio_29_1;
 
 public class Tile {
-// CARTA
+    // CARTA
     private int valoreCarta;
     private boolean isGirata;
+
 
     public Tile(int valoreCarta) {
         this.valoreCarta = valoreCarta;
@@ -15,14 +16,15 @@ public class Tile {
         return valoreCarta;
     }
 
-    public boolean getGirata() {
+    public boolean isGirata() {
         return isGirata;
     }
 
-    public void rivelaCarta(){
+    public void rivelaCarta() {
         isGirata = true;
     }
-    public void copriCarta(){
+
+    public void copriCarta() {
         isGirata = false;
     }
 

@@ -1,6 +1,7 @@
 package academy.esercizi.esercizio_29_1;
 
 import java.util.Random;
+import java.util.Scanner;
 
 public class MatchingGame {
     /* In un gioco di carte in cui si cercano le coppie,
@@ -16,28 +17,57 @@ public class MatchingGame {
        */
 
     private final int DIMENSIONE_GRIGLIA = 4;
-    private Grid[][] griglia = new Grid[DIMENSIONE_GRIGLIA][DIMENSIONE_GRIGLIA];
-    private static int punteggio = 0;
+    private final Grid[][] griglia = new Grid[DIMENSIONE_GRIGLIA][DIMENSIONE_GRIGLIA];
+    private int punteggio = 0;
 
 
     public void gioca() {
         popolaGriglia();
+        stampaMemory();
+
+        boolean checkCoppie = false;
+        Scanner scanner = new Scanner(System.in);
+
+        while (!checkCoppie) {
+            System.out.println("Inserisci le coordinate della prima carta:");
+            Location carta1 = chiediCoordinate(scanner);
+
+            System.out.println("Inserisci le coordinate della seconda carta:");
+            Location carta2 = chiediCoordinate(scanner);
+
+            Tile t1 = griglia[carta1.getRiga()][carta1.getColonna()].getCarta();
+            Tile t2 = griglia[carta2.getRiga()][carta2.getColonna()].getCarta();
+
+            if (t1.getValoreCarta() == t2.getValoreCarta()) {
+                t1.rivelaCarta();
+                t2.rivelaCarta();
+                System.out.println("Coppia trovata");
+                punteggio++;
+            } else {
+                System.out.println("Le carte non sono uguali");
+            }
+            stampaMemory();
+            checkCoppie = checkCoppie();
+            System.out.println("griglia con carte scoperte");
+            stampaCarteGirate();
+            System.out.println("--------------------");
+        }
+        System.out.println("Gioco finito! Il tuo punteggio finale è: " + punteggio);
+        scanner.close();
     }
 
     private void popolaGriglia() {
-        // array di carte doppie
-        Tile[] carteDisponibili = new Tile[DIMENSIONE_GRIGLIA * DIMENSIONE_GRIGLIA];
-        int indiceCarteArray = 0;
+        int numCarte = DIMENSIONE_GRIGLIA * DIMENSIONE_GRIGLIA;
 
-        // Aggiungiamo le carte due volte (per formare le coppie)
-        for (int i = 0; i < Carte.values().length; i++) {
-            carteDisponibili[indiceCarteArray] = new Tile(i);
-            indiceCarteArray++;
-            carteDisponibili[indiceCarteArray] = new Tile(i);
-            indiceCarteArray++;
+        Tile[] carteDisponibili = new Tile[numCarte];
+
+        //creo coppie
+        for (int i = 0; i < numCarte / 2; i++) {
+            carteDisponibili[2 * i] = new Tile(i);
+            carteDisponibili[2 * i + 1] = new Tile(i);
         }
 
-        // Mescoliamo l'array di carte
+        //mischio carte
         Random random = new Random();
         for (int i = 0; i < carteDisponibili.length; i++) {
             int randomIndex = random.nextInt(carteDisponibili.length);
@@ -46,15 +76,15 @@ public class MatchingGame {
             carteDisponibili[randomIndex] = temp;
         }
 
-        indiceCarteArray = 0;  // Reset dell'indice per l'array delle carte
-        for (int i = 0; i < griglia.length; i++) {
-            for (int j = 0; j < griglia[i].length; j++) {
+        //popolo griglia
+        int indiceCarte = 0;
+        for (int i = 0; i < DIMENSIONE_GRIGLIA; i++) {
+            for (int j = 0; j < DIMENSIONE_GRIGLIA; j++) {
                 Location location = new Location(i, j);
-                griglia[i][j] = new Grid(carteDisponibili[indiceCarteArray], location);
-                indiceCarteArray++;
+                griglia[i][j] = new Grid(carteDisponibili[indiceCarte], location);
+                indiceCarte++;
             }
         }
-        stampaMemory();
     }
 
     private void stampaMemory() {
@@ -63,16 +93,49 @@ public class MatchingGame {
                 Grid cella = griglia[i][j];
                 Tile carta = cella.getCarta();
 
-                if (carta.getGirata()) {
+                if (carta.isGirata()) {
                     System.out.print(carta.getValoreCarta() + " ");
                 } else {
-                    System.out.print("\u2580 ");
+                    System.out.print("▀ ");
                 }
             }
             System.out.println();
         }
     }
 
+    private Location chiediCoordinate(Scanner scanner) {
+        int riga;
+        int colonna;
 
+        System.out.print("Inserisci la riga (0-" + (DIMENSIONE_GRIGLIA - 1) + "): ");
+        riga = scanner.nextInt();
+        System.out.print("Inserisci la colonna (0-" + (DIMENSIONE_GRIGLIA - 1) + "): ");
+        colonna = scanner.nextInt();
+        if (riga < 0 || riga >= DIMENSIONE_GRIGLIA || colonna < 0 || colonna >= DIMENSIONE_GRIGLIA) {
+            System.out.println("Coordinate non valide");
+        }
+        return new Location(riga, colonna);
+    }
+
+    private boolean checkCoppie() {
+        for (int i = 0; i < griglia.length; i++) {
+            for (int j = 0; j < griglia[i].length; j++) {
+                if (!griglia[i][j].getCarta().isGirata()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void stampaCarteGirate() {
+        for (int i = 0; i < griglia.length; i++) {
+            for (int j = 0; j < griglia[i].length; j++) {
+                Grid cella = griglia[i][j];
+                Tile carta = cella.getCarta();
+                System.out.print(carta.getValoreCarta() + " ");
+            }
+            System.out.println();
+        }
+    }
 }
-
