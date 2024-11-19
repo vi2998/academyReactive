@@ -1,4 +1,4 @@
-package academy.esercizi.esercizio_29_1;
+package academy.esercizi.esercizio_29;
 
 public class Tile {
     // CARTA
