@@ -1,4 +1,4 @@
-package academy.esercizi.esercizio_29_1_4;
+package academy.esercizi.esercizio_29_1;
 
 import java.io.*;
 
