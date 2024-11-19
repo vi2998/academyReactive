@@ -36,7 +36,7 @@ public class Esercizio_24_4 {
         String modalitaStampa = scanner.nextLine();
 
         // Stampa il diagramma (modifica il secondo parametro per cambiare modalità)
-        stampaDiagramma(nomi, valori, valoreMax, modalitaStampa); // true per orizzontale, false per verticale
+        stampaDiagramma(nomi, valori, valoreMax, modalitaStampa);
     }
 
     private void stampaDiagramma(String[] nomi, int[] valori, int valoreMax, String modalitaStampa) {
