@@ -65,7 +65,7 @@ public class Esercizio_29_1_4 {
 
             while ((line = bufferedReader.readLine()) != null) {
                 if(rigaFileCsv == riga){
-                    String[] fields = line.split(",");
+                    String[] fields = line.split(";");
                     numberOfFields = fields.length;
                 }
                 rigaFileCsv++;
@@ -102,7 +102,7 @@ public class Esercizio_29_1_4 {
 
             while ((line = bufferedReader.readLine()) != null) {
                 if(rigaFileCsv == riga){
-                    String[] fields = line.split(",");
+                    String[] fields = line.split(";");
                     if (colonna >= 0 && colonna < fields.length) {
                         field = fields[colonna];
                     }
