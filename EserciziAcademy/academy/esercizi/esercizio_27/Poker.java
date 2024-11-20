@@ -61,38 +61,23 @@ public class Poker {
     }
 
 
-    // Quattro carte con lo stesso valore
-    private boolean isPoker() {
-        for (int i = 0; i < carteInMano.length; i++) {
-            int carteUguali = 1;  // Parto dalla prima carta
-            for (int j = i + 1; j < carteInMano.length; j++) {
-                if (carteInMano[i].getValore() == carteInMano[j].getValore()) {
-                    carteUguali++;
-                }
-            }
-            if (carteUguali == 4) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     // un tris e una coppia
+
     private boolean isFull() {
         return isTris() && isCoppia();
     }
-
     // 5 carte dello stesso seme
+
     private boolean isColore() {
-        for (int i = 0; i < carteInMano.length - 2; i++) {
+        for (int i = 0; i < carteInMano.length - 1; i++) {
             if (carteInMano[i].getSeme() != carteInMano[i + 1].getSeme()) {
                 return false;
             }
         }
         return true;
     }
-
     // Cinque carte con valori consecutivi
+
     private boolean isScala() {
 
         for (int i = cartaPiuAltaNellaMano() - 1; i > cartaPiuAltaNellaMano() - 4; i--) {
@@ -109,6 +94,21 @@ public class Poker {
         return true;
     }
 
+    // Quattro carte con lo stesso valore
+    private boolean isPoker() {
+        for (int i = 0; i < carteInMano.length; i++) {
+            int carteUguali = 1;  // Parto dalla prima carta
+            for (int j = i + 1; j < carteInMano.length; j++) {
+                if (carteInMano[i].getValore() == carteInMano[j].getValore()) {
+                    carteUguali++;
+                }
+            }
+            if (carteUguali == 4) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     // Tre carte dello stesso valore
     private boolean isTris() {
@@ -127,20 +127,6 @@ public class Poker {
     }
 
 
-    private boolean isCoppia() {
-        int[] arrayContaCarteInManoPerValore = new int[15];  // non devo tener conto della posizione 0
-        for (Carta carta : carteInMano) {
-            arrayContaCarteInManoPerValore[carta.getValore()]++; // Incrementa il contatore per il valore della carta che ho
-        }
-        int coppie = 0;
-        for (int count : arrayContaCarteInManoPerValore) {
-            if (count == 2) { // count == 2 per vedere se di quella carta ne ho 2 --> quindi ho una coppia
-                coppie++;
-            }
-        }
-        return coppie == 1;
-    }
-
     private boolean isDoppiaCoppia() {
         int[] arrayContaCarteInManoPerValore = new int[15];  // non devo tener conto della posizione 0
         for (Carta carta : carteInMano) {
@@ -155,6 +141,20 @@ public class Poker {
         return coppie == 2;
     }
 
+    private boolean isCoppia() {
+        int[] arrayContaCarteInManoPerValore = new int[15];  // non devo tener conto della posizione 0
+        for (Carta carta : carteInMano) {
+            arrayContaCarteInManoPerValore[carta.getValore()]++; // Incrementa il contatore per il valore della carta che ho
+        }
+        int coppie = 0;
+        for (int count : arrayContaCarteInManoPerValore) {
+            if (count == 2) { // count == 2 per vedere se di quella carta ne ho 2 --> quindi ho una coppia
+                coppie++;
+            }
+        }
+        return coppie == 1;
+    }
+
     public Semi semi(int posizione) {
         for (Semi value : Semi.values()) {
             if (value.ordinal() == posizione) {
@@ -162,11 +162,6 @@ public class Poker {
             }
         }
         throw new RuntimeException("Errore nella posizione");
-    }
-
-    public String unioneNumeroSeme(int valoreCarta, int valoreSeme) {
-        String semeValore = valoreCarta + semi(valoreSeme).getCodice();
-        return semeValore;
     }
 
     public void creaMazzo() {
@@ -243,9 +238,9 @@ public class Poker {
     //test per scala colore e scala reale
     public void setCarteInMano() {
         for (int i = 0; i < carteInMano.length-1; i++) {
-            carteInMano[i] = new Carta(13 - i, semi(0));
+            carteInMano[i] = new Carta(13 - i - 3, semi(0));
         }
-        carteInMano[carteInMano.length-1] = new Carta(1,semi(0));
+        carteInMano[carteInMano.length-1] = new Carta(1,semi(2));
         stampaCarte(carteInMano);
     }
 }

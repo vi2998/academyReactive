@@ -12,8 +12,8 @@ public class Esercizio_27_2 {
     private void test() {
         Poker poker = new Poker();
         poker.creaMazzo();
-        poker.distribusciCarte();
         // poker.setCarteInMano(); test per scala colore e scala reale
+        poker.distribusciCarte();
         System.out.println(poker.determinaPunteggio());
         System.out.println("Vuoi scartere delle carte?");
         Scanner scanner = new Scanner(System.in);
