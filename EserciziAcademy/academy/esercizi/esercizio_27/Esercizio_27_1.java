@@ -1,6 +1,7 @@
 package academy.esercizi.esercizio_27;
 
 import java.util.Random;
+import java.util.Scanner;
 
 public class Esercizio_27_1 {
     /* Quadrati magici.
@@ -19,7 +20,7 @@ public class Esercizio_27_1 {
     public void test() {
         /*Scrivete un programma che legga 16 valori dalla tastiera e verifichi se, disposti in una matrice 4 × 4, formano un quadrato magico.  */
         System.out.println("inserisci la dimensione matrice");
-        int dimensioneMatrice = 5;
+        final int dimensioneMatrice = 5;
         int[][] matrice = new int[dimensioneMatrice][dimensioneMatrice];
         matrice[0] = new int[]{17, 24, 1, 8, 15};
         matrice[1] = new int[]{23, 5, 7, 14, 16};
@@ -38,18 +39,18 @@ public class Esercizio_27_1 {
 
     private boolean checkQuadratoMagico(int[][] matrice) {
         int numeroMagico = (matrice.length * ((matrice.length * matrice.length) + 1) / 2);
-        if (!firstcheck(matrice, numeroMagico)) {
+        if (!checkColonne(matrice, numeroMagico)) {
             return false;
-        } else if (!secondCheck(matrice, numeroMagico)) {
+        } else if (!checkRighe(matrice, numeroMagico)) {
             return false;
-        } else if (!terzoCheck(matrice, numeroMagico)) {
+        } else if (!checkDiagonale(matrice, numeroMagico)) {
             return false;
         } else {
-            return ultimoCheck(matrice, numeroMagico);
+            return checkDiagonaleAlContrario(matrice, numeroMagico);
         }
     }
 
-    private boolean ultimoCheck(int[][] matrice, int numeroMagico) {
+    private boolean checkDiagonaleAlContrario(int[][] matrice, int numeroMagico) {
         int sommaDiagonaliAlContrario = 0;
         for (int i = 0; i < matrice.length; i++) {
             sommaDiagonaliAlContrario += matrice[matrice.length - 1 - i][i];
@@ -57,7 +58,7 @@ public class Esercizio_27_1 {
         return sommaDiagonaliAlContrario == numeroMagico;
     }
 
-    private boolean terzoCheck(int[][] matrice, int numeroMagico) {
+    private boolean checkDiagonale(int[][] matrice, int numeroMagico) {
         int sommaDiagonali = 0;
         for (int i = 0; i < matrice.length; i++) {
             sommaDiagonali += matrice[i][i];
@@ -65,7 +66,7 @@ public class Esercizio_27_1 {
         return sommaDiagonali == numeroMagico;
     }
 
-    private boolean secondCheck(int[][] matrice, int numeroMagico) {
+    private boolean checkRighe(int[][] matrice, int numeroMagico) {
         int sommaColonne = 0;
         for (int i = 0; i < matrice.length; i++) {
             for (int j = 0; j < matrice[i].length; j++) {
@@ -79,7 +80,7 @@ public class Esercizio_27_1 {
         return true;
     }
 
-    private boolean firstcheck(int[][] matrice, int numeroMagico) {
+    private boolean checkColonne(int[][] matrice, int numeroMagico) {
         int sommaRighe = 0;
         for (int i = 0; i < matrice.length; i++) {
             for (int j = 0; j < matrice[i].length; j++) {
