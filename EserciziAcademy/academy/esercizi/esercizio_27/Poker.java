@@ -92,7 +92,7 @@ public class Poker {
         return true;
     }
 
-    // Cinque carte con valori consecutivi  FIXME
+    // Cinque carte con valori consecutivi
     private boolean isScala() {
 
         for (int i = cartaPiuAltaNellaMano() - 1; i > cartaPiuAltaNellaMano() - 4; i--) {
