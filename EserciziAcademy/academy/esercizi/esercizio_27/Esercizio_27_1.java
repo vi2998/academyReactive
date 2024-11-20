@@ -4,6 +4,9 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Esercizio_27_1 {
+   //private final int DIMENSIONE_MATRICE = 5;
+   /*la dimensione matrice è per il test*/
+
     /* Quadrati magici.
 
     Una matrice n × n riempita con i numeri 1, 2, 3, …, n² è un quadrato magico se la somma degli elementi di ogni riga, di ogni colonna e delle due diagonali ha lo stesso valore. */
@@ -18,19 +21,20 @@ public class Esercizio_27_1 {
     }
 
     public void test() {
+        Scanner scanner = new Scanner(System.in);
         /*Scrivete un programma che legga 16 valori dalla tastiera e verifichi se, disposti in una matrice 4 × 4, formano un quadrato magico.  */
         System.out.println("inserisci la dimensione matrice");
-        final int dimensioneMatrice = 5;
+        int dimensioneMatrice = scanner.nextInt();
         int[][] matrice = new int[dimensioneMatrice][dimensioneMatrice];
+        // se si vuole testare il programma bisogna decommentare l'attributo final e inserirlo al posto di dimensioneMatrice e decommentare la matrice seguente
+        /*
         matrice[0] = new int[]{17, 24, 1, 8, 15};
         matrice[1] = new int[]{23, 5, 7, 14, 16};
         matrice[2] = new int[]{4, 6, 13, 20, 22};
         matrice[3] = new int[]{10, 12, 19, 21, 3};
         matrice[4] = new int[]{11, 18, 25, 2, 9};
-
-
-
-        //matrice = riempiMatrice(matrice);
+        */
+        matrice = riempiMatrice(matrice); // questa riga la commento in modalità test
         stampa(matrice);
         boolean quadratoMagico = checkQuadratoMagico(matrice);
         String risultato = quadratoMagico ? "Il quadrato inserito è un Quadrato magico" : "Il quadrato inserito non è un quadrato magico";
