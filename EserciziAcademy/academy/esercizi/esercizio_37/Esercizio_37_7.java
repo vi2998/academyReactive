@@ -2,14 +2,17 @@ package academy.esercizi.esercizio_37;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class Esercizio_37_7 {
     public static void main(String[] args) {
         Esercizio_37_7 esercizio_37_7 = new Esercizio_37_7();
-        esercizio_37_7.test();
+        try {
+            esercizio_37_7.test();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
         /* Scrivere un programma che legge un file di testo e visualizza un elenco contenente, in ordine alfabetico tutte le parole presenti nel file, seguite da un conteggio che indica il numero di ripetizioni
         di ciascuna parola.
@@ -26,11 +29,12 @@ public class Esercizio_37_7 {
         File file = new File(filepath);
         Scanner scanner = new Scanner(file);
 
-        HashMap<String, String> capitalCities = new HashMap<String, String>();
+        HashMap<String, String> identificatoriPresenti = new HashMap<String, String>();
         while(scanner.hasNextLine()) {
             int numeroDellaLinea = 0;
             String linea = scanner.nextLine();
             String[] paroleDellaLinea = linea.split("[^A-Za-z0-9_]]+");
+            
         }
     }
 }
