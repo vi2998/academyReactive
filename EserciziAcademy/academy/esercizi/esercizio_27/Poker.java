@@ -1,6 +1,5 @@
 package academy.esercizi.esercizio_27;
 
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -10,32 +9,34 @@ public class Poker {
     Carta[] mazzoCarte = new Carta[NUMERO_CARTE];
     Carta[] carteInMano = new Carta[CARTE_IN_MANO];
 
+
+    /* TODO Alcuni metodi sono chiamati più volte sugli stessi valori: isScalaAndColore 2 volte oppure isColore() 3 volte
+        Ci sono dei metodi praticamente identici che potrebbero essere scritti una volta sola passando dei parametri
+        (isTris, isPoker, forse anche isCoppia o isDoppiaCoppia si potrebbero mettere a fattor comune) */
+
     public String determinaPunteggio() {
-        if (isScalaAndColore() && cartaPiuAltaNellaMano() == 14) {
-            return "Hai fatto scala reale";
-        } else if (isScalaAndColore()) {
-            return "Hai fatto scala colore";
-        } else if (isPoker()) {
+        if (isColore()) {
+            if (isScala()) {
+                if (cartaPiuAltaNellaMano() == 14) {
+                    return "Hai fatto scala reale";
+                }
+                return "hai fatto scala colore";
+            }
+            return "hai fatto colore";
+        } else if (isPokerOrTris(4)) {
             return "Hai fatto poker";
         } else if (isFull()) {
             return "Hai fatto full";
-        } else if (isColore()) {
-            return "Hai fatto colore";
         } else if (isScala()) {
             return "Hai fatto scala";
-        } else if (isTris()) {
+        } else if (isPokerOrTris(3)) {
             return "Hai fatto tris";
-        } else if (isDoppiaCoppia()) {
+        } else if (isCoppiaOrDoppiaCoppia() == 2) {
             return "Hai fatto doppia coppia";
-        } else if (isCoppia()) {
+        } else if (isCoppiaOrDoppiaCoppia() == 1) {
             return "Hai fatto coppia";
         }
         return "Non hai fatto nessun punteggio";
-    }
-
-
-    private boolean isScalaAndColore() {
-        return isColore() && isScala();
     }
 
     private int cartaPiuAltaNellaMano() {
@@ -62,12 +63,11 @@ public class Poker {
 
 
     // un tris e una coppia
-
     private boolean isFull() {
-        return isTris() && isCoppia();
+        return isPokerOrTris(3) && (isCoppiaOrDoppiaCoppia() == 1);
     }
-    // 5 carte dello stesso seme
 
+    // 5 carte dello stesso seme
     private boolean isColore() {
         for (int i = 0; i < carteInMano.length - 1; i++) {
             if (carteInMano[i].getSeme() != carteInMano[i + 1].getSeme()) {
@@ -76,8 +76,8 @@ public class Poker {
         }
         return true;
     }
-    // Cinque carte con valori consecutivi
 
+    // Cinque carte con valori consecutivi
     private boolean isScala() {
 
         for (int i = cartaPiuAltaNellaMano() - 1; i > cartaPiuAltaNellaMano() - 4; i--) {
@@ -95,7 +95,7 @@ public class Poker {
     }
 
     // Quattro carte con lo stesso valore
-    private boolean isPoker() {
+    private boolean isPokerOrTris(int valoreCarteUguali) {
         for (int i = 0; i < carteInMano.length; i++) {
             int carteUguali = 1;  // Parto dalla prima carta
             for (int j = i + 1; j < carteInMano.length; j++) {
@@ -103,23 +103,7 @@ public class Poker {
                     carteUguali++;
                 }
             }
-            if (carteUguali == 4) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // Tre carte dello stesso valore
-    private boolean isTris() {
-        for (int i = 0; i < carteInMano.length; i++) {
-            int carteUguali = 1;  // Parto dalla prima carta
-            for (int j = i + 1; j < carteInMano.length; j++) {
-                if (carteInMano[i].getValore() == carteInMano[j].getValore()) {
-                    carteUguali++;
-                }
-            }
-            if (carteUguali == 3) {
+            if (carteUguali == valoreCarteUguali) {
                 return true;
             }
         }
@@ -127,7 +111,7 @@ public class Poker {
     }
 
 
-    private boolean isDoppiaCoppia() {
+    private int isCoppiaOrDoppiaCoppia() {
         int[] arrayContaCarteInManoPerValore = new int[15];  // non devo tener conto della posizione 0
         for (Carta carta : carteInMano) {
             arrayContaCarteInManoPerValore[carta.getValore()]++;
@@ -138,21 +122,7 @@ public class Poker {
                 coppie++;
             }
         }
-        return coppie == 2;
-    }
-
-    private boolean isCoppia() {
-        int[] arrayContaCarteInManoPerValore = new int[15];  // non devo tener conto della posizione 0
-        for (Carta carta : carteInMano) {
-            arrayContaCarteInManoPerValore[carta.getValore()]++; // Incrementa il contatore per il valore della carta che ho
-        }
-        int coppie = 0;
-        for (int count : arrayContaCarteInManoPerValore) {
-            if (count == 2) { // count == 2 per vedere se di quella carta ne ho 2 --> quindi ho una coppia
-                coppie++;
-            }
-        }
-        return coppie == 1;
+        return coppie;
     }
 
     public Semi semi(int posizione) {
@@ -237,10 +207,10 @@ public class Poker {
 
     //test per scala colore e scala reale
     public void setCarteInMano() {
-        for (int i = 0; i < carteInMano.length-1; i++) {
+        for (int i = 0; i < carteInMano.length - 1; i++) {
             carteInMano[i] = new Carta(13 - i - 3, semi(0));
         }
-        carteInMano[carteInMano.length-1] = new Carta(1,semi(2));
+        carteInMano[carteInMano.length - 1] = new Carta(1, semi(2));
         stampaCarte(carteInMano);
     }
 }
