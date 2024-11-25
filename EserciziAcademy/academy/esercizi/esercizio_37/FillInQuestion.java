@@ -39,7 +39,7 @@ public class FillInQuestion extends Question{
     @Override
     public boolean rispondi(Scanner scanner) {
         display();
-        System.out.println("Digita le risposte da inserire (separete da un invio");
+        System.out.println("Digita le risposte da inserire (separate da un invio)");
         List<String> risposte = new ArrayList<>();
         while (risposte.size() != ((List<String>)super.answer).size()){
             risposte.add(scanner.nextLine());

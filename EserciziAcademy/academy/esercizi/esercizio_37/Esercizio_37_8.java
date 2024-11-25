@@ -11,12 +11,18 @@ public class Esercizio_37_8 {
     }
 
     private void test() {
-        List<String> risposte = new ArrayList<>();
-        risposte.add("Roma");
-        risposte.add("Lazio");
-        risposte.add("2800000");
-        //risposte.add("test per far apparire l'eccezione");
-        Question q1 = new FillInQuestion("La capitale dell'Italia è ****, si trova nella regione **** ed ha **** abitanti", risposte);
-        q1.rispondi(new Scanner(System.in));
+//        List<String> risposte = new ArrayList<>();
+//        risposte.add("Roma");
+//        risposte.add("Lazio");
+//        risposte.add("2800000");
+//        //risposte.add("test per far apparire l'eccezione");
+//        Question q1 = new FillInQuestion("La capitale dell'Italia è ****, si trova nella regione **** ed ha **** abitanti", risposte);
+//        q1.rispondi(new Scanner(System.in));
+//
+//        System.out.println("-----------------------");
+        Question q2 = new FreeResponseQuestion("Quale è la capitalia dell’Italia?", "Roma");
+        q2.rispondi(new Scanner(System.in));
+
+        System.out.println("-----------------------");
     }
 }
