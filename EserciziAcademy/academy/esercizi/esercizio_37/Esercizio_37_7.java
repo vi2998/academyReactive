@@ -2,8 +2,7 @@ package academy.esercizi.esercizio_37;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class Esercizio_37_7 {
     public static void main(String[] args) {
@@ -13,15 +12,6 @@ public class Esercizio_37_7 {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-        /* Scrivere un programma che legge un file di testo e visualizza un elenco contenente, in ordine alfabetico tutte le parole presenti nel file, seguite da un conteggio che indica il numero di ripetizioni
-        di ciascuna parola.
-
-        Scrivete un programma che legga un file di codice sorgente Java e generi un elenco di tutti gli identificatori presenti, visualizzando, accanto a ciascuno di essi, i numeri delle righe in cui compare.
-        Per semplicità considereremo che qualsiasi stringa costituita soltanto da lettere, cifre numeriche e caratteri di sottolineatura sia un identificatore.
-        Dichiarate la variabile Scanner in per leggere il file, ciclatela con nextLine e splittate ciascuna riga con il pattern "[^A-Za-z0-9_]+" in modo da ottenere un array di identificatori
-        ed il numero di righe contato in base alle volte in cui si richiama nextLine.
-         */
     }
 
     private void test() throws FileNotFoundException {
@@ -29,12 +19,31 @@ public class Esercizio_37_7 {
         File file = new File(filepath);
         Scanner scanner = new Scanner(file);
 
-        HashMap<String, String> identificatoriPresenti = new HashMap<String, String>();
-        while(scanner.hasNextLine()) {
-            int numeroDellaLinea = 0;
+        // Mappa per gli identificatori presenti
+        HashMap<String, List<Integer>> identificatoriPresenti = new HashMap<>();
+
+        int numeroLinea = 0;
+        while (scanner.hasNextLine()) {
+            numeroLinea++;
             String linea = scanner.nextLine();
-            String[] paroleDellaLinea = linea.split("[^A-Za-z0-9_]]+");
-            
+            String[] paroleDellaLinea = linea.split("[^A-Za-z0-9_]+");
+
+            for (String parola : paroleDellaLinea) {
+                if (!parola.isEmpty()) {
+                    identificatoriPresenti.putIfAbsent(parola, new ArrayList<>());
+                    identificatoriPresenti.get(parola).add(numeroLinea);
+                }
+            }
         }
+
+        // Ordino e stampo
+        List<String> identificatoriOrdinati = new ArrayList<>(identificatoriPresenti.keySet());
+        Collections.sort(identificatoriOrdinati);
+
+        for (String identificatore : identificatoriOrdinati) {
+            List<Integer> righe = identificatoriPresenti.get(identificatore);
+            System.out.println(identificatore + " - Righe: " + righe);
+        }
+        scanner.close();
     }
 }
