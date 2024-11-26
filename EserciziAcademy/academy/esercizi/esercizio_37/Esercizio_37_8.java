@@ -31,7 +31,12 @@ public class Esercizio_37_8 {
 //
 //        System.out.println("-----------------------");
 
-        String[] choises = {"Roma", "Torino", "Milano"};
-        SingleChoiceQuestion q4 = new MultipleChoiceQuestion();
+        String[] multipleChoises = {"-----", "Roma", "Torino", "Ginevra"};
+        List<Integer> risposteCorrette = new ArrayList<>();
+        risposteCorrette.add(1);
+        risposteCorrette.add(2);
+        SingleChoiceQuestion q4 = new MultipleChoiceQuestion("Quali sono le città italiane? (da 1-3)", risposteCorrette, multipleChoises);
+        q4.rispondi(new Scanner(System.in));
+        System.out.println("-----------------------");
     }
 }

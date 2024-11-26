@@ -2,8 +2,8 @@ package academy.esercizi.esercizio_37;
 
 import java.util.Scanner;
 
-public class SingleChoiceQuestion extends Question{
-    private String[] choises;
+public class SingleChoiceQuestion extends Question {
+    String[] choises;
 
     public SingleChoiceQuestion(Object text, Object answer, String[] choises) {
         super(text, answer);
