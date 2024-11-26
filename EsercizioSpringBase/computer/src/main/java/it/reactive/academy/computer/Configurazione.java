@@ -13,14 +13,14 @@ public class Configurazione {
     se vale HD un Bean di tipo HD
     altrimenti segnalare che la variabile d’ambiente è configurata in maniera errata. */
 
-    @Value("${harddisk}")
-    private String tipoHardDisk;
+    @Value("${tipoMemoria}")
+    private String tipoMemoria;
 
     @Bean
     HardDisk creaHardDisk() {
-        if(tipoHardDisk.equals("SSD")) {
+        if(tipoMemoria.equals("SSD")) {
             return new SSD();
-        } else if (tipoHardDisk.equals("HD")) {
+        } else if (tipoMemoria.equals("HD")) {
             return new HD();
         } else {
             throw new RuntimeException("Tipo di hard disk configurato in maniera errata.");
