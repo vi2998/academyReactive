@@ -10,8 +10,8 @@ public class FreeResponseQuestion extends Question {
 
     @Override
     public boolean checkAnswer(Object answer) {
-        String testo = (String) super.answer;
-        if(testo.equalsIgnoreCase((String) answer)){
+        String risposta = (String) super.answer;
+        if(risposta.equalsIgnoreCase((String) answer)){
             return true;
         }
         return false;

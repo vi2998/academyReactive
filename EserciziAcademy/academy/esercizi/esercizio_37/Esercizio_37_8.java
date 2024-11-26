@@ -20,9 +20,18 @@ public class Esercizio_37_8 {
 //        q1.rispondi(new Scanner(System.in));
 //
 //        System.out.println("-----------------------");
-        Question q2 = new FreeResponseQuestion("Quale è la capitalia dell’Italia?", "Roma");
-        q2.rispondi(new Scanner(System.in));
+//        Question q2 = new FreeResponseQuestion("Quale è la capitalia dell’Italia?", "Roma");
+//        q2.rispondi(new Scanner(System.in));
+//
+//        System.out.println("-----------------------");
 
-        System.out.println("-----------------------");
+//        String[] choises = {"Roma", "Torino", "Milano"};
+//        Question q3 = new SingleChoiceQuestion("Capoluogo del Piemonte? (selezionare risposta con 0-2)", "Torino", choises);
+//        q3.rispondi(new Scanner(System.in));
+//
+//        System.out.println("-----------------------");
+
+        String[] choises = {"Roma", "Torino", "Milano"};
+        SingleChoiceQuestion q4 = new MultipleChoiceQuestion();
     }
 }
