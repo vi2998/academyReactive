@@ -2,11 +2,11 @@ package it.reactive.academy.computer;
 
 public interface SistemaOperativo {
     /* firma dei metodi nome() e getLinguaggio */
-    public String nome();
+    String getNome();
 
-    public String getLinguaggio();
+    String getLinguaggio();
 
-    public default String getLineSeparator(){
+    default String getLineSeparator(){
         /* restituisce il valore System.lineSeparator(). */
         return System.lineSeparator();
     }

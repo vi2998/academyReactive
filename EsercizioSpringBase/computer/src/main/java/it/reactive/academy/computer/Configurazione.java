@@ -13,7 +13,7 @@ public class Configurazione {
     se vale HD un Bean di tipo HD
     altrimenti segnalare che la variabile d’ambiente è configurata in maniera errata. */
 
-    @Value("${tipoMemoria}")
+    @Value("${harddisk}")
     private String tipoMemoria;
 
     @Bean

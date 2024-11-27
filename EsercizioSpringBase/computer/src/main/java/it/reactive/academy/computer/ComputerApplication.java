@@ -10,6 +10,11 @@ public class ComputerApplication {
 	public static void main(String[] args) {
 		ConfigurableApplicationContext ctx = SpringApplication.run(ComputerApplication.class, args);
 		System.out.println("Posso richiamare il metodo saluta della classe computer");
+
+		Computer computer = ctx.getBean(Computer.class);
+		computer.saluta();
+
+
 	}
 
 }
