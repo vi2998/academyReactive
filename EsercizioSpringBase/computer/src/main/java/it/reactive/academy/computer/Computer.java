@@ -7,15 +7,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class Computer {
 
-
-    private HardDisk hardDisk;
-    private Schermo schermo;
+    // Dependency Injection a livello di attributo
+//    @Autowired
+//    private HardDisk hardDisk;
+//    @Autowired
+//    private Schermo schermo;
 
 
     //    public void saluta(){
     //     System.out.println(hardDisk.getTipo());
     //    }
 
+    // Dependency Injection a livello di costruttore
+    private HardDisk hardDisk;
+    private Schermo schermo;
+    
     @Autowired
     public Computer(HardDisk hardDisk, Schermo schermo) {
         this.hardDisk = hardDisk;
