@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Esercizio_9_3 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
+// FIXARE SOTTO
         System.out.println("Inserisci coordinate punto A (x y): ");
         int[] verticeA = {scanner.nextInt(), scanner.nextInt()};
 
