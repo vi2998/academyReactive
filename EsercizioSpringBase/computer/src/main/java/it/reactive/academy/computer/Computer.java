@@ -18,23 +18,31 @@ public class Computer {
     //     System.out.println(hardDisk.getTipo());
     //    }
 
-    // Dependency Injection a livello di costruttore
+
+
+    private Tastiera tastiera;
     private HardDisk hardDisk;
     private Schermo schermo;
-    
+
+    // Dependency Injection a livello di costruttore
     @Autowired
     public Computer(HardDisk hardDisk, Schermo schermo) {
         this.hardDisk = hardDisk;
         this.schermo = schermo;
     }
 
-    @Autowired(required=false)
-    private Tastiera tastiera;
 
+    // SistemaOperativo con autowired sull’attributo ed usando il nome windows
     @Autowired
     @Qualifier("windows")
     private SistemaOperativo sistemaOperativo;
 
+
+    // Tastiera con il setter sull’attributo, utilizzando il parametro required=false per non far andare in errore il programma se non configurato
+    @Autowired(required=false)
+    public void setTastiera(Tastiera tastiera) {
+        this.tastiera = tastiera;
+    }
 
     public void saluta() {
         System.out.println("Sono il computer");
