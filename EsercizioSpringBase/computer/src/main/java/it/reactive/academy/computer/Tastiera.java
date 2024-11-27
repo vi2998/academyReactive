@@ -6,8 +6,4 @@ public class Tastiera {
     public String tasti(){
         return "QWERTY";
     }
-
-    public void setTastiera() {
-
-    }
 }
