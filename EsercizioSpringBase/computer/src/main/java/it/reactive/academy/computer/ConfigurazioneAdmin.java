@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile("Admin")
+
 public class ConfigurazioneAdmin {
     @Bean
     public Tastiera tastiera() {
