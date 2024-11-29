@@ -5,16 +5,10 @@ import java.util.Random;
 
 public class ElementoCasualeOptional {
 
-    /*
-
-    - Nel costruttore valorizzare il valore empty oppure con un numero casuale tra 100 e 2000.
-
-    - Aggiungere un costruttore per forzare il valore e non utilizzare quello casuale.
-    */
-
     private Optional<Integer> valore;
 
     public ElementoCasualeOptional(Optional<Integer> valore) {
+        this.valore = valore;
     }
 
     public ElementoCasualeOptional() {
