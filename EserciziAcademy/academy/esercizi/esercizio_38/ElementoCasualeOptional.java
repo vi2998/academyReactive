@@ -7,12 +7,12 @@ public class ElementoCasualeOptional {
 
     private Optional<Integer> valore;
 
-    public ElementoCasualeOptional(Optional<Integer> valore) {
-        this.valore = valore;
+    public ElementoCasualeOptional() {
+        this(setValoreIniziale());
     }
 
-    public ElementoCasualeOptional() {
-       this(setValoreIniziale());
+    public ElementoCasualeOptional(Optional<Integer> valore) {
+        this.valore = valore;
     }
 
     private static Optional<Integer> setValoreIniziale() {
@@ -21,11 +21,11 @@ public class ElementoCasualeOptional {
                 Optional.empty() : Optional.of(random.nextInt((2000 - 100) + 1) + 100);
     }
 
-    public Optional<Integer> getValore() {
-        return valore;
-    }
-
     public void setValore(Optional<Integer> valore) {
         this.valore = valore;
+    }
+
+    public Optional<Integer> getValore() {
+        return valore;
     }
 }
