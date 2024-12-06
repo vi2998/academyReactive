@@ -4,13 +4,24 @@ import javax.validation.constraints.NotNull;
 
 public class GiocatoreDTO {
     @NotNull
-    String nomeCognome;
+    String nome;
 
-    public @NotNull String getNomeCognome() {
-        return nomeCognome;
+    @NotNull
+    String cognome;
+
+    public @NotNull String getNome() {
+        return nome;
     }
 
-    public void setNomeCognome(@NotNull String nomeCognome) {
-        this.nomeCognome = nomeCognome;
+    public void setNome(@NotNull String nome) {
+        this.nome = nome;
+    }
+
+    public @NotNull String getCognome() {
+        return cognome;
+    }
+
+    public void setCognome(@NotNull String cognome) {
+        this.cognome = cognome;
     }
 }

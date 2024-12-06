@@ -4,19 +4,20 @@ import it.reactive.torneoDemo.resource.Giocatore;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 public class SquadraDTO {
     @NotNull
-    @Min(value = 3, message = "Il nome deve essere almeno di tre caratteri")
+    @Size(min = 3, message = "Il nome deve essere almeno di tre caratteri")
     String nome;
     String coloriSociali;
 
-    public @NotNull @Min(value = 3, message = "Il nome deve essere almeno di tre caratteri") String getNome() {
+    public @NotNull @Size(min = 3, message = "Il nome deve essere almeno di tre caratteri") String getNome() {
         return nome;
     }
 
-    public void setNome(@NotNull @Min(value = 3, message = "Il nome deve essere almeno di tre caratteri") String nome) {
+    public void setNome(@NotNull @Size(min = 3, message = "Il nome deve essere almeno di tre caratteri") String nome) {
         this.nome = nome;
     }
 
