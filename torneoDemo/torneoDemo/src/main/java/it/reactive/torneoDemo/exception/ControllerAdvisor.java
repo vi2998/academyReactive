@@ -20,6 +20,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         String formatDateTime = LocalDateTime.now().format(formatter);
         body.put("timestamp", formatDateTime);
+        body.put("code","C1");
         body.put("message", e.getMessage());
 
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);

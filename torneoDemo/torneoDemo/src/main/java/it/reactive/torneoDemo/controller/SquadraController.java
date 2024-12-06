@@ -4,13 +4,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.reactive.torneoDemo.dto.SquadraDTO;
+import it.reactive.torneoDemo.dto.SquadraGiocatoreDTO;
 import it.reactive.torneoDemo.resource.Squadra;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "squadre", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -20,15 +21,35 @@ public class SquadraController {
 
     @ApiOperation(value = "Aggiungi una nuova squadra", response = Squadra.class)
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Squadra aggiunta"),
+            @ApiResponse(code = 201, message = "Squadra aggiunta", response = Squadra.class),
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
             @ApiResponse(code = 500, message = "Errore del server")
     })
     @PostMapping("/salvaSquadra")
-    public ResponseEntity<Squadra> salvaSquadra(SquadraDTO squadraDTO){
+    public ResponseEntity<Squadra> salvaSquadra(@RequestBody SquadraDTO squadraDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
+    @ApiOperation(value = "Aggiungi una nuova squadra e una lista giocatori", response = Squadra.class)
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Squadra aggiunta con lista giocatori", response = Squadra.class),
+            @ApiResponse(code = 400, message = "Dati inseriti non validi"),
+            @ApiResponse(code = 500, message = "Errore del server")
+    })
+    @PostMapping("/salvaSquadraGiocatori")
+    public ResponseEntity<Squadra> salvaSquadraGiocatori(@RequestBody SquadraGiocatoreDTO squadraGiocatoreDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
 
+    @ApiOperation(value = "Ricerca squadre", response = List.class)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Squadre cercate", response = List.class),
+            @ApiResponse(code = 400, message = "Dati inseriti non validi"),
+            @ApiResponse(code = 500, message = "Errore del server")
+    })
 
+    @GetMapping("/ricercaSquadre/{completo}")
+    public ResponseEntity<List<Squadra>> ricercaSquadra(@PathVariable boolean completo){
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 }

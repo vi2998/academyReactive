@@ -13,6 +13,9 @@ public class Giocatore {
         this.squadra = squadra;
     }
 
+    public Giocatore() {
+    }
+
     public Integer getIdGiocatore() {
         return idGiocatore;
     }
