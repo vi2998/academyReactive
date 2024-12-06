@@ -27,8 +27,8 @@ public class SquadraController {
     @PostMapping("/salvaSquadra")
     public ResponseEntity<Squadra> salvaSquadra(SquadraDTO squadraDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
-
     }
+
 
 
 }
