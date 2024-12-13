@@ -4,6 +4,7 @@ insert into Autori (nome, cognome) values ('Italo', 'Calvino');
 insert into Autori (nome, cognome) values ('Dante', 'Alighieri');
 insert into Autori (nome, cognome) values ('Leonardo', 'Da Vinci');
 insert into Autori (nome, cognome) values ('Luigi', 'Pirandello');
+insert into Autori (nome, cognome) values ('Vito', 'Pitrelli'); -- usato per query se l’autore non ha scritto libri 
 
 --inserimento Generi
 insert into Generi (nome_genere) values ('Classico');
