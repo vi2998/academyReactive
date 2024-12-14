@@ -36,7 +36,7 @@
 	select l.genere,l.autore_cognome, 
 	count(*) as conteggio
 	from libri as l
-	where datapubblicazione > '01-01-2021'
+	where l.datapubblicazione > '01-01-2021'
 	group by l.genere, l.autore_cognome;
 	
 --8.	Estrarre il conteggio dei libri per genere ed autore riportando le colonne genere, cognome e conteggio per tutte le occorrenze presenti almeno due volte
