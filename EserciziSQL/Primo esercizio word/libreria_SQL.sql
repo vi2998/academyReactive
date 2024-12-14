@@ -1,7 +1,7 @@
 --1.	Recuperare tutte le colonne di libri ed autori mettendo in join le due tabelle con la sintassi senza la parola Join
 	SELECT * FROM libri AS l, autori AS a
 	where l.autore_nome = a.nome 
-	and l.autore_cognome = a.cognome; --così non duplico i record
+	and l.autore_cognome = a.cognome;
 	
 --2.	Recuperare le colonne titolo, genere ed nome dell’autore con la sintassi inner join su tutte le relazioni
 	select l.titolo, l.genere, a.nome from Libri as l
@@ -22,6 +22,26 @@
 	and l.autore_cognome = a.cognome;
 
 --5.	Recuperare i libri e le case editrici visualizzando le colonne della casa editrice come null se non presente la relazione
+	select l.titolo, c.casa from libri as l
+	left join caseeditrici as c
+	on l.idcasaeditrice = c.id;
+
 --6.	Recuperare i libri e le case editrici visualizzando le colonne dei libri come null se non presente la relazione
+	select l.titolo, c.casa from Libri as l
+	right join CaseEditrici as c
+	on c.id = l.idCasaEditrice;
+
+	
 --7.	Estrarre il conteggio dei libri per genere ed autore riportando le colonne genere, cognome e conteggio per tutti i libri scritti dopo il ’01-01-2021’
+	select l.genere,l.autore_cognome, 
+	count(*) as conteggio
+	from libri as l
+	where datapubblicazione > '01-01-2021'
+	group by l.genere, l.autore_cognome;
+	
 --8.	Estrarre il conteggio dei libri per genere ed autore riportando le colonne genere, cognome e conteggio per tutte le occorrenze presenti almeno due volte
+	select l.genere,l.autore_cognome, 
+	count(*) as conteggio
+	from libri as l
+	group by l.genere, l.autore_cognome
+	having count(*) >= 2;

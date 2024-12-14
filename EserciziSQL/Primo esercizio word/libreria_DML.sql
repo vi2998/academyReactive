@@ -19,6 +19,7 @@ insert into CaseEditrici (casa) values ('Einaudi');
 insert into CaseEditrici (casa) values ('Feltrinelli');
 insert into CaseEditrici (casa) values ('Rizzoli');
 insert into CaseEditrici (casa) values ('Garzanti');
+insert into CaseEditrici (casa) values ('Senza Libro'); -- usato per query casaeditrice senza libro
 
 --inserimento Libri
 insert into Libri (titolo, genere, autore_nome, autore_cognome, dataPubblicazione, idCasaEditrice) values
@@ -36,6 +37,9 @@ insert into Libri (titolo, genere, autore_nome, autore_cognome, dataPubblicazion
 insert into Libri (titolo, genere, autore_nome, autore_cognome, dataPubblicazione, idCasaEditrice) values
 ('Sei Personaggi in Cerca d Autore', 'Giallo', 'Luigi', 'Pirandello', '1921-10-20', 5);
 
+insert into Libri (titolo, genere, autore_nome, autore_cognome, dataPubblicazione, idCasaEditrice)
+values ('Libro Senza Casa Editrice', 'Giallo', 'Luigi', 'Pirandello', '2024-12-01', null); -- usato per query libro senza casa editrice 
+
 --inserimento Librerie
 insert into Librerie (nome, citta) values ('Libreria Mondadori', 'Torino');
 insert into Librerie (nome, citta) values ('Libreria Feltrinelli', 'Milano');
@@ -49,3 +53,4 @@ insert into Libri_Librerie (id_Libri, nome_Libreria, citta_libreria) values (2, 
 insert into Libri_Librerie (id_Libri, nome_Libreria, citta_libreria) values (3, 'Libreria Einaudi', 'Roma');
 insert into Libri_Librerie (id_Libri, nome_Libreria, citta_libreria) values (4, 'Libreria Rizzoli', 'Napoli');
 insert into Libri_Librerie (id_Libri, nome_Libreria, citta_libreria) values (5, 'Libreria Garzanti', 'Torino');
+insert into Libri_Librerie (id_Libri, nome_Libreria, citta_libreria) values (6, 'Libreria Garzanti', 'Torino');
