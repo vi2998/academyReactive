@@ -35,3 +35,6 @@ CREATE TABLE fornitori(
 	denominazione varchar(100),
 	regioneResidenza varchar(100)
 );
+
+alter table fatture add constraint FK_idCliente FOREIGN KEY (idCliente) REFERENCES clienti(NumeroCliente);
+alter table fatture add constraint FK_numero_fornitore FOREIGN KEY (NumeroFornitore) REFERENCES Fornitori(NumeroFornitore);
