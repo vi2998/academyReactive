@@ -1,5 +1,5 @@
 drop table if exists clienti CASCADE;
-drop table if exists fattrure CASCADE;
+drop table if exists fatture CASCADE;
 drop table if exists prodotti CASCADE;
 drop table if exists fornitori CASCADE;
 
@@ -31,7 +31,7 @@ CREATE TABLE prodotti(
 );
 
 CREATE TABLE fornitori(
-	numeroFornitore integer,
+	numeroFornitore integer primary key,
 	denominazione varchar(100),
 	regioneResidenza varchar(100)
 );

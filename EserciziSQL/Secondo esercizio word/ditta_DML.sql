@@ -41,9 +41,11 @@ VALUES
     (113, 'Vendita', 21.80, 22, 17, '2012-01-02', 201),
     (114, 'Vendita', 14.00, 10, 10, '2013-12-12', 202),
     (115, 'Vendita', 76.15, 22, 14, '2011-01-01', 203),
-    (116, 'A', 85.00, 10, 16, '2018-02-01', 203),
-    (117, 'Vendita', 195.00, 22, 18, '2013-01-01', 201),
-    (118, 'A', 45.75, 22, 10, '2005-09-10', 201);
+    (116, 'A', 85.00, 10, 16, '2018-02-01', 203), --aggiunte più insert uguali del 2018 per verifica query più di 2 fatture con tipologia ‘A’
+    (117, 'A', 85.00, 10, 16, '2018-02-01', 203),
+    (118, 'A', 85.00, 10, 16, '2018-02-01', 203),
+    (119, 'Vendita', 195.00, 22, 18, '2013-01-01', 201),
+    (129, 'A', 45.75, 22, 10, '2005-09-10', 201);
  
 INSERT INTO Prodotti (IdProdotto, Descrizione, InProduzione, InCommercio, DataAttivazione, DataDisattivazione)
 VALUES
