@@ -26,7 +26,7 @@ import java.util.List;
 @Validated
 public class SquadraController {
 
-    @ApiOperation(value = "Creao una nuova squadra", response = SquadraResponse.class)
+    @ApiOperation(value = "Creo una nuova squadra", response = SquadraResponse.class)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Squadra creata con successo"),
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
@@ -73,7 +73,8 @@ public class SquadraController {
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
             @ApiResponse(code = 500, message = "errore di server")})
     @PutMapping("/addGiocatore/{id}")
-    public ResponseEntity<SquadraResponse> aggiungiGiocatore(@PathVariable @ApiParam(value = "id squadra", required = true) @Min(0) @Max(10000) Integer id, @Valid @RequestBody @ApiParam(value = "giocatoreDTO", required = true) GiocatoreDto giocatoreDTO) {
+    public ResponseEntity<SquadraResponse> aggiungiGiocatore(@PathVariable @ApiParam(value = "id squadra",
+            required = true) @Min(0) @Max(10000) Integer id, @Valid @RequestBody @ApiParam(value = "giocatoreDTO", required = true) GiocatoreDto giocatoreDTO) {
         return ResponseEntity.ok(null);
     }
 
@@ -87,7 +88,6 @@ public class SquadraController {
             true) @Min(0) @Max(10000) Integer idSquadra, @RequestBody @ApiParam(value = "tifoseria") @Valid TifoseriaDTO tifoseriaDTO) {
         return ResponseEntity.ok(null);
     }
-
 
     @ApiOperation(value = "Elimino squadra con relativi giocatori", response = SquadraResponse.class, responseContainer = "List")
     @ApiResponses(value = {

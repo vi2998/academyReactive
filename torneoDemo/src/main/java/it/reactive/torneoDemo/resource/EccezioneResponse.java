@@ -4,15 +4,6 @@ public class EccezioneResponse {
 
     private String cod;
     private String des;
-//    private String error;
-//
-//    public String getError() {
-//        return error;
-//    }
-//
-//    public void setError(String error) {
-//        this.error = error;
-//    }
 
     public String getCod() {
         return cod;

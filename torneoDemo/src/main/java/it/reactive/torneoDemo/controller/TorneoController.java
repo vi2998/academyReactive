@@ -47,7 +47,8 @@ public class TorneoController {
     }
 
 
-    @ApiOperation(value = "Ritorna tutti i tornei con tutte le squadre", response = TorneoResponse.class, responseContainer = "List")
+    @ApiOperation(value = "Ritorna tutti i tornei con tutte le squadre", response = TorneoResponse.class,
+            responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Tornei e squadre recuperato con sucesso"),
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
@@ -58,9 +59,10 @@ public class TorneoController {
         return ResponseEntity.ok(null);
     }
 
-    @ApiOperation(value = "Elimino il torneo con relative squadre assciare se non fanno parte di una altro torneo con relativi giocatori", response = TorneoResponse.class, responseContainer = "List")
+    @ApiOperation(value = "Elimino il torneo con relative squadre associate se non fanno parte di una altro torneo con relativi giocatori",
+            response = TorneoResponse.class, responseContainer = "List")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Tornei,squadre e giocatori eliminati con sucesso"),
+            @ApiResponse(code = 200, message = "Tornei, squadre e giocatori eliminati con successo"),
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
             @ApiResponse(code = 500, message = "Errore del server")
     })
