@@ -18,7 +18,7 @@ VALUES (14, 'Sara', 'Ferrari', '1982-03-05', 'Veneto'),
     (17, 'Mario', 'Pintone', '1980-08-18', 'Campania'),
     (18, 'Luisa', 'Gallo', '1982-11-22', 'Piemonte');
  
-   INSERT INTO Fornitori (NumeroFornitore, Denominazione, RegioneResidenza)
+   INSERT INTO fornitori (NumeroFornitore, Denominazione, RegioneResidenza)
 VALUES
     (201, 'Fornitore A', 'Lombardia'),
     (202, 'Fornitore B', 'Toscana'),
