@@ -33,7 +33,7 @@
 		where f.tipologia = 'A'
 		group by anno_fatture_a
 		having count(*) > 2; 
-
+	
 --8)	Riportare l’elenco delle fatture (numero, importo, iva e data) con in aggiunta il nome del fornitore  
 		select f.numerofattura , f.importo, f.iva, f.datafattura, fo.denominazione as nome_fornitore
 		from fatture as f, fornitori as fo;
