@@ -21,9 +21,6 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<Object> handleException(CustomException e) {
-//        Map<String, Object> body = new LinkedHashMap<>();
-//        body.put("Codice errore", e.getCodErr());
-//        body.put("Message", e.getMessage());
         EccezioneResponse ex = new EccezioneResponse();
         ex.setCod(e.getCodErr());
         ex.setDes(e.getMessaggio());
