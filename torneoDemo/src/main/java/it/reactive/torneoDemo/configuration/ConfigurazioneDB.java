@@ -1,14 +1,14 @@
 package it.reactive.torneoDemo.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-@Configuration
-public class ConfigurationDatabase {
+@Component
+public class ConfigurazioneDB {
     @Value("${spring.datasource.url}")
     private String url;
     @Value("${spring.datasource.username}")
@@ -27,4 +27,6 @@ public class ConfigurationDatabase {
     public Connection getConnection() {
         return con;
     }
+
+
 }

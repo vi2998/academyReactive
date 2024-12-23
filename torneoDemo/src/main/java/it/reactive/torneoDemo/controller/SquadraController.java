@@ -4,10 +4,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import it.reactive.torneoDemo.DTO.giocatore.GiocatoreDto;
-import it.reactive.torneoDemo.DTO.squadra.SquadraDTO;
-import it.reactive.torneoDemo.DTO.squadra.SquadreDiGiocatoriDTO;
-import it.reactive.torneoDemo.DTO.tifoseria.TifoseriaDTO;
+import it.reactive.torneoDemo.dto.GiocatoreDTO;
+import it.reactive.torneoDemo.dto.SquadraDTO;
+import it.reactive.torneoDemo.dto.SquadreDiGiocatoriDTO;
+import it.reactive.torneoDemo.dto.TifoseriaDTO;
 import it.reactive.torneoDemo.resource.EccezioneResponse;
 import it.reactive.torneoDemo.resource.SquadraResponse;
 import org.springframework.http.HttpStatus;
@@ -74,7 +74,7 @@ public class SquadraController {
             @ApiResponse(code = 500, message = "errore di server")})
     @PutMapping("/addGiocatore/{id}")
     public ResponseEntity<SquadraResponse> aggiungiGiocatore(@PathVariable @ApiParam(value = "id squadra",
-            required = true) @Min(0) @Max(10000) Integer id, @Valid @RequestBody @ApiParam(value = "giocatoreDTO", required = true) GiocatoreDto giocatoreDTO) {
+            required = true) @Min(0) @Max(10000) Integer id, @Valid @RequestBody @ApiParam(value = "giocatoreDTO", required = true) GiocatoreDTO giocatoreDTO) {
         return ResponseEntity.ok(null);
     }
 

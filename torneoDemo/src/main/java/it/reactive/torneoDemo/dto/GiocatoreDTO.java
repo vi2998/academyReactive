@@ -1,9 +1,9 @@
-package it.reactive.torneoDemo.DTO.giocatore;
+package it.reactive.torneoDemo.dto;
 
 
 import javax.validation.constraints.NotBlank;
 
-public class GiocatoreDto {
+public class GiocatoreDTO {
 
 
     @NotBlank(message = "Il nome non puo essere null")
@@ -17,6 +17,6 @@ public class GiocatoreDto {
         this.nomeCognome = nomeCognome;
     }
 
-    public GiocatoreDto() {
+    public GiocatoreDTO() {
     }
 }

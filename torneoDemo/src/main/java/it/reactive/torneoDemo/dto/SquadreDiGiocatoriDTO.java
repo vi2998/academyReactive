@@ -1,6 +1,4 @@
-package it.reactive.torneoDemo.DTO.squadra;
-
-import it.reactive.torneoDemo.DTO.giocatore.GiocatoreDto;
+package it.reactive.torneoDemo.dto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -17,7 +15,7 @@ public class SquadreDiGiocatoriDTO {
     private String coloriSociali;
     @NotNull
     @Valid
-    private List<GiocatoreDto> listaGiocatori;
+    private List<GiocatoreDTO> listaGiocatori;
 
     public String getNome() {
         return nome;
@@ -35,11 +33,11 @@ public class SquadreDiGiocatoriDTO {
         this.coloriSociali = coloriSociali;
     }
 
-    public List<GiocatoreDto> getListaGiocatori() {
+    public List<GiocatoreDTO> getListaGiocatori() {
         return listaGiocatori;
     }
 
-    public void setListaGiocatori(List<GiocatoreDto> listaGiocatori) {
+    public void setListaGiocatori(List<GiocatoreDTO> listaGiocatori) {
         this.listaGiocatori = listaGiocatori;
     }
 }

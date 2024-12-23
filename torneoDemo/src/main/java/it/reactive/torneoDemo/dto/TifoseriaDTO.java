@@ -1,4 +1,4 @@
-package it.reactive.torneoDemo.DTO.tifoseria;
+package it.reactive.torneoDemo.dto;
 
 import javax.validation.constraints.NotBlank;
 

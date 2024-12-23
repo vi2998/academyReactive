@@ -1,4 +1,4 @@
-package it.reactive.torneoDemo.DTO.torneo;
+package it.reactive.torneoDemo.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
