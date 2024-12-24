@@ -1,13 +1,13 @@
 package it.reactive.torneoDemo.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-@Component
+@Configuration
 public class ConfigurazioneDB {
     @Value("${spring.datasource.url}")
     private String url;
@@ -17,16 +17,13 @@ public class ConfigurazioneDB {
     private String password;
     private Connection con;
 
-    @PostConstruct
-    public void init() throws Exception {
+    @Bean
+    @Scope("prototype")
+    public Connection init() throws Exception {
         con = DriverManager.getConnection(url, user, password);
         System.out.println(con);
         con.setAutoCommit(false);
-    }
-
-    public Connection getConnection() {
         return con;
     }
-
 
 }
