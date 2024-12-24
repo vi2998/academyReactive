@@ -4,6 +4,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.reactive.torneoDemo.resource.GiocatoreResponse;
+//import it.reactive.torneoDemo.service.GiocatoreService;
+import it.reactive.torneoDemo.service.GiocatoreService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +22,9 @@ import javax.validation.constraints.Min;
 @RequestMapping(value = "giocatori", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class GiocatoreController {
+
+    @Autowired
+    GiocatoreService giocatoreService;
 
     @ApiOperation(value = "Aggiorna ammonizione per un determinato giocatore", response = GiocatoreResponse.class)
     @ApiResponses(value = {
