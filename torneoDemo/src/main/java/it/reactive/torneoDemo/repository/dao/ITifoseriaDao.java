@@ -2,6 +2,7 @@ package it.reactive.torneoDemo.repository.dao;
 
 import it.reactive.torneoDemo.dto.SquadraDTO;
 import it.reactive.torneoDemo.dto.TifoseriaDTO;
+import it.reactive.torneoDemo.model.TifoseriaModel;
 
 public interface ITifoseriaDao {
     TifoseriaModel create(TifoseriaDTO tifoseriaDTO);
