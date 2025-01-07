@@ -36,8 +36,6 @@ public class SquadraService {
         iSquadraDao.salvaSquadraDiGiocatori(squadreDiGiocatoriDTO);
     }
 
-    public void read(int id){
-        iSquadraDao.read(id);
-    }
+
 
 }

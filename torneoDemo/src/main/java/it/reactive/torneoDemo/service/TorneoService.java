@@ -19,11 +19,11 @@ public class TorneoService {
         iTorneoDao.eliminaTorneo(id);
     }
 
-    public void read(int id){
-        iTorneoDao.read(id);
+    public void read(){
+        iTorneoDao.read();
     }
 
-    public void update(int id, TorneoDTO torneoDTO){
-        iTorneoDao.update(id, torneoDTO);
+    public void update(int idTorneo, Integer idSquadra){
+        iTorneoDao.update(idTorneo, idSquadra);
     }
 }

@@ -6,6 +6,6 @@ import it.reactive.torneoDemo.model.TorneoModel;
 public interface ITorneoDao {
     TorneoModel aggiungiTorneo(TorneoDTO torneoDTO);
     TorneoModel eliminaTorneo(int id);
-    TorneoModel update(int id, TorneoDTO torneoDTO);
-    TorneoModel read(int id);
+    TorneoModel update(int idTorneo, int idSquadra);
+    TorneoModel read();
 }

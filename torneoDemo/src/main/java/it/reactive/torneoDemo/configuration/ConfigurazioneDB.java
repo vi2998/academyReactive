@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 @Configuration
 public class ConfigurazioneDB {
@@ -15,12 +16,11 @@ public class ConfigurazioneDB {
     private String user;
     @Value("${spring.datasource.password}")
     private String password;
-    private Connection con;
 
     @Bean
     @Scope("prototype")
-    public Connection init() throws Exception {
-        con = DriverManager.getConnection(url, user, password);
+    public Connection init() throws SQLException {
+        Connection con = DriverManager.getConnection(url, user, password);
         System.out.println(con);
         con.setAutoCommit(false);
         return con;

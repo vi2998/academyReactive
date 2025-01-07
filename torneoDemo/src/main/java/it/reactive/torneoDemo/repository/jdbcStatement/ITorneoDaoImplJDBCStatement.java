@@ -1,8 +1,14 @@
 package it.reactive.torneoDemo.repository.jdbcStatement;
 
+import it.reactive.torneoDemo.Costanti;
 import it.reactive.torneoDemo.dto.TorneoDTO;
 import it.reactive.torneoDemo.model.TorneoModel;
 import it.reactive.torneoDemo.repository.dao.ITorneoDao;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Repository;
+
+@Repository
+@Profile(Costanti.TORNEO_DAO_JDBC_STATEMENT)
 
 public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
     @Override
@@ -16,12 +22,12 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
     }
 
     @Override
-    public TorneoModel update(int id, TorneoDTO torneoDTO) {
+    public TorneoModel update(int idTorneo, int idSquadra) {
         return null;
     }
 
     @Override
-    public TorneoModel read(int id) {
+    public TorneoModel read() {
         return null;
     }
 }

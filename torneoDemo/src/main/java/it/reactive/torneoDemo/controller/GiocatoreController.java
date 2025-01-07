@@ -3,6 +3,7 @@ package it.reactive.torneoDemo.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import it.reactive.torneoDemo.model.GiocatoreModel;
 import it.reactive.torneoDemo.resource.GiocatoreResponse;
 //import it.reactive.torneoDemo.service.GiocatoreService;
 import it.reactive.torneoDemo.service.GiocatoreService;
@@ -32,8 +33,8 @@ public class GiocatoreController {
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
             @ApiResponse(code = 500, message = "Errore di server")})
     @PutMapping("/updateAmmonizioni/{idGiocatore}")
-    public ResponseEntity<GiocatoreResponse> aggiornaAmmonizione(@PathVariable @Min(0) @Max(10000) Integer idGiocatore) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<GiocatoreModel> aggiornaAmmonizione(@PathVariable @Min(0) @Max(10000) Integer idGiocatore) throws Exception {
+        return ResponseEntity.ok(giocatoreService.aggiornaAmmonizione(idGiocatore));
     }
 
 }
