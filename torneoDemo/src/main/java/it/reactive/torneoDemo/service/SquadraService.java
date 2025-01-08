@@ -10,6 +10,8 @@ import it.reactive.torneoDemo.repository.dao.ISquadraDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
+
 @Service
 public class SquadraService {
 
@@ -20,7 +22,7 @@ public class SquadraService {
         iSquadraDao.rimuoviSquadra(id);
     }
 
-    public void aggiungiGiocatore(int id, GiocatoreDTO giocatoreDTO){
+    public void aggiungiGiocatore(int id, GiocatoreDTO giocatoreDTO) throws SQLException {
         iSquadraDao.aggiungiGiocatore(id, giocatoreDTO);
     }
 

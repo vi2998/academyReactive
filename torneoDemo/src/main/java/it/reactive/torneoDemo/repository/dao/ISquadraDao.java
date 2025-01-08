@@ -6,10 +6,11 @@ import it.reactive.torneoDemo.dto.SquadreDiGiocatoriDTO;
 import it.reactive.torneoDemo.dto.TifoseriaDTO;
 import it.reactive.torneoDemo.model.SquadraModel;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ISquadraDao {
-    SquadraModel aggiungiGiocatore(int id, GiocatoreDTO giocatoreDTO);
+    SquadraModel aggiungiGiocatore(int id, GiocatoreDTO giocatoreDTO) throws SQLException;
     SquadraModel aggiungiTifoseria(int id, TifoseriaDTO tifoseriaDTO);
     SquadraModel salvaSquadra(SquadraDTO squadraDTO);
     SquadraModel salvaSquadraDiGiocatori(SquadreDiGiocatoriDTO squadreDiGiocatoriDTO);
