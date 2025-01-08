@@ -34,7 +34,7 @@ public class GiocatoreDaoImplJDBCStatement implements IGiocatoreDao {
                                 // Se vengono aggiornate più righe, c'è un errore logico nel database o nella query.
             System.out.println("Qualcosa è andato storto");
         }else{
-            //con.commit();
+            con.commit();
         }
         query = "select g.nome_cognome,g.numero_ammonizioni, s.nome as nome_squadra from giocatore g join squadra s on G.id_squadra = s.id";
         ResultSet rs = st.executeQuery(query);

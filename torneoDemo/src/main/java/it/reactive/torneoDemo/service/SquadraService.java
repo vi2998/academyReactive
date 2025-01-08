@@ -22,8 +22,8 @@ public class SquadraService {
         iSquadraDao.rimuoviSquadra(id);
     }
 
-    public void aggiungiGiocatore(int id, GiocatoreDTO giocatoreDTO) throws SQLException {
-        iSquadraDao.aggiungiGiocatore(id, giocatoreDTO);
+    public SquadraModel aggiungiGiocatore(int id, GiocatoreDTO giocatoreDTO) throws SQLException {
+       return iSquadraDao.aggiungiGiocatore(id, giocatoreDTO);
     }
 
     public void aggiungiTifoseria(int id, TifoseriaDTO tifoseriaDTO) {

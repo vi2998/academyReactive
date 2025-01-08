@@ -8,8 +8,12 @@ import it.reactive.torneoDemo.dto.GiocatoreDTO;
 import it.reactive.torneoDemo.dto.SquadraDTO;
 import it.reactive.torneoDemo.dto.SquadreDiGiocatoriDTO;
 import it.reactive.torneoDemo.dto.TifoseriaDTO;
+import it.reactive.torneoDemo.model.GiocatoreModel;
+import it.reactive.torneoDemo.model.SquadraModel;
 import it.reactive.torneoDemo.resource.EccezioneResponse;
 import it.reactive.torneoDemo.resource.SquadraResponse;
+import it.reactive.torneoDemo.service.SquadraService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +23,15 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "squadre", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class SquadraController {
+    @Autowired
+    SquadraService squadraService;
 
     @ApiOperation(value = "Creo una nuova squadra", response = SquadraResponse.class)
     @ApiResponses(value = {
@@ -73,9 +80,9 @@ public class SquadraController {
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
             @ApiResponse(code = 500, message = "errore di server")})
     @PutMapping("/addGiocatore/{id}")
-    public ResponseEntity<SquadraResponse> aggiungiGiocatore(@PathVariable @ApiParam(value = "id squadra",
-            required = true) @Min(0) @Max(10000) Integer id, @Valid @RequestBody @ApiParam(value = "giocatoreDTO", required = true) GiocatoreDTO giocatoreDTO) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<SquadraModel> aggiungiGiocatore(@PathVariable @ApiParam(value = "id squadra",
+            required = true) @Min(0) @Max(10000) Integer id, @Valid @RequestBody @ApiParam(value = "giocatoreDTO", required = true) GiocatoreDTO giocatoreDTO) throws SQLException {
+        return ResponseEntity.ok(squadraService.aggiungiGiocatore(id, giocatoreDTO));
     }
 
     @ApiOperation(value = "Aggiorno una tifoseria se no ne creo una", response = SquadraResponse.class)
