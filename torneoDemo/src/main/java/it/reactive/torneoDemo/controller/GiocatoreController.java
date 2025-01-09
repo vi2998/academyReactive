@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.reactive.torneoDemo.model.GiocatoreModel;
 import it.reactive.torneoDemo.resource.GiocatoreResponse;
-//import it.reactive.torneoDemo.service.GiocatoreService;
 import it.reactive.torneoDemo.service.GiocatoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

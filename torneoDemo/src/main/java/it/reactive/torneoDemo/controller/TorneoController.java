@@ -43,12 +43,12 @@ public class TorneoController {
 
     @ApiOperation(value = "Censisco una squadra al torneo", response = TorneoResponse.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Sqadra aggiunta al torneo con sucesso"),
+            @ApiResponse(code = 201, message = "Squadra aggiunta al torneo con sucesso"),
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
             @ApiResponse(code = 500, message = "Errore del server")
     })
     @PutMapping("/addSquadraToTorneo/{idTorneo}/{idSquadra}")
-    public ResponseEntity<TorneoResponse> censitaSquadraAlTorneo(@PathVariable @Min(0) @Max(10000) Integer idTorneo,
+    public ResponseEntity<TorneoModel> censitaSquadraAlTorneo(@PathVariable @Min(0) @Max(10000) Integer idTorneo,
                                                                  @PathVariable @Min(0) @Max(10000) Integer idSquadra) {
         return ResponseEntity.ok(null);
     }

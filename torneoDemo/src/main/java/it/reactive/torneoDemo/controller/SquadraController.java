@@ -34,7 +34,7 @@ public class SquadraController {
     @Autowired
     SquadraService squadraService;
 
-    @ApiOperation(value = "Creo una nuova squadra", response = SquadraResponse.class)
+    @ApiOperation(value = "Inserisce una nuova squadra", response = SquadraResponse.class)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Squadra creata con successo"),
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
@@ -47,7 +47,7 @@ public class SquadraController {
     }
 
 
-    @ApiOperation(value = "Creao una nuova squadra con la lista di giocatore", response = SquadraResponse.class)
+    @ApiOperation(value = "Inserisce una nuova squadra insieme a una lista di giocatori", response = SquadraResponse.class)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Squadra e giocatori creata con successo", response = SquadraResponse.class),
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
