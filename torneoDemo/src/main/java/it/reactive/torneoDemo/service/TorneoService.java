@@ -22,7 +22,7 @@ public class TorneoService {
         iTorneoDao.eliminaTorneo(id);
     }
 
-    public void update(int idTorneo, Integer idSquadra){
-        iTorneoDao.update(idTorneo, idSquadra);
+    public TorneoModel associaTorneoASquadra(int idTorneo, Integer idSquadra) throws SQLException {
+       return iTorneoDao.associaTorneoASquadra(idTorneo, idSquadra);
     }
 }

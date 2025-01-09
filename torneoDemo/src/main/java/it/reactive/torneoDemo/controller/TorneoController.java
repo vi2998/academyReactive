@@ -49,8 +49,8 @@ public class TorneoController {
     })
     @PutMapping("/addSquadraToTorneo/{idTorneo}/{idSquadra}")
     public ResponseEntity<TorneoModel> censitaSquadraAlTorneo(@PathVariable @Min(0) @Max(10000) Integer idTorneo,
-                                                                 @PathVariable @Min(0) @Max(10000) Integer idSquadra) {
-        return ResponseEntity.ok(null);
+                                                                 @PathVariable @Min(0) @Max(10000) Integer idSquadra) throws SQLException {
+        return ResponseEntity.ok(torneoService.associaTorneoASquadra(idTorneo, idSquadra));
     }
 
 

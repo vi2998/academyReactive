@@ -128,6 +128,11 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
     }
 
     @Override
+    public SquadraModel salvaSquadraGiocatori(SquadreDiGiocatoriDTO squadreDiGiocatoriDTO) throws SQLException {
+        return null;
+    }
+
+    @Override
     public void rimuoviSquadra(int id) throws SQLException {
         Connection con = configurazioneDB.init();
         Statement st = con.createStatement();

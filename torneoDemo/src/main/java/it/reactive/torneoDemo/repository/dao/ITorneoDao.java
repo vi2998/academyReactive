@@ -4,9 +4,12 @@ import it.reactive.torneoDemo.dto.TorneoDTO;
 import it.reactive.torneoDemo.model.TorneoModel;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface ITorneoDao {
     TorneoModel aggiungiTorneo(TorneoDTO torneoDTO) throws SQLException;
     void eliminaTorneo(int id) throws SQLException;
-    TorneoModel update(int idTorneo, int idSquadra);
+    TorneoModel associaTorneoASquadra(int idTorneo, int idSquadra) throws SQLException;
+    List<TorneoModel> ricavoITornei() throws SQLException;
+
 }
