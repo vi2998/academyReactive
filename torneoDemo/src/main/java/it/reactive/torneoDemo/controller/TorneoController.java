@@ -4,7 +4,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.reactive.torneoDemo.dto.TorneoDTO;
+import it.reactive.torneoDemo.model.TorneoModel;
 import it.reactive.torneoDemo.resource.TorneoResponse;
+import it.reactive.torneoDemo.service.TorneoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +17,16 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "tornei", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class TorneoController {
+
+    @Autowired
+    TorneoService torneoService;
 
 
     @ApiOperation(value = "Creo un nuovo torneo", response = TorneoResponse.class)
@@ -29,8 +36,8 @@ public class TorneoController {
             @ApiResponse(code = 500, message = "Errore del server")
     })
     @PostMapping
-    public ResponseEntity<TorneoResponse> aggiungiTorneo(@RequestBody @Valid TorneoDTO torneoDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    public ResponseEntity<TorneoModel> aggiungiTorneo(@RequestBody @Valid TorneoDTO torneoDTO) throws SQLException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(torneoService.aggiungiTorneo(torneoDTO));
     }
 
 
@@ -67,8 +74,9 @@ public class TorneoController {
             @ApiResponse(code = 500, message = "Errore del server")
     })
     @DeleteMapping("/{idTorneo}")
-    public ResponseEntity<List<TorneoResponse>> eliminaTorneoConSquadreAndGiocatori(@PathVariable @Min(0) @Max(10000) Integer idTorneo) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<Void> eliminaTorneoConSquadreAndGiocatori(@PathVariable @Min(0) @Max(10000) Integer idTorneo) throws SQLException {
+       torneoService.eliminaTorneo(idTorneo);
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -31,14 +31,7 @@ public class SquadraService {
         return iSquadraDao.aggiungiTifoseria(id, tifoseriaDTO);
     }
 
-    public void salvaSquadra(SquadraDTO squadraDTO){
-        iSquadraDao.salvaSquadra(squadraDTO);
+    public SquadraModel salvaSquadra(SquadraDTO squadraDTO) throws SQLException {
+        return iSquadraDao.salvaSquadra(squadraDTO);
     }
-
-    public void salvaSquadraDiGiocatori(SquadreDiGiocatoriDTO squadreDiGiocatoriDTO){
-        iSquadraDao.salvaSquadraDiGiocatori(squadreDiGiocatoriDTO);
-    }
-
-
-
 }

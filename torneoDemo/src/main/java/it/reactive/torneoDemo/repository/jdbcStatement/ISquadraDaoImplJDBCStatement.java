@@ -76,6 +76,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         // Imposta i giocatori nella squadra
         squadraModel.setGiocatori(new HashSet<>(giocatoriGiaPresenti));
         con.commit();
+        con.close();
         return squadraModel;
     }
 
@@ -103,17 +104,27 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
             squadraModel.setTifoseria(tifoseriaModel);
         }
         con.commit();
+        con.close();
         return squadraModel;
     }
 
     @Override
-    public SquadraModel salvaSquadra(SquadraDTO squadraDTO) {
-        return null;
-    }
+    public SquadraModel salvaSquadra(SquadraDTO squadraDTO) throws SQLException {
+        Connection con = configurazioneDB.init();
+        Statement st = con.createStatement();
 
-    @Override
-    public SquadraModel salvaSquadraDiGiocatori(SquadreDiGiocatoriDTO squadreDiGiocatoriDTO) {
-        return null;
+        String insertQuery = "insert into squadra (nome, colori_sociali) values ('" + squadraDTO.getNome() + "','" + squadraDTO.getColoriSociali() + "')";
+        int numeroRiga = st.executeUpdate(insertQuery);
+        if (numeroRiga != 1) {
+            System.out.println("Qualcosa è andato storto");
+        }else{
+            con.commit();
+        }
+        SquadraModel squadraModel = new SquadraModel();
+        squadraModel.setNome(squadraDTO.getNome());
+        squadraModel.setColoriSociali(squadraDTO.getColoriSociali());
+        con.close();
+        return squadraModel;
     }
 
     @Override
@@ -128,11 +139,11 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
             throw new SquadraNonPresenteException();
             }
             con.commit();
+        con.close();
     }
 
     @Override
     public List<SquadraModel> ricercaSquadre(boolean ricercaGiocatori) {
         return Collections.emptyList();
     }
-
 }

@@ -42,8 +42,8 @@ public class SquadraController {
             @ApiResponse(code = 550, message = "Squadra duplicata", response = EccezioneResponse.class)
     })
     @PostMapping
-    public ResponseEntity<SquadraResponse> salvaSquadra(@RequestBody @Valid SquadraDTO squadraDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    public ResponseEntity<SquadraModel> salvaSquadra(@RequestBody @Valid SquadraDTO squadraDTO) throws SQLException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(squadraService.salvaSquadra(squadraDTO));
     }
 
 

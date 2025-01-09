@@ -2,7 +2,6 @@ package it.reactive.torneoDemo.repository.jdbcStatement;
 
 import it.reactive.torneoDemo.Costanti;
 import it.reactive.torneoDemo.configuration.ConfigurazioneDB;
-import it.reactive.torneoDemo.dto.GiocatoreDTO;
 import it.reactive.torneoDemo.model.GiocatoreModel;
 import it.reactive.torneoDemo.model.SquadraModel;
 import it.reactive.torneoDemo.repository.dao.IGiocatoreDao;
