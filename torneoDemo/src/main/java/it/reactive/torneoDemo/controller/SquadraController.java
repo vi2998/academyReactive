@@ -10,6 +10,7 @@ import it.reactive.torneoDemo.dto.SquadreDiGiocatoriDTO;
 import it.reactive.torneoDemo.dto.TifoseriaDTO;
 import it.reactive.torneoDemo.model.GiocatoreModel;
 import it.reactive.torneoDemo.model.SquadraModel;
+import it.reactive.torneoDemo.model.TifoseriaModel;
 import it.reactive.torneoDemo.resource.EccezioneResponse;
 import it.reactive.torneoDemo.resource.SquadraResponse;
 import it.reactive.torneoDemo.service.SquadraService;
@@ -91,9 +92,9 @@ public class SquadraController {
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
             @ApiResponse(code = 500, message = "errore di server")})
     @PutMapping("/addTifoseria/{idSquadra}")
-    public ResponseEntity<SquadraResponse> aggiungiTifoseria(@PathVariable @ApiParam(value = "id squadra", required =
-            true) @Min(0) @Max(10000) Integer idSquadra, @RequestBody @ApiParam(value = "tifoseria") @Valid TifoseriaDTO tifoseriaDTO) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<SquadraModel> aggiungiTifoseria(@PathVariable @ApiParam(value = "id squadra", required =
+            true) @Min(0) @Max(10000) Integer idSquadra, @RequestBody @ApiParam(value = "tifoseria") @Valid TifoseriaDTO tifoseriaDTO) throws SQLException {
+        return ResponseEntity.ok(squadraService.aggiungiTifoseria(idSquadra, tifoseriaDTO));
     }
 
     @ApiOperation(value = "Elimino squadra con relativi giocatori", response = SquadraResponse.class, responseContainer = "List")
@@ -102,7 +103,8 @@ public class SquadraController {
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
             @ApiResponse(code = 500, message = "errore di server")})
     @DeleteMapping("/{idSquadra}")
-    public ResponseEntity<Void> rimuoviSquadra(@PathVariable @Min(0) @Max(10000) Integer idSquadra) {
+    public ResponseEntity<Void> rimuoviSquadra(@PathVariable @Min(0) @Max(10000) Integer idSquadra) throws SQLException {
+        squadraService.rimuoviSquadra(idSquadra);
         return ResponseEntity.noContent().build();
     }
 

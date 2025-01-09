@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface ISquadraDao {
     SquadraModel aggiungiGiocatore(int id, GiocatoreDTO giocatoreDTO) throws SQLException;
-    SquadraModel aggiungiTifoseria(int id, TifoseriaDTO tifoseriaDTO);
+    SquadraModel aggiungiTifoseria(int id, TifoseriaDTO tifoseriaDTO) throws SQLException;
     SquadraModel salvaSquadra(SquadraDTO squadraDTO);
     SquadraModel salvaSquadraDiGiocatori(SquadreDiGiocatoriDTO squadreDiGiocatoriDTO);
-    SquadraModel rimuoviSquadra(int id);
+    void rimuoviSquadra(int id) throws SQLException;
     List<SquadraModel> ricercaSquadre(boolean ricercaGiocatori);
 }

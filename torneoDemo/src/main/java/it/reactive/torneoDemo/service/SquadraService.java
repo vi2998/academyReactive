@@ -6,6 +6,7 @@ import it.reactive.torneoDemo.dto.SquadraDTO;
 import it.reactive.torneoDemo.dto.SquadreDiGiocatoriDTO;
 import it.reactive.torneoDemo.dto.TifoseriaDTO;
 import it.reactive.torneoDemo.model.SquadraModel;
+import it.reactive.torneoDemo.model.TifoseriaModel;
 import it.reactive.torneoDemo.repository.dao.ISquadraDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class SquadraService {
     @Autowired
     ISquadraDao iSquadraDao;
 
-    public void rimuoviSquadra(int id){
+    public void rimuoviSquadra(int id) throws SQLException {
         iSquadraDao.rimuoviSquadra(id);
     }
 
@@ -26,8 +27,8 @@ public class SquadraService {
        return iSquadraDao.aggiungiGiocatore(id, giocatoreDTO);
     }
 
-    public void aggiungiTifoseria(int id, TifoseriaDTO tifoseriaDTO) {
-        iSquadraDao.aggiungiTifoseria(id, tifoseriaDTO);
+    public SquadraModel aggiungiTifoseria(int id, TifoseriaDTO tifoseriaDTO) throws SQLException {
+        return iSquadraDao.aggiungiTifoseria(id, tifoseriaDTO);
     }
 
     public void salvaSquadra(SquadraDTO squadraDTO){
