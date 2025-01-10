@@ -28,6 +28,7 @@ import static it.reactive.torneoDemo.Costanti.TORNEO_DAO_JDBC_STATEMENT;
 
 public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
 
+    //FIXME CORREGGERE: IL GIOCATORE NON PUò STARE IN PIù SQUADRE --> DI CONSEGUENZA ANCHE TIFOSERIA E TORNEI
     @Autowired
     ConfigurazioneDB configurazioneDB;
 
