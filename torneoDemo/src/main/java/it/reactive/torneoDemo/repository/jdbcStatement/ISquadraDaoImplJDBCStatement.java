@@ -58,7 +58,10 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
 
         // Inserisci il nuovo giocatore
         String insertQuery = "INSERT INTO giocatore (nome_cognome, id_squadra) VALUES ('" + giocatoreDTO.getNomeCognome() + "', " + idSquadra + ")";
-        st.executeUpdate(insertQuery);
+        st.executeUpdate(insertQuery, Statement.RETURN_GENERATED_KEYS);
+        rs = st.getGeneratedKeys();
+        rs.next();
+        int idGiocatore = rs.getInt("id");
 
         // Recupera la squadra
         String selectSquadraQuery = "SELECT * FROM squadra WHERE id = " + idSquadra;
@@ -73,10 +76,12 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         // Aggiungi il nuovo giocatore alla lista dei giocatori
         GiocatoreModel nuovoGiocatore = new GiocatoreModel();
         nuovoGiocatore.setNomeCognome(giocatoreDTO.getNomeCognome());
+        nuovoGiocatore.setIdGiocatore(idGiocatore);
         giocatoriGiaPresenti.add(nuovoGiocatore);
 
         // Imposta i giocatori nella squadra
         squadraModel.setGiocatori(new HashSet<>(giocatoriGiaPresenti));
+        squadraModel.setIdSquadra(idSquadra);
         con.commit();
         con.close();
         return squadraModel;
@@ -128,9 +133,13 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         Statement st = con.createStatement();
 
         int numeroRiga = 0;
+        int idSquadra;
         try {
             String insertQuery = "insert into squadra (nome, colori_sociali) values ('" + squadraDTO.getNome() + "','" + squadraDTO.getColoriSociali() + "')";
-            numeroRiga = st.executeUpdate(insertQuery);
+            numeroRiga = st.executeUpdate(insertQuery, Statement.RETURN_GENERATED_KEYS);
+            ResultSet rs = st.getGeneratedKeys();
+            rs.next();
+            idSquadra = rs.getInt("id");
         } catch (SQLException e) {
             throw new SquadraDuplicataException();
         }
@@ -140,15 +149,11 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
             con.commit();
         }
         SquadraModel squadraModel = new SquadraModel();
+        squadraModel.setIdSquadra(idSquadra);
         squadraModel.setNome(squadraDTO.getNome());
         squadraModel.setColoriSociali(squadraDTO.getColoriSociali());
         con.close();
         return squadraModel;
-    }
-
-    @Override   // fixme aggiungere squadraduplicataexc?
-    public SquadraModel salvaSquadraGiocatori(SquadreDiGiocatoriDTO squadreDiGiocatoriDTO) throws SQLException {
-        return null;
     }
 
     @Override

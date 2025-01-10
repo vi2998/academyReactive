@@ -6,32 +6,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-public class SquadreDiGiocatoriDTO {
+public class SquadreDiGiocatoriDTO extends SquadraDTO{
 
-    @NotBlank
-    @Size(min = 3, max = 20, message = "Il nome della squadra deve essere almeno di 3 caratterie e massimo di 20")
-    private String nome;
-    @NotBlank
-    private String coloriSociali;
     @NotNull
     @Valid
     private List<GiocatoreDTO> listaGiocatori;
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getColoriSociali() {
-        return coloriSociali;
-    }
-
-    public void setColoriSociali(String coloriSociali) {
-        this.coloriSociali = coloriSociali;
-    }
 
     public List<GiocatoreDTO> getListaGiocatori() {
         return listaGiocatori;

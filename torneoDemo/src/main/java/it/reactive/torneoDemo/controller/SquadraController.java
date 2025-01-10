@@ -42,7 +42,7 @@ public class SquadraController {
             @ApiResponse(code = 550, message = "Squadra duplicata", response = EccezioneResponse.class)
     })
     @PostMapping
-    public ResponseEntity<SquadraModel> salvaSquadra(@RequestBody @Valid SquadraDTO squadraDTO) throws SQLException {
+    public ResponseEntity<SquadraResponse> salvaSquadra(@RequestBody @Valid SquadraDTO squadraDTO) throws SQLException {
         return ResponseEntity.status(HttpStatus.CREATED).body(squadraService.salvaSquadra(squadraDTO));
     }
 
@@ -59,8 +59,8 @@ public class SquadraController {
                     "• C6 in caso di errore di validazione", response = EccezioneResponse.class)
     })
     @PostMapping("/squadreGiocatori")
-    public ResponseEntity<SquadraResponse> salvaSquadraSquadraGiocatori(@RequestBody @Valid SquadreDiGiocatoriDTO squadreDiGiocatoriDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    public ResponseEntity<SquadraResponse> salvaSquadraSquadraGiocatori(@RequestBody @Valid SquadreDiGiocatoriDTO squadreDiGiocatoriDTO) throws SQLException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(squadraService.salvaSquadraConGiocatori(squadreDiGiocatoriDTO));
     }
 
 
@@ -81,7 +81,7 @@ public class SquadraController {
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
             @ApiResponse(code = 500, message = "errore di server")})
     @PutMapping("/addGiocatore/{id}")
-    public ResponseEntity<SquadraModel> aggiungiGiocatore(@PathVariable @ApiParam(value = "id squadra",
+    public ResponseEntity<SquadraResponse> aggiungiGiocatore(@PathVariable @ApiParam(value = "id squadra",
             required = true) @Min(0) @Max(10000) Integer id, @Valid @RequestBody @ApiParam(value = "giocatoreDTO", required = true) GiocatoreDTO giocatoreDTO) throws SQLException {
         return ResponseEntity.ok(squadraService.aggiungiGiocatore(id, giocatoreDTO));
     }
@@ -92,7 +92,7 @@ public class SquadraController {
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
             @ApiResponse(code = 500, message = "errore di server")})
     @PutMapping("/addTifoseria/{idSquadra}")
-    public ResponseEntity<SquadraModel> aggiungiTifoseria(@PathVariable @ApiParam(value = "id squadra", required =
+    public ResponseEntity<SquadraResponse> aggiungiTifoseria(@PathVariable @ApiParam(value = "id squadra", required =
             true) @Min(0) @Max(10000) Integer idSquadra, @RequestBody @ApiParam(value = "tifoseria") @Valid TifoseriaDTO tifoseriaDTO) throws SQLException {
         return ResponseEntity.ok(squadraService.aggiungiTifoseria(idSquadra, tifoseriaDTO));
     }

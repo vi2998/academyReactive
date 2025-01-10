@@ -9,17 +9,6 @@ public class GiocatoreResponse {
     private Integer numeroAmmonizioni;
     private Set<Trasferimenti> trasferimenti = new HashSet<>();
 
-    public GiocatoreResponse(Integer idGiocatore, String nomeCognome, Integer numeroAmmonizioni,
-                             Set<Trasferimenti> trasferimenti) {
-        this.idGiocatore = idGiocatore;
-        this.nomeCognome = nomeCognome;
-        this.numeroAmmonizioni = numeroAmmonizioni;
-        this.trasferimenti = trasferimenti;
-    }
-
-    public GiocatoreResponse() {
-    }
-
     public Integer getIdGiocatore() {
         return idGiocatore;
     }

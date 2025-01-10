@@ -4,10 +4,6 @@ public class TifoseriaResponse {
     private Integer idTifoseria;
     private String nomeTifoseria;
 
-    public TifoseriaResponse(Integer idTifoseria, String nomeTifoseria) {
-        this.idTifoseria = idTifoseria;
-        this.nomeTifoseria = nomeTifoseria;
-    }
 
     public Integer getIdTifoseria() {
         return idTifoseria;
