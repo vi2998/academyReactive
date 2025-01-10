@@ -3,6 +3,7 @@ package it.reactive.torneoDemo.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import it.reactive.torneoDemo.mapper.GiocatoreMapper;
 import it.reactive.torneoDemo.model.GiocatoreModel;
 import it.reactive.torneoDemo.resource.GiocatoreResponse;
 import it.reactive.torneoDemo.service.GiocatoreService;
@@ -25,6 +26,8 @@ public class GiocatoreController {
 
     @Autowired
     GiocatoreService giocatoreService;
+    @Autowired
+    GiocatoreMapper giocatoreMapper;
 
     @ApiOperation(value = "Aggiorna ammonizione per un determinato giocatore", response = GiocatoreResponse.class)
     @ApiResponses(value = {
@@ -32,8 +35,8 @@ public class GiocatoreController {
             @ApiResponse(code = 400, message = "Dati inseriti non validi"),
             @ApiResponse(code = 500, message = "Errore di server")})
     @PutMapping("/updateAmmonizioni/{idGiocatore}")
-    public ResponseEntity<GiocatoreModel> aggiornaAmmonizione(@PathVariable @Min(0) @Max(10000) Integer idGiocatore) throws Exception {
-        return ResponseEntity.ok(giocatoreService.aggiornaAmmonizione(idGiocatore));
+    public ResponseEntity<GiocatoreResponse> aggiornaAmmonizione(@PathVariable @Min(0) @Max(10000) Integer idGiocatore) throws Exception {
+        return ResponseEntity.ok(giocatoreMapper.fromModelToResource(giocatoreService.aggiornaAmmonizione(idGiocatore)));
     }
 
 }

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.reactive.torneoDemo.dto.TorneoDTO;
+import it.reactive.torneoDemo.mapper.TorneoMapper;
 import it.reactive.torneoDemo.model.TorneoModel;
 import it.reactive.torneoDemo.resource.TorneoResponse;
 import it.reactive.torneoDemo.service.TorneoService;
@@ -36,7 +37,7 @@ public class TorneoController {
             @ApiResponse(code = 500, message = "Errore del server")
     })
     @PostMapping
-    public ResponseEntity<TorneoModel> aggiungiTorneo(@RequestBody @Valid TorneoDTO torneoDTO) throws SQLException {
+    public ResponseEntity<TorneoResponse> aggiungiTorneo(@RequestBody @Valid TorneoDTO torneoDTO) throws SQLException {
         return ResponseEntity.status(HttpStatus.CREATED).body(torneoService.aggiungiTorneo(torneoDTO));
     }
 
@@ -48,7 +49,7 @@ public class TorneoController {
             @ApiResponse(code = 500, message = "Errore del server")
     })
     @PutMapping("/addSquadraToTorneo/{idTorneo}/{idSquadra}")
-    public ResponseEntity<TorneoModel> censitaSquadraAlTorneo(@PathVariable @Min(0) @Max(10000) Integer idTorneo,
+    public ResponseEntity<TorneoResponse> censitaSquadraAlTorneo(@PathVariable @Min(0) @Max(10000) Integer idTorneo,
                                                                  @PathVariable @Min(0) @Max(10000) Integer idSquadra) throws SQLException {
         return ResponseEntity.ok(torneoService.associaTorneoASquadra(idTorneo, idSquadra));
     }
