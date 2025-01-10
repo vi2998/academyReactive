@@ -1,6 +1,5 @@
 package it.reactive.torneoDemo.repository.jdbcStatement;
 
-import it.reactive.torneoDemo.Costanti;
 import it.reactive.torneoDemo.configuration.ConfigurazioneDB;
 import it.reactive.torneoDemo.model.GiocatoreModel;
 import it.reactive.torneoDemo.model.SquadraModel;
@@ -14,8 +13,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static it.reactive.torneoDemo.Costanti.TORNEO_DAO_JDBC_STATEMENT;
+
 @Repository
-@Profile(Costanti.TORNEO_DAO_JDBC_STATEMENT)
+@Profile(TORNEO_DAO_JDBC_STATEMENT)
 
 public class GiocatoreDaoImplJDBCStatement implements IGiocatoreDao {
 

@@ -6,6 +6,7 @@ import it.reactive.torneoDemo.dto.SquadraDTO;
 import it.reactive.torneoDemo.dto.SquadreDiGiocatoriDTO;
 import it.reactive.torneoDemo.dto.TifoseriaDTO;
 import it.reactive.torneoDemo.exception.GiocatoreDuplicatoException;
+import it.reactive.torneoDemo.exception.SquadraDuplicataException;
 import it.reactive.torneoDemo.exception.SquadraNonPresenteException;
 import it.reactive.torneoDemo.model.GiocatoreModel;
 import it.reactive.torneoDemo.model.SquadraModel;
@@ -32,6 +33,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
 
     @Override
     public SquadraModel aggiungiGiocatore(int idSquadra, GiocatoreDTO giocatoreDTO) throws SQLException {
+
         // Crea connessione
         Connection con = configurazioneDB.init();
         Statement st = con.createStatement();
@@ -58,16 +60,16 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         String insertQuery = "INSERT INTO giocatore (nome_cognome, id_squadra) VALUES ('" + giocatoreDTO.getNomeCognome() + "', " + idSquadra + ")";
         st.executeUpdate(insertQuery);
 
-        // Recupera la squadra aggiornata con i giocatori
+        // Recupera la squadra
         String selectSquadraQuery = "SELECT * FROM squadra WHERE id = " + idSquadra;
         rs = st.executeQuery(selectSquadraQuery);
         SquadraModel squadraModel = new SquadraModel();
-
         if (rs.next()) {
             squadraModel.setNome(rs.getString("nome"));
             squadraModel.setColoriSociali(rs.getString("colori_sociali"));
+        }else {
+            throw new SquadraNonPresenteException();
         }
-
         // Aggiungi il nuovo giocatore alla lista dei giocatori
         GiocatoreModel nuovoGiocatore = new GiocatoreModel();
         nuovoGiocatore.setNomeCognome(giocatoreDTO.getNomeCognome());
@@ -80,41 +82,58 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         return squadraModel;
     }
 
-    @Override   //FIXME RESPONSE BODY NELLO SWAGGER
+    @Override
     public SquadraModel aggiungiTifoseria(int idSquadra, TifoseriaDTO tifoseriaDTO) throws SQLException {
-        Connection con = configurazioneDB.init();
-        Statement st = con.createStatement();
-
-        String insertQuery = "INSERT INTO tifoseria (nome_tifoseria, id_squadra) VALUES ('" + tifoseriaDTO.getNomeTifoseria() + "', " + idSquadra + ")";
-        st.executeUpdate(insertQuery);
-
-        String query = "SELECT s.nome, t.nome_tifoseria FROM squadra s , tifoseria t WHERE s.id = t.id_squadra";
-        ResultSet rs = st.executeQuery(query);
-
         SquadraModel squadraModel = new SquadraModel();
+        TifoseriaModel tifoseriaModel = new TifoseriaModel();
 
-        if (rs.next()) {
-            String nomeSquadra = rs.getString("nome");
-            String nomeTifoseria = rs.getString("nome_tifoseria");
+           Connection con = configurazioneDB.init();
+           Statement st = con.createStatement();
 
-            squadraModel.setNome(nomeSquadra);
-            TifoseriaModel tifoseriaModel = new TifoseriaModel();
-            tifoseriaModel.setNomeTifoseria(nomeTifoseria);
-            tifoseriaModel.setSquadra(squadraModel);
-            squadraModel.setTifoseria(tifoseriaModel);
+        try {
+            String querySelect = "SELECT nome_tifoseria FROM tifoseria WHERE id_squadra = " + idSquadra;
+            ResultSet rs = st.executeQuery(querySelect);
+
+            if (rs.next()) {
+                // Se la tifoseria esiste
+                String queryUpdate = "UPDATE tifoseria SET nome_tifoseria = '" + tifoseriaDTO.getNomeTifoseria() + "' WHERE id_squadra = " + idSquadra;
+                st.executeUpdate(queryUpdate);
+            } else {
+                // Se non esiste
+                String queryInsert = "INSERT INTO tifoseria (nome_tifoseria, id_squadra) VALUES ('" + tifoseriaDTO.getNomeTifoseria() + "', " + idSquadra + ")";
+                st.executeUpdate(queryInsert);
+            }
+
+            String querySquadra = "SELECT nome FROM squadra WHERE id = " + idSquadra;
+            rs = st.executeQuery(querySquadra);
+
+            if (rs.next()) {
+                String nomeSquadra = rs.getString("nome");
+                squadraModel.setNome(nomeSquadra);
+                squadraModel.setTifoseria(tifoseriaModel);
+            }
+            con.commit();
+        } catch (SQLException e) {
+            throw new SQLException("É stato riscontrato un errore");
         }
         con.commit();
         con.close();
         return squadraModel;
     }
 
+
     @Override
     public SquadraModel salvaSquadra(SquadraDTO squadraDTO) throws SQLException {
         Connection con = configurazioneDB.init();
         Statement st = con.createStatement();
 
-        String insertQuery = "insert into squadra (nome, colori_sociali) values ('" + squadraDTO.getNome() + "','" + squadraDTO.getColoriSociali() + "')";
-        int numeroRiga = st.executeUpdate(insertQuery);
+        int numeroRiga = 0;
+        try {
+            String insertQuery = "insert into squadra (nome, colori_sociali) values ('" + squadraDTO.getNome() + "','" + squadraDTO.getColoriSociali() + "')";
+            numeroRiga = st.executeUpdate(insertQuery);
+        } catch (SQLException e) {
+            throw new SquadraDuplicataException();
+        }
         if (numeroRiga != 1) {
             System.out.println("Qualcosa è andato storto");
         }else{
@@ -127,7 +146,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         return squadraModel;
     }
 
-    @Override
+    @Override   // fixme aggiungere squadraduplicataexc?
     public SquadraModel salvaSquadraGiocatori(SquadreDiGiocatoriDTO squadreDiGiocatoriDTO) throws SQLException {
         return null;
     }
@@ -149,6 +168,9 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
 
     @Override
     public List<SquadraModel> ricercaSquadre(boolean ricercaGiocatori) {
+        //fixme se false solo squadra. se true return squadra con i giocatori
+        // Nello Step2 e nell'implementazione JPA fare la ricerca con una Query (non native) nel caso di completo e
+        // NamedQuery nel caso di non completo.
         return Collections.emptyList();
     }
 }
