@@ -13,6 +13,7 @@ public interface ISquadraDao {
     SquadraModel salvaSquadra(SquadraDTO squadraDTO) throws SQLException;
     SquadraModel aggiungiTifoseria(int id, TifoseriaDTO tifoseriaDTO) throws SQLException;
     SquadraModel aggiungiGiocatore(int id, GiocatoreDTO giocatoreDTO) throws SQLException;
-    List<SquadraModel> ricercaSquadre(boolean ricercaGiocatori) throws SQLException;
+    List<SquadraModel> ricercaSquadre(boolean ricercaGiocatori) throws SQLException; /* TODO: nell'implementazione JPA
+    TODO: -------------fare la ricerca con una Query (non native) nel caso di completo e NamedQuery nel caso di non completo. */
     void rimuoviSquadra(int id) throws SQLException;
 }

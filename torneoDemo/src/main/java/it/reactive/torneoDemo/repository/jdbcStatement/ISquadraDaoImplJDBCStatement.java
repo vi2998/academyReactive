@@ -3,7 +3,6 @@ package it.reactive.torneoDemo.repository.jdbcStatement;
 import it.reactive.torneoDemo.configuration.ConfigurazioneDB;
 import it.reactive.torneoDemo.dto.GiocatoreDTO;
 import it.reactive.torneoDemo.dto.SquadraDTO;
-import it.reactive.torneoDemo.dto.SquadreDiGiocatoriDTO;
 import it.reactive.torneoDemo.dto.TifoseriaDTO;
 import it.reactive.torneoDemo.exception.GiocatoreDuplicatoException;
 import it.reactive.torneoDemo.exception.SquadraDuplicataException;
@@ -175,9 +174,6 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
 
     @Override
     public List<SquadraModel> ricercaSquadre(boolean conGiocatori) throws SQLException {
-        //fixme:
-        // Nello Step2 e nell'implementazione JPA fare la ricerca con una Query (non native) nel caso di completo e
-        // NamedQuery nel caso di non completo.
 
         Connection con = configurazioneDB.init();
         List<SquadraModel> squadraModelList = new ArrayList<>();
