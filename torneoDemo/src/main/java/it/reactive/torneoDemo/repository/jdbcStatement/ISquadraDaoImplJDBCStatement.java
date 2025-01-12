@@ -15,6 +15,7 @@ import it.reactive.torneoDemo.repository.dao.ISquadraDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -71,7 +72,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         if (rs.next()) {
             squadraModel.setNome(rs.getString("nome"));
             squadraModel.setColoriSociali(rs.getString("colori_sociali"));
-        }else {
+        } else {
             throw new SquadraNonPresenteException();
         }
         // Aggiungi il nuovo giocatore alla lista dei giocatori
@@ -93,8 +94,8 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         SquadraModel squadraModel = new SquadraModel();
         TifoseriaModel tifoseriaModel = new TifoseriaModel();
 
-           Connection con = configurazioneDB.init();
-           Statement st = con.createStatement();
+        Connection con = configurazioneDB.init();
+        Statement st = con.createStatement();
 
         try {
             String querySelect = "SELECT nome_tifoseria FROM tifoseria WHERE id_squadra = " + idSquadra;
@@ -146,7 +147,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         }
         if (numeroRiga != 1) {
             System.out.println("Qualcosa è andato storto");
-        }else{
+        } else {
             con.commit();
         }
         SquadraModel squadraModel = new SquadraModel();
@@ -167,16 +168,69 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         int nRow = st.executeUpdate("delete from squadra where id='" + id + "'");
         if (nRow == 0) {
             throw new SquadraNonPresenteException();
-            }
-            con.commit();
+        }
+        con.commit();
         con.close();
     }
 
     @Override
-    public List<SquadraModel> ricercaSquadre(boolean ricercaGiocatori) {
-        //fixme se false solo squadra. se true return squadra con i giocatori
+    public List<SquadraModel> ricercaSquadre(boolean conGiocatori) throws SQLException {
+        //fixme:
         // Nello Step2 e nell'implementazione JPA fare la ricerca con una Query (non native) nel caso di completo e
         // NamedQuery nel caso di non completo.
-        return Collections.emptyList();
+
+        Connection con = configurazioneDB.init();
+        List<SquadraModel> squadraModelList = new ArrayList<>();
+        Statement st = con.createStatement();
+        String query = "select s.id, nome, colori_sociali, t.nome_tifoseria from squadra s join tifoseria t on s.id = t.id_squadra";
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next()) {
+            int idSquadra = rs.getInt("id");
+            SquadraModel squadraModel = new SquadraModel();
+            squadraModel.setIdSquadra(idSquadra);
+            squadraModel.setNome(rs.getString("nome"));
+            squadraModel.setColoriSociali(rs.getString("colori_sociali"));
+            squadraModel.setTifoseria(getTifoseriaSquadraBySquadra(idSquadra));
+
+
+            // se true aggiungo giocatori alla squadra
+            if (conGiocatori) {
+                squadraModel.setGiocatori(getGiocatoriBySquadra(idSquadra));
+            }
+            squadraModelList.add(squadraModel);
+        }
+        con.commit();
+        con.close();
+        return squadraModelList;
+    }
+
+    private Set<GiocatoreModel> getGiocatoriBySquadra(int idSquadra) throws SQLException {
+        Set<GiocatoreModel> giocatoreModelSet = new HashSet<>();
+        Connection con = configurazioneDB.init();
+        Statement st = con.createStatement();
+        String query = "SELECT g.id, g.nome_cognome FROM giocatore as g JOIN squadra as sq ON g.id_squadra = sq.id WHERE g.id_squadra = " + idSquadra;
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next()) {
+            GiocatoreModel giocatoreModel = new GiocatoreModel();
+            giocatoreModel.setIdGiocatore(rs.getInt("id"));
+            giocatoreModel.setNomeCognome(rs.getString("nome_cognome"));
+            giocatoreModelSet.add(giocatoreModel);
+        }
+        return giocatoreModelSet;
+    }
+
+    public TifoseriaModel getTifoseriaSquadraBySquadra(int idSquadra) throws SQLException {
+        Connection con = configurazioneDB.init();
+        Statement st = con.createStatement();
+        TifoseriaModel tifoseriaModel = new TifoseriaModel();
+
+        String query = "select * from tifoseria where id_squadra = " + idSquadra;
+        ResultSet rs = st.executeQuery(query);
+        if (rs.next()) {
+            tifoseriaModel.setIdTifoseria(rs.getInt("id"));
+            tifoseriaModel.setNomeTifoseria(rs.getString("nome_tifoseria"));
+        }
+        return tifoseriaModel;
+
     }
 }

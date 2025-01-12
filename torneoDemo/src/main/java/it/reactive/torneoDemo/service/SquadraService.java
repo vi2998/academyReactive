@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SquadraService {
@@ -47,4 +49,18 @@ public class SquadraService {
         }
         return squadraMapper.fromModelToResource(squadraModel);
     }
+
+    public List<SquadraResponse> ricercaSquadre(boolean ricercaGiocatori) throws SQLException{
+        List<SquadraModel> squadraModelList = iSquadraDao.ricercaSquadre(ricercaGiocatori);
+        List<SquadraResponse> squadraResponseList = new ArrayList<>();
+        for (SquadraModel squadraModel : squadraModelList) {
+            if (ricercaGiocatori){
+                squadraResponseList.add(squadraMapper.fromModelToResource(squadraModel));
+            }else{
+                squadraResponseList.add(squadraMapper.fromModelToResourceSenzaGiocatori(squadraModel));
+            }
+        }
+        return squadraResponseList;
+    }
+
 }

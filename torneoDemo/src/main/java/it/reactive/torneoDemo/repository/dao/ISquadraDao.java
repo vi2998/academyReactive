@@ -13,6 +13,6 @@ public interface ISquadraDao {
     SquadraModel salvaSquadra(SquadraDTO squadraDTO) throws SQLException;
     SquadraModel aggiungiTifoseria(int id, TifoseriaDTO tifoseriaDTO) throws SQLException;
     SquadraModel aggiungiGiocatore(int id, GiocatoreDTO giocatoreDTO) throws SQLException;
-    List<SquadraModel> ricercaSquadre(boolean ricercaGiocatori);
+    List<SquadraModel> ricercaSquadre(boolean ricercaGiocatori) throws SQLException;
     void rimuoviSquadra(int id) throws SQLException;
 }

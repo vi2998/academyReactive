@@ -8,9 +8,6 @@ import it.reactive.torneoDemo.dto.GiocatoreDTO;
 import it.reactive.torneoDemo.dto.SquadraDTO;
 import it.reactive.torneoDemo.dto.SquadreDiGiocatoriDTO;
 import it.reactive.torneoDemo.dto.TifoseriaDTO;
-import it.reactive.torneoDemo.model.GiocatoreModel;
-import it.reactive.torneoDemo.model.SquadraModel;
-import it.reactive.torneoDemo.model.TifoseriaModel;
 import it.reactive.torneoDemo.resource.EccezioneResponse;
 import it.reactive.torneoDemo.resource.SquadraResponse;
 import it.reactive.torneoDemo.service.SquadraService;
@@ -71,8 +68,8 @@ public class SquadraController {
             @ApiResponse(code = 500, message = "Errore del server")
     })
     @GetMapping
-    public ResponseEntity<List<SquadraResponse>> ricercaSquadra(@RequestParam @ApiParam("Parametro che mi inizializza una lista di giocatori vuota o meno") boolean completo) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<List<SquadraResponse>> ricercaSquadre(@RequestParam @ApiParam("Parametro che mi inizializza una lista di giocatori vuota o meno") boolean completo) throws SQLException {
+        return ResponseEntity.ok(squadraService.ricercaSquadre(completo));
     }
 
     @ApiOperation(value = "Aggiungo una giocatore ad una determinata squadra", response = SquadraResponse.class)

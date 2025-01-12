@@ -41,4 +41,15 @@ public class SquadraMapper {
 
         return squadraResponse;
     }
+
+    public SquadraResponse fromModelToResourceSenzaGiocatori(SquadraModel squadraModel) {
+        SquadraResponse squadraResource = new SquadraResponse();
+        squadraResource.setIdSquadra(squadraModel.getIdSquadra());
+        squadraResource.setNome(squadraModel.getNome());
+        squadraResource.setColoriSociali(squadraModel.getColoriSociali());
+        if (squadraModel.getTifoseria() != null) {
+            squadraResource.setTifoseria(tifoseriaMapper.fromModelToResource(squadraModel.getTifoseria()));
+        }
+        return squadraResource;
+    }
 }
