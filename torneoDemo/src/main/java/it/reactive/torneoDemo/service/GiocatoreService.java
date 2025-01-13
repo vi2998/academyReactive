@@ -1,7 +1,8 @@
 package it.reactive.torneoDemo.service;
 
-import it.reactive.torneoDemo.model.GiocatoreModel;
+import it.reactive.torneoDemo.mapper.GiocatoreMapper;
 import it.reactive.torneoDemo.repository.dao.IGiocatoreDao;
+import it.reactive.torneoDemo.resource.GiocatoreResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,10 @@ public class GiocatoreService {
     @Autowired
     IGiocatoreDao iGiocatoreDao;
 
-    public GiocatoreModel aggiornaAmmonizione(Integer idGiocatore) throws SQLException {
-        return iGiocatoreDao.aggiornaAmmonizione(idGiocatore);
+    @Autowired
+    GiocatoreMapper giocatoreMapper;
+
+    public GiocatoreResponse aggiornaAmmonizione(Integer idGiocatore) throws SQLException {
+        return giocatoreMapper.fromModelToResource(iGiocatoreDao.aggiornaAmmonizione(idGiocatore));
     }
 }

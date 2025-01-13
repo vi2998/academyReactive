@@ -26,8 +26,7 @@ public class GiocatoreController {
 
     @Autowired
     GiocatoreService giocatoreService;
-    @Autowired
-    GiocatoreMapper giocatoreMapper;
+
 
     @ApiOperation(value = "Aggiorna ammonizione per un determinato giocatore", response = GiocatoreResponse.class)
     @ApiResponses(value = {
@@ -36,7 +35,7 @@ public class GiocatoreController {
             @ApiResponse(code = 500, message = "Errore di server")})
     @PutMapping("/updateAmmonizioni/{idGiocatore}")
     public ResponseEntity<GiocatoreResponse> aggiornaAmmonizione(@PathVariable @Min(0) @Max(10000) Integer idGiocatore) throws Exception {
-        return ResponseEntity.ok(giocatoreMapper.fromModelToResource(giocatoreService.aggiornaAmmonizione(idGiocatore)));
+        return ResponseEntity.ok(giocatoreService.aggiornaAmmonizione(idGiocatore));
     }
 
 }
