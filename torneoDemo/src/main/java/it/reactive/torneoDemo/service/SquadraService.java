@@ -7,7 +7,6 @@ import it.reactive.torneoDemo.dto.SquadreDiGiocatoriDTO;
 import it.reactive.torneoDemo.dto.TifoseriaDTO;
 import it.reactive.torneoDemo.mapper.SquadraMapper;
 import it.reactive.torneoDemo.model.SquadraModel;
-import it.reactive.torneoDemo.model.TifoseriaModel;
 import it.reactive.torneoDemo.repository.dao.ISquadraDao;
 import it.reactive.torneoDemo.resource.SquadraResponse;
 import org.springframework.beans.factory.annotation.Autowired;

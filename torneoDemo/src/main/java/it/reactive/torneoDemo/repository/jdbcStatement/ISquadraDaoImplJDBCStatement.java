@@ -28,36 +28,22 @@ import static it.reactive.torneoDemo.Costanti.TORNEO_DAO_JDBC_STATEMENT;
 
 public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
 
-    //FIXME CORREGGERE: IL GIOCATORE NON PUò STARE IN PIù SQUADRE --> DI CONSEGUENZA ANCHE TIFOSERIA E TORNEI
     @Autowired
     ConfigurazioneDB configurazioneDB;
 
     @Override
     public SquadraModel aggiungiGiocatore(int idSquadra, GiocatoreDTO giocatoreDTO) throws SQLException {
 
-        // Crea connessione
         Connection con = configurazioneDB.init();
         Statement st = con.createStatement();
 
-        // Query per recuperare i giocatori già presenti nella squadra
-        String query = "SELECT nome_cognome FROM giocatore WHERE id_squadra = " + idSquadra;
+        //verifica se è duplicato
+        String query = "SELECT COUNT(*) FROM giocatore WHERE id_squadra = " + idSquadra + " AND nome_cognome = '" + giocatoreDTO.getNomeCognome() + "'";
         ResultSet rs = st.executeQuery(query);
-
-        List<GiocatoreModel> giocatoriGiaPresenti = new ArrayList<>();
-        while (rs.next()) {
-            GiocatoreModel giocatoreModel = new GiocatoreModel();
-            giocatoreModel.setNomeCognome(rs.getString("nome_cognome"));
-            giocatoriGiaPresenti.add(giocatoreModel);
+        if (rs.next() && rs.getInt(1) > 0) {
+            throw new GiocatoreDuplicatoException();
         }
 
-        // Verifica se il giocatore è già presente nella lista
-        for (GiocatoreModel giocatoreModel : giocatoriGiaPresenti) {
-            if (giocatoreModel.getNomeCognome().equalsIgnoreCase(giocatoreDTO.getNomeCognome())) {
-                throw new GiocatoreDuplicatoException();
-            }
-        }
-
-        // Inserisci il nuovo giocatore
         String insertQuery = "INSERT INTO giocatore (nome_cognome, id_squadra) VALUES ('" + giocatoreDTO.getNomeCognome() + "', " + idSquadra + ")";
         st.executeUpdate(insertQuery, Statement.RETURN_GENERATED_KEYS);
         rs = st.getGeneratedKeys();
@@ -65,8 +51,8 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         int idGiocatore = rs.getInt("id");
 
         // Recupera la squadra
-        String selectSquadraQuery = "SELECT * FROM squadra WHERE id = " + idSquadra;
-        rs = st.executeQuery(selectSquadraQuery);
+        String selectQuerySquadra = "SELECT * FROM squadra WHERE id = " + idSquadra;
+        rs = st.executeQuery(selectQuerySquadra);
         SquadraModel squadraModel = new SquadraModel();
         if (rs.next()) {
             squadraModel.setNome(rs.getString("nome"));
@@ -74,19 +60,21 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         } else {
             throw new SquadraNonPresenteException();
         }
-        // Aggiungi il nuovo giocatore alla lista dei giocatori
-        GiocatoreModel nuovoGiocatore = new GiocatoreModel();
-        nuovoGiocatore.setNomeCognome(giocatoreDTO.getNomeCognome());
-        nuovoGiocatore.setIdGiocatore(idGiocatore);
-        giocatoriGiaPresenti.add(nuovoGiocatore);
 
-        // Imposta i giocatori nella squadra
-        squadraModel.setGiocatori(new HashSet<>(giocatoriGiaPresenti));
+        GiocatoreModel giocatoreModel = new GiocatoreModel();
+        giocatoreModel.setNomeCognome(giocatoreDTO.getNomeCognome());
+        giocatoreModel.setIdGiocatore(idGiocatore);
+        Set<GiocatoreModel> giocatoriGiaPresenti = new HashSet<>();
+        giocatoriGiaPresenti.add(giocatoreModel);
+
+        squadraModel.setGiocatori(giocatoriGiaPresenti);
         squadraModel.setIdSquadra(idSquadra);
+
         con.commit();
         con.close();
         return squadraModel;
     }
+
 
     @Override
     public SquadraModel aggiungiTifoseria(int idSquadra, TifoseriaDTO tifoseriaDTO) throws SQLException {
@@ -95,34 +83,44 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
 
         Connection con = configurazioneDB.init();
         Statement st = con.createStatement();
+        ResultSet rs = null;
 
         try {
-            String querySelect = "SELECT nome_tifoseria FROM tifoseria WHERE id_squadra = " + idSquadra;
-            ResultSet rs = st.executeQuery(querySelect);
+            String querySelect = "SELECT id, nome_tifoseria FROM tifoseria WHERE id_squadra = " + idSquadra;
+            rs = st.executeQuery(querySelect);
 
             if (rs.next()) {
-                // Se la tifoseria esiste
+                // Se la tifoseria esiste, aggiorna il nome
+                int idTifoseria = rs.getInt("id");
                 String queryUpdate = "UPDATE tifoseria SET nome_tifoseria = '" + tifoseriaDTO.getNomeTifoseria() + "' WHERE id_squadra = " + idSquadra;
                 st.executeUpdate(queryUpdate);
+                tifoseriaModel.setIdTifoseria(idTifoseria);
+                tifoseriaModel.setNomeTifoseria(tifoseriaDTO.getNomeTifoseria());
             } else {
-                // Se non esiste
+                // inserisci una nuova tifoseria
                 String queryInsert = "INSERT INTO tifoseria (nome_tifoseria, id_squadra) VALUES ('" + tifoseriaDTO.getNomeTifoseria() + "', " + idSquadra + ")";
-                st.executeUpdate(queryInsert);
+                st.executeUpdate(queryInsert, Statement.RETURN_GENERATED_KEYS);
+                rs = st.getGeneratedKeys();
+                if (rs.next()) {
+                    tifoseriaModel.setIdTifoseria(rs.getInt("id"));
+                    tifoseriaModel.setNomeTifoseria(tifoseriaDTO.getNomeTifoseria());
+                }
             }
 
-            String querySquadra = "SELECT nome FROM squadra WHERE id = " + idSquadra;
+            String querySquadra = "SELECT nome, colori_sociali FROM squadra WHERE id = " + idSquadra;
             rs = st.executeQuery(querySquadra);
-
             if (rs.next()) {
-                String nomeSquadra = rs.getString("nome");
-                squadraModel.setNome(nomeSquadra);
+                squadraModel.setIdSquadra(idSquadra);
+                squadraModel.setNome(rs.getString("nome"));
+                squadraModel.setColoriSociali(rs.getString("colori_sociali"));
                 squadraModel.setTifoseria(tifoseriaModel);
             }
+
             con.commit();
+
         } catch (SQLException e) {
-            throw new SQLException("É stato riscontrato un errore");
+            throw new SQLException("È stato riscontrato un errore: " + e.getMessage(), e);
         }
-        con.commit();
         con.close();
         return squadraModel;
     }
