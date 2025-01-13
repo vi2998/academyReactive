@@ -33,17 +33,29 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
     public TorneoModel aggiungiTorneo(TorneoDTO torneoDTO) throws SQLException {
         Connection con = configurazioneDB.init();
         Statement st = con.createStatement();
-
-        String insertQuery = "INSERT INTO torneo (nome_torneo) VALUES ('" + torneoDTO.getNomeTorneo() + "')";
-        int numeroRiga = st.executeUpdate(insertQuery);
-        if (numeroRiga != 1) {
-            System.out.println("Qualcosa è andato storto");
-        }else{
-            con.commit();
-        }
+        ResultSet rs = null;
         TorneoModel torneoModel = new TorneoModel();
-        torneoModel.setNomeTorneo(torneoDTO.getNomeTorneo());
-        con.close();
+
+        try {
+            String insertQuery = "INSERT INTO torneo (nome_torneo) VALUES ('" + torneoDTO.getNomeTorneo() + "')";
+            st.executeUpdate(insertQuery, Statement.RETURN_GENERATED_KEYS);
+            rs = st.getGeneratedKeys();
+
+            if (rs.next()) {
+                int idTorneo = rs.getInt("id");
+                torneoModel.setIdTorneo(idTorneo);
+                torneoModel.setNomeTorneo(torneoDTO.getNomeTorneo());
+            } else {
+                System.out.println("Qualcosa è andato storto. La chiave non è stata generata.");
+            }
+
+            con.commit();
+            con.close();
+
+        } catch (SQLException e) {
+            throw new SQLException();
+        }
+
         return torneoModel;
     }
 

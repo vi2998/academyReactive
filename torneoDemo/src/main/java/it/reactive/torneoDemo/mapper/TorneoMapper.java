@@ -22,8 +22,10 @@ public class TorneoMapper {
         torneoResponse.setIdTorneo(torneoModel.getIdTorneo());
         torneoResponse.setNomeTorneo(torneoModel.getNomeTorneo());
         Set<SquadraResponse> listaSquadre = new HashSet<>();
-        for (SquadraModel squadraModel : torneoModel.getSquadre()) {
-            listaSquadre.add(squadraMapper.fromModelToResource(squadraModel));
+        if (torneoModel.getSquadre() != null){
+            for (SquadraModel squadraModel : torneoModel.getSquadre()) {
+                listaSquadre.add(squadraMapper.fromModelToResource(squadraModel));
+            }
         }
         torneoResponse.setSquadre(listaSquadre);
         return torneoResponse;
