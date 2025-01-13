@@ -17,7 +17,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static it.reactive.torneoDemo.Costanti.TORNEO_DAO_JDBC_STATEMENT;
 
@@ -80,38 +82,41 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
 
     @Override
     public TorneoModel associaTorneoASquadra(int idTorneo, int idSquadra) throws SQLException {
-        //FIXME: Per questo metodo usare una namedQuery per cercare squadra e torneo.
-        // Se non trova il torneo restituisce eccezione TORNONONTROVATOEXC",
-        // se non trova la squadra C4 SQUADRANONPRESENTEEXC".
         Connection con = configurazioneDB.init();
         Statement st = con.createStatement();
         TorneoModel torneoModel = new TorneoModel();
+        Set<SquadraModel> squadraModelSet = new HashSet<>();
 
         try {
-            // 1. Controllo se la squadra è presente
-            String query = "SELECT id FROM squadra WHERE id = " + idSquadra;
+            String query = "SELECT * FROM squadra WHERE id = " + idSquadra;
             ResultSet rs = st.executeQuery(query);
             if (!rs.next()) {
                 throw new SquadraNonPresenteException();
             }
 
-            // 2. Controllo se il torneo è presente
+            SquadraModel squadraModel = new SquadraModel();
+            squadraModel.setIdSquadra(rs.getInt("id"));
+            squadraModel.setNome(rs.getString("nome"));
+            squadraModel.setColoriSociali(rs.getString("colori_sociali"));
+
+            squadraModelSet.add(squadraModel);
+
             query = "SELECT * FROM torneo WHERE id = " + idTorneo;
             rs = st.executeQuery(query);
             if (!rs.next()) {
                 throw new TorneoNonTrovatoException();
             }
 
-            // 3. Popola il modello del torneo
             torneoModel.setIdTorneo(rs.getInt("id"));
             torneoModel.setNomeTorneo(rs.getString("nome_torneo"));
 
-            // 4. Inserimento nella tabella di collegamento (squadra_torneo)
+            torneoModel.setSquadre(squadraModelSet);
+
             String queryInsert = "INSERT INTO squadra_torneo (id_torneo, id_squadra) VALUES (" + idTorneo + ", " + idSquadra + ")";
             int numeroRiga = st.executeUpdate(queryInsert);
 
             if (numeroRiga != 1) {
-                throw new SQLException("Qualcosa è andato storto durante l'inserimento nella tabella squadra_torneo.");
+                throw new SQLException("Qualcosa è andato storto nell'inserimento nella tabella squadra_torneo.");
             } else {
                 con.commit();
                 con.close();
@@ -120,10 +125,9 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
         } catch (SQLException e) {
             System.out.println("Qualcosa è andato storto");
         }
-
         return torneoModel;
-
     }
+
 
 
     @Override
