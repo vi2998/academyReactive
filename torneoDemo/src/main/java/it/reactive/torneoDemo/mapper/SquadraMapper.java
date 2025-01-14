@@ -32,7 +32,7 @@ public class SquadraMapper {
         Set<GiocatoreResponse> listaGiocatori = new HashSet<>();
         if (squadraModel.getGiocatori() != null) {
             for (GiocatoreModel giocatoreModel : squadraModel.getGiocatori()) {
-                GiocatoreResponse giocatoreResource = giocatoreMapper.fromModelToResource(giocatoreModel);
+                GiocatoreResponse giocatoreResource = giocatoreMapper.fromModelToResponse(giocatoreModel);
                 listaGiocatori.add(giocatoreResource);
             }
 

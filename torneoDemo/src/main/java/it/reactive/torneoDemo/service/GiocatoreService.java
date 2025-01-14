@@ -18,6 +18,6 @@ public class GiocatoreService {
     GiocatoreMapper giocatoreMapper;
 
     public GiocatoreResponse aggiornaAmmonizione(Integer idGiocatore) throws SQLException {
-        return giocatoreMapper.fromModelToResource(iGiocatoreDao.aggiornaAmmonizione(idGiocatore));
+        return giocatoreMapper.fromModelToResponse(iGiocatoreDao.aggiornaAmmonizione(idGiocatore));
     }
 }

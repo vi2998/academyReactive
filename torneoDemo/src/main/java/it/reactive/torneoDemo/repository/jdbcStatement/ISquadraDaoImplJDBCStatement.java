@@ -34,7 +34,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
     @Override
     public SquadraModel aggiungiGiocatore(int idSquadra, GiocatoreDTO giocatoreDTO) throws SQLException {
 
-        Connection con = configurazioneDB.init();
+        Connection con = configurazioneDB.getConnection();
         Statement st = con.createStatement();
 
         //verifica se è duplicato
@@ -81,7 +81,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         SquadraModel squadraModel = new SquadraModel();
         TifoseriaModel tifoseriaModel = new TifoseriaModel();
 
-        Connection con = configurazioneDB.init();
+        Connection con = configurazioneDB.getConnection();
         Statement st = con.createStatement();
         ResultSet rs = null;
 
@@ -128,7 +128,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
 
     @Override
     public SquadraModel salvaSquadra(SquadraDTO squadraDTO) throws SQLException {
-        Connection con = configurazioneDB.init();
+        Connection con = configurazioneDB.getConnection();
         Statement st = con.createStatement();
 
         int numeroRiga = 0;
@@ -157,7 +157,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
 
     @Override
     public void rimuoviSquadra(int id) throws SQLException {
-        Connection con = configurazioneDB.init();
+        Connection con = configurazioneDB.getConnection();
         Statement st = con.createStatement();
 
         st.executeUpdate("delete from giocatore where id_squadra='" + id + "'");
@@ -173,7 +173,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
     @Override
     public List<SquadraModel> ricercaSquadre(boolean conGiocatori) throws SQLException {
 
-        Connection con = configurazioneDB.init();
+        Connection con = configurazioneDB.getConnection();
         List<SquadraModel> squadraModelList = new ArrayList<>();
         Statement st = con.createStatement();
         String query = "select s.id, nome, colori_sociali, t.nome_tifoseria from squadra s join tifoseria t on s.id = t.id_squadra";
@@ -200,7 +200,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
 
     private Set<GiocatoreModel> getGiocatoriBySquadra(int idSquadra) throws SQLException {
         Set<GiocatoreModel> giocatoreModelSet = new HashSet<>();
-        Connection con = configurazioneDB.init();
+        Connection con = configurazioneDB.getConnection();
         Statement st = con.createStatement();
         String query = "SELECT g.id, g.nome_cognome FROM giocatore as g JOIN squadra as sq ON g.id_squadra = sq.id WHERE g.id_squadra = " + idSquadra;
         ResultSet rs = st.executeQuery(query);
@@ -214,7 +214,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
     }
 
     public TifoseriaModel getTifoseriaSquadraBySquadra(int idSquadra) throws SQLException {
-        Connection con = configurazioneDB.init();
+        Connection con = configurazioneDB.getConnection();
         Statement st = con.createStatement();
         TifoseriaModel tifoseriaModel = new TifoseriaModel();
 

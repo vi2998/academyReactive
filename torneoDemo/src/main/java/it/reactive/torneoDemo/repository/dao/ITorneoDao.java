@@ -10,6 +10,6 @@ public interface ITorneoDao {
     TorneoModel aggiungiTorneo(TorneoDTO torneoDTO) throws SQLException;
     void eliminaTorneo(int id) throws SQLException;
     TorneoModel associaTorneoASquadra(int idTorneo, int idSquadra) throws SQLException;
-    List<TorneoModel> ricavoITornei() throws SQLException;
+    List<TorneoModel> cercaTorneiAndSquadre() throws SQLException;
 
 }

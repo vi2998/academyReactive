@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+
+import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,13 +18,17 @@ public class ConfigurazioneDB {
     private String user;
     @Value("${spring.datasource.password}")
     private String password;
+    private Connection con;
 
-    @Bean
-    @Scope("prototype")
+    @PostConstruct
     public Connection init() throws SQLException {
-        Connection con = DriverManager.getConnection(url, user, password);
+        con = DriverManager.getConnection(url, user, password);
         System.out.println(con);
         con.setAutoCommit(false);
+        return con;
+    }
+
+    public Connection getConnection(){
         return con;
     }
 

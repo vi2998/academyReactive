@@ -54,7 +54,6 @@ public class GiocatoreDaoImplJDBCStatement implements IGiocatoreDao {
             con.close();
             return giocatoreModel;
         } else {
-            // Giocatore non trovato
             con.close();
             throw new SQLException("Giocatore non trovato con ID: " + idGiocatore);
         }

@@ -4,8 +4,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import it.reactive.torneoDemo.dto.TorneoDTO;
-import it.reactive.torneoDemo.mapper.TorneoMapper;
-import it.reactive.torneoDemo.model.TorneoModel;
 import it.reactive.torneoDemo.resource.TorneoResponse;
 import it.reactive.torneoDemo.service.TorneoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +61,8 @@ public class TorneoController {
             @ApiResponse(code = 500, message = "Errore del server")
     })
     @GetMapping()
-    public ResponseEntity<List<TorneoResponse>> getTorneoEndSquadre() {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<List<TorneoResponse>> getTorneoAndSquadre() throws SQLException {
+        return ResponseEntity.ok(torneoService.cercaTorneiAndSquadre());
     }
 
     @ApiOperation(value = "Elimino il torneo con relative squadre associate se non fanno parte di una altro torneo con relativi giocatori",
