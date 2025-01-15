@@ -6,7 +6,10 @@ import it.reactive.torneoDemo.model.SquadraModel;
 import it.reactive.torneoDemo.repository.dao.IGiocatoreDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -17,46 +20,60 @@ import static it.reactive.torneoDemo.Costanti.TORNEO_DAO_JDBC_STATEMENT;
 
 @Repository
 @Profile(TORNEO_DAO_JDBC_STATEMENT)
-
 public class GiocatoreDaoImplJDBCStatement implements IGiocatoreDao {
 
     @Autowired
     ConfigurazioneDB configurazioneDB;
 
+    @Autowired
+    PlatformTransactionManager transactionManager;
+
     @Override
     public GiocatoreModel aggiornaAmmonizione(Integer idGiocatore) throws SQLException {
-        Connection con = configurazioneDB.init();
-        Statement st = con.createStatement();
-        String query = "UPDATE giocatore set numero_ammonizioni = numero_ammonizioni + 1 WHERE id = " + idGiocatore;
-        int numeroRiga = st.executeUpdate(query);
-        if (numeroRiga != 1) {
-            System.out.println("Qualcosa è andato storto");
-        } else {
-            con.commit();
+        Connection con = null;
+        GiocatoreModel giocatoreModel = null;
+        ResultSet rs = null;
+        Statement st = null;
+
+        try {
+            con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            st = con.createStatement();
+            String query = "SELECT g.id, g.nome_cognome, g.numero_ammonizioni, s.nome AS nome_squadra " +
+                    "FROM giocatore g " +
+                    "JOIN squadra s ON g.id_squadra = s.id " +
+                    "WHERE g.id = " + idGiocatore;
+            rs = st.executeQuery(query);
+
+            if (rs.next()) {
+                giocatoreModel = new GiocatoreModel();
+                giocatoreModel.setIdGiocatore(rs.getInt("id"));
+                giocatoreModel.setNomeCognome(rs.getString("nome_cognome"));
+                giocatoreModel.setNumeroAmmonizioni(rs.getInt("numero_ammonizioni"));
+
+                SquadraModel squadraModel = new SquadraModel();
+                squadraModel.setNome(rs.getString("nome_squadra"));
+                giocatoreModel.setSquadra(squadraModel);
+                giocatoreModel.setNumeroAmmonizioni(giocatoreModel.getNumeroAmmonizioni() + 1);
+
+            } else {
+                throw new SQLException("Giocatore non trovato con ID: " + idGiocatore);
+            }
+
+            String queryUpdate = "UPDATE giocatore SET numero_ammonizioni = " +
+                    giocatoreModel.getNumeroAmmonizioni() + " WHERE id = " + giocatoreModel.getIdGiocatore();
+            int numeroRiga = st.executeUpdate(queryUpdate);
+            if (numeroRiga != 1) {
+                System.out.println("Qualcosa è andato storto nell'aggiornamento dell'ammonizione.");
+                return null;
+            }
+
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-
-        query = "select g.id, g.nome_cognome, g.numero_ammonizioni, s.nome as nome_squadra " +
-                "from giocatore g " +
-                "join squadra s on g.id_squadra = s.id " +
-                "where g.id = " + idGiocatore;
-        ResultSet rs = st.executeQuery(query);
-
-        if (rs.next()) {
-            GiocatoreModel giocatoreModel = new GiocatoreModel();
-            giocatoreModel.setIdGiocatore(rs.getInt("id"));
-            giocatoreModel.setNomeCognome(rs.getString("nome_cognome"));
-            giocatoreModel.setNumeroAmmonizioni(rs.getInt("numero_ammonizioni"));
-
-            SquadraModel squadraModel = new SquadraModel();
-            squadraModel.setNome(rs.getString("nome_squadra"));
-            giocatoreModel.setSquadra(squadraModel);
-
-            con.close();
-            return giocatoreModel;
-        } else {
-            con.close();
-            throw new SQLException("Giocatore non trovato con ID: " + idGiocatore);
-        }
+        return giocatoreModel;
     }
-
 }

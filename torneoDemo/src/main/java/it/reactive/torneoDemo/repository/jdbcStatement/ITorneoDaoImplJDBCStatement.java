@@ -33,7 +33,7 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
 
     @Override
     public TorneoModel aggiungiTorneo(TorneoDTO torneoDTO) throws SQLException {
-        Connection con = configurazioneDB.getConnection();
+        Connection con = configurazioneDB.init();
         Statement st = con.createStatement();
         ResultSet rs = null;
         TorneoModel torneoModel = new TorneoModel();
@@ -64,7 +64,7 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
     @Override
     public void eliminaTorneo(int idTorneo) throws SQLException {
         //FIXME: cancella TORNEO, squadra e giocatori per IL TORNEO cancellatO SE LA SQUADRA NON è PRESENTE IN ALTRI TORNEI
-        Connection con = configurazioneDB.getConnection();
+        Connection con = configurazioneDB.init();
         Statement st = con.createStatement();
 
         st.executeUpdate("DELETE FROM squadra_torneo WHERE id_torneo = " + idTorneo);
@@ -82,7 +82,7 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
 
     @Override
     public TorneoModel associaTorneoASquadra(int idTorneo, int idSquadra) throws SQLException {
-        Connection con = configurazioneDB.getConnection();
+        Connection con = configurazioneDB.init();
         Statement st = con.createStatement();
         TorneoModel torneoModel = new TorneoModel();
         Set<SquadraModel> squadraModelSet = new HashSet<>();
