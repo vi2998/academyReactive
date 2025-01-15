@@ -17,6 +17,7 @@ public class GiocatoreService {
     @Autowired
     GiocatoreMapper giocatoreMapper;
 
+    
     public GiocatoreResponse aggiornaAmmonizione(Integer idGiocatore) throws SQLException {
         return giocatoreMapper.fromModelToResponse(iGiocatoreDao.aggiornaAmmonizione(idGiocatore));
     }
