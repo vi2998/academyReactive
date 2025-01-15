@@ -10,7 +10,10 @@ import it.reactive.torneoDemo.model.TorneoModel;
 import it.reactive.torneoDemo.repository.dao.ITorneoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -31,14 +34,20 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
     @Autowired
     ConfigurazioneDB configurazioneDB;
 
+    @Autowired
+    PlatformTransactionManager transactionManager;
+
     @Override
     public TorneoModel aggiungiTorneo(TorneoDTO torneoDTO) throws SQLException {
-        Connection con = configurazioneDB.init();
-        Statement st = con.createStatement();
+        Connection con = null;
         ResultSet rs = null;
+        Statement st = null;
         TorneoModel torneoModel = new TorneoModel();
 
+
         try {
+            con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            st = con.createStatement();
             String insertQuery = "INSERT INTO torneo (nome_torneo) VALUES ('" + torneoDTO.getNomeTorneo() + "')";
             st.executeUpdate(insertQuery, Statement.RETURN_GENERATED_KEYS);
             rs = st.getGeneratedKeys();
@@ -51,21 +60,26 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
                 System.out.println("Qualcosa è andato storto. La chiave non è stata generata.");
             }
 
-            con.commit();
-            con.close();
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
 
+            return torneoModel;
         } catch (SQLException e) {
-            throw new SQLException();
+            throw new RuntimeException(e);
         }
 
-        return torneoModel;
     }
 
     @Override
     public void eliminaTorneo(int idTorneo) throws SQLException {
         //FIXME: cancella TORNEO, squadra e giocatori per IL TORNEO cancellatO SE LA SQUADRA NON è PRESENTE IN ALTRI TORNEI
-        Connection con = configurazioneDB.init();
-        Statement st = con.createStatement();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement st = null;
+
+        con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+        st = con.createStatement();
 
         st.executeUpdate("DELETE FROM squadra_torneo WHERE id_torneo = " + idTorneo);
         st.executeUpdate("DELETE FROM giocatore WHERE id_squadra IN (SELECT id_squadra FROM squadra_torneo WHERE id_torneo = " + idTorneo + ")");
@@ -76,20 +90,22 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
         if (nRow == 0) {
             System.out.println("Qualcosa è andato storto");
         }
-        con.commit();
-        con.close();
     }
 
     @Override
     public TorneoModel associaTorneoASquadra(int idTorneo, int idSquadra) throws SQLException {
-        Connection con = configurazioneDB.init();
-        Statement st = con.createStatement();
+        Connection con = null;
+        ResultSet rs = null;
+        Statement st = null;
+
         TorneoModel torneoModel = new TorneoModel();
         Set<SquadraModel> squadraModelSet = new HashSet<>();
 
         try {
+            con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            st = con.createStatement();
             String query = "SELECT * FROM squadra WHERE id = " + idSquadra;
-            ResultSet rs = st.executeQuery(query);
+            rs = st.executeQuery(query);
             if (!rs.next()) {
                 throw new SquadraNonPresenteException();
             }
@@ -117,28 +133,57 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
 
             if (numeroRiga != 1) {
                 throw new SQLException("Qualcosa è andato storto nell'inserimento nella tabella squadra_torneo.");
-            } else {
-                con.commit();
-                con.close();
             }
 
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
+            return torneoModel;
         } catch (SQLException e) {
-            System.out.println("Qualcosa è andato storto");
+            throw new RuntimeException(e);
         }
-        return torneoModel;
     }
-
 
 
     @Override
     public List<TorneoModel> cercaTorneiAndSquadre() throws SQLException {
-        /* FIXME: senza input restituisce l'elenco di tutti i torneo con la lista delle squadre partecipanti ad ogni torneo.
+        /* TODO: senza input restituisce l'elenco di tutti i torneo con la lista delle squadre partecipanti ad ogni torneo.
             Per ogni squadra le informazioni sul nome della tifoseria e la lista dei giocatori con nome e numero di ammonizioni
             (usare una nativequery con le join tra le tabelle).
             Prima di fornire la risposta dovrà essere contatta
             la banca nazionale TransferMarket all'indirizzo http://85.235.148.177:8872/transfer/{nomegiocatore}
             che restituirà lo storico dei trasferimenti del giocatore. Quindi nella risorsa giocatore predisporsi
             quindi per ottenere anche una lista di oggetti con attributi anno e squadra. */
+
+        Connection con = null;
+        ResultSet rs = null;
+        Statement st = null;
+
+        try {
+            con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            st = con.createStatement();
+            String query = "\n" +
+                    "SELECT \n" +
+                    "    t.nome_torneo,\n" +
+                    "    s.nome AS nome_squadra,\n" +
+                    "    ts.nome_tifoseria,\n" +
+                    "    g.nome_cognome AS nome_giocatore,\n" +
+                    "    g.numero_ammonizioni\n" +
+                    "FROM torneo t\n" +
+                    "JOIN squadra_torneo st ON t.id = st.id_torneo\n" +
+                    "JOIN squadra s ON st.id_squadra = s.id\n" +
+                    "LEFT JOIN tifoseria ts ON s.id = ts.id_squadra\n" +
+                    "LEFT JOIN giocatore g ON s.id = g.id_squadra\n" +
+                    "ORDER BY t.nome_torneo, s.nome, g.numero_ammonizioni;";
+
+
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+
         return Collections.emptyList();
     }
 

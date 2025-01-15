@@ -38,10 +38,7 @@ public class GiocatoreDaoImplJDBCStatement implements IGiocatoreDao {
         try {
             con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
             st = con.createStatement();
-            String query = "SELECT g.id, g.nome_cognome, g.numero_ammonizioni, s.nome AS nome_squadra " +
-                    "FROM giocatore g " +
-                    "JOIN squadra s ON g.id_squadra = s.id " +
-                    "WHERE g.id = " + idGiocatore;
+            String query = "SELECT g.id, g.nome_cognome, g.numero_ammonizioni from giocatore as g where g.id = " + idGiocatore;
             rs = st.executeQuery(query);
 
             if (rs.next()) {
@@ -49,10 +46,6 @@ public class GiocatoreDaoImplJDBCStatement implements IGiocatoreDao {
                 giocatoreModel.setIdGiocatore(rs.getInt("id"));
                 giocatoreModel.setNomeCognome(rs.getString("nome_cognome"));
                 giocatoreModel.setNumeroAmmonizioni(rs.getInt("numero_ammonizioni"));
-
-                SquadraModel squadraModel = new SquadraModel();
-                squadraModel.setNome(rs.getString("nome_squadra"));
-                giocatoreModel.setSquadra(squadraModel);
                 giocatoreModel.setNumeroAmmonizioni(giocatoreModel.getNumeroAmmonizioni() + 1);
 
             } else {
