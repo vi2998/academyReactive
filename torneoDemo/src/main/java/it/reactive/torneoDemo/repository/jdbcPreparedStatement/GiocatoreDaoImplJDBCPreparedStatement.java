@@ -1,6 +1,5 @@
 package it.reactive.torneoDemo.repository.jdbcPreparedStatement;
 
-import it.reactive.torneoDemo.configuration.ConfigurazioneDB;
 import it.reactive.torneoDemo.model.GiocatoreModel;
 import it.reactive.torneoDemo.model.SquadraModel;
 import it.reactive.torneoDemo.repository.dao.IGiocatoreDao;
@@ -18,9 +17,6 @@ import static it.reactive.torneoDemo.Costanti.TORNEO_DAO_JDBC_PREPAREDSTATEMENT;
 @Repository
 @Profile(TORNEO_DAO_JDBC_PREPAREDSTATEMENT)
 public class GiocatoreDaoImplJDBCPreparedStatement implements IGiocatoreDao {
-
-    @Autowired
-    ConfigurazioneDB configurazioneDB;
 
     @Autowired
     PlatformTransactionManager transactionManager;
