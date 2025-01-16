@@ -141,12 +141,10 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
                 squadraModel.setTifoseria(tifoseriaModel);
             }
 
-            con.commit();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        con.close();
         return squadraModel;
     }
 

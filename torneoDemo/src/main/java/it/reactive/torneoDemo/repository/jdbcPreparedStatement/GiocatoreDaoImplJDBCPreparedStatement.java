@@ -62,7 +62,6 @@ public class GiocatoreDaoImplJDBCPreparedStatement implements IGiocatoreDao {
             int numeroRiga = psUpdate.executeUpdate();
             if (numeroRiga != 1) {
                 System.out.println("Qualcosa è andato storto nell'aggiornamento dell'ammonizione.");
-                con.rollback();
                 return null;
             }
 
