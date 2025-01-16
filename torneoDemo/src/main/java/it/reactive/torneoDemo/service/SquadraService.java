@@ -11,12 +11,14 @@ import it.reactive.torneoDemo.repository.dao.ISquadraDao;
 import it.reactive.torneoDemo.resource.SquadraResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class SquadraService {
 
     @Autowired
