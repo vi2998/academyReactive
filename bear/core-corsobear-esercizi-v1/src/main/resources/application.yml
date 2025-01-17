@@ -7,18 +7,18 @@ spring:
 error-manager:
   enabled: true
 
-  connectors:
-    jdbcConfigurations:
+connectors:
+  jdbcConfigurations:
     default:
-    connectionPoolSize: 5
-    timeout: 30000
-    mocked: false
-  items:
-    GetCountriesJdbcConnector:
-    uri: ${DATASOURCE_URL}
-    driver-class-name: org.postgresql.Driver
-    username: ${DATASOURCE_USER}
-    password: ${DATASOURCE_PWD}
+      connectionPoolSize: 5
+      timeout: 30000
+      mocked: false
+    items:
+      GetCountriesJdbcConnector:
+        uri: jdbc:postgresql://localhost:5432/bear
+        driver-class-name: org.postgresql.Driver
+        username: postgres
+        password: example
 
 #### Security configuration
 keycloak:

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 
-@Service
+//@Service
 //public class GetCountriesJDBCRequestTransformer implements IJDBCRequestTransformer<String, Void> {
 //
 //    @Override
@@ -29,6 +29,7 @@ import java.util.List;
 //        return jdbcConnectorRequest;
 //    }
 
+@Service
 public class GetCountriesJDBCRequestTransformer implements IJDBCRequestTransformer<String, Void>{
 
 
@@ -36,7 +37,7 @@ public class GetCountriesJDBCRequestTransformer implements IJDBCRequestTransform
     public JDBCRequest<Void> transform(String query, Object... args) {
         JDBCRequest<Void> jdbcConnectorRequest = new JDBCRequest<>();
         jdbcConnectorRequest.setQuery(query);
-        jdbcConnectorRequest.setRowMapper(new BeanPropertyRowMapper(CountryResource.class));
+        jdbcConnectorRequest.setRowMapper(new BeanPropertyRowMapper(CountryModel.class));
         jdbcConnectorRequest.setType((JDBCQueryType) args[0]);
         if (args.length > 1) jdbcConnectorRequest.setParams(Arrays.copyOfRange(args, 1, args.length));
         return jdbcConnectorRequest;
