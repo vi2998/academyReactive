@@ -3,6 +3,7 @@ package com.intesasanpaolo.bear.mpab0.corsobearesercizi.controller;
 import com.intesasanpaolo.bear.core.controller.CoreController;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.command.CountryCommand;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.command.CountryCommandService;
+import com.intesasanpaolo.bear.mpab0.corsobearesercizi.command.CountryCommandServiceJDBC;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.command.CountryCommandServiceParam;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.factory.Mapper;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.model.CountryModel;
@@ -54,9 +55,15 @@ public class CountryController extends CoreController {
     }
 
 
-    @GetMapping(value = "/countries")
+    //@GetMapping(value = "/countries")
     public ResponseEntity<List<CountryResource>> getCountriesCountryCommandServiceParam(int id, String info) throws Exception {
         List<CountryModel> countryModelList = beanFactory.getBean(CountryCommandServiceParam.class, id, info).execute();
+        return ResponseEntity.ok(mapper.countryModelsToResources(countryModelList));
+    }
+
+    @GetMapping(value = "/countries")
+    public ResponseEntity<List<CountryResource>> getCountriesCountryCommandServiceJDBC() throws Exception {
+        List<CountryModel> countryModelList = beanFactory.getBean(CountryCommandServiceJDBC.class).execute();
         return ResponseEntity.ok(mapper.countryModelsToResources(countryModelList));
     }
 }

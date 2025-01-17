@@ -7,6 +7,19 @@ spring:
 error-manager:
   enabled: true
 
+  connectors:
+  jdbcConfigurations:
+  default:
+  connectionPoolSize: 5
+  timeout: 30000
+  mocked: false
+  items:
+  GetCountriesJdbcConnector:
+  uri: ${DATASOURCE_URL}
+  driver-class-name: org.posgresql.Driver
+  username: ${DATASOURCE_USER:MCRE0_MPAB0_APP}
+  password: ${DATASOURCE_PWD:MCRE0_MPAB0_APP}
+
 #### Security configuration
 keycloak:
   enabled: false

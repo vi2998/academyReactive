@@ -1,0 +1,3 @@
+DATASOURCE_URL=jdbc:postgresql://localhost:5432/bear
+DATASOURCE_USER:MCRE0_MPAB0_APP=postgres
+DATASOURCE_PWD:MCRE0_MPAB0_APP=example
