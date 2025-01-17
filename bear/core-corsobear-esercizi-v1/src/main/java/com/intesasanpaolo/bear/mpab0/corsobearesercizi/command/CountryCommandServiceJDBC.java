@@ -1,4 +1,24 @@
 package com.intesasanpaolo.bear.mpab0.corsobearesercizi.command;
 
-public class CountryCommandServiceJDBC {
+import com.intesasanpaolo.bear.core.command.BaseCommand;
+import com.intesasanpaolo.bear.mpab0.corsobearesercizi.model.CountryModel;
+import com.intesasanpaolo.bear.mpab0.corsobearesercizi.service.CountryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Component
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
+public class CountryCommandServiceJDBC extends BaseCommand<List<CountryModel>> {
+
+    @Autowired
+    CountryService countryService;
+
+    @Override
+    protected List<CountryModel> doExecute() throws Exception {
+        return countryService.getJdbc();
+    }
 }
