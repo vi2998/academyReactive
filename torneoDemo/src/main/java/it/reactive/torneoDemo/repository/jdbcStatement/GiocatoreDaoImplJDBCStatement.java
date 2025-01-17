@@ -23,9 +23,6 @@ import static it.reactive.torneoDemo.Costanti.TORNEO_DAO_JDBC_STATEMENT;
 public class GiocatoreDaoImplJDBCStatement implements IGiocatoreDao {
 
     @Autowired
-    ConfigurazioneDB configurazioneDB;
-
-    @Autowired
     PlatformTransactionManager transactionManager;
 
     @Override
