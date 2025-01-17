@@ -4,6 +4,9 @@ public class CountryModel {
     private long id;
     private String info;
 
+    public CountryModel() {
+    }
+
     public CountryModel(long id, String info) {
         this.id = id;
         this.info = info;
