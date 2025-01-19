@@ -2,6 +2,7 @@ package com.intesasanpaolo.bear.mpab0.corsobearesercizi.service;
 
 import com.intesasanpaolo.bear.connector.jdbc.JDBCQueryType;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.jdbc.GetCountriesJdbcConnector;
+import com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.jpa.CountriesJpaRepositoryConnector;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.transformer.GetCountriesJDBCRequestTransformer;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.connector.transformer.GetCountriesJDBCResponseTransformer;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.model.CountryModel;
@@ -9,13 +10,18 @@ import com.intesasanpaolo.bear.mpab0.corsobearesercizi.resource.CountryResource;
 import com.intesasanpaolo.bear.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class CountryService extends BaseService {
+
+    @Autowired
+    CountriesJpaRepositoryConnector countriesJpaRepositoryConnector;
 
     @Autowired
     GetCountriesJdbcConnector getCountriesJdbcConnector;
@@ -51,5 +57,11 @@ public class CountryService extends BaseService {
                         getCountriesJDBCResponseTransformer,
                         JDBCQueryType.FIND);
         return response;
+    }
+
+    public Optional<CountryModel> getJpa(Long id){
+        Optional<CountryModel> countryModelOptional = countriesJpaRepositoryConnector.findById(id);
+        return countryModelOptional;
+
     }
 }

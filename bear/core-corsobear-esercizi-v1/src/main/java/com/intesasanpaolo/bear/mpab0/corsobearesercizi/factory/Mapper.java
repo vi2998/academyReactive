@@ -23,4 +23,15 @@ public class Mapper {
         }
         return countryResources;
     }
+
+    public CountryResource countryModelsToResource(CountryModel countryModel) {
+        CountryResource countryResource = new CountryResource();
+        String[] info = countryModel.getInfo().split("-");
+        countryResource.setName(info[0]);
+        countryResource.setLanguage(info[1]);
+        countryResource.setContinent(info[2]);
+        countryResource.setChiave(countryModel.getId());
+        return countryResource;
+    }
 }
+

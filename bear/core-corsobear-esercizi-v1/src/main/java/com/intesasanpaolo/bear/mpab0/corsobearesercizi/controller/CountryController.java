@@ -1,10 +1,7 @@
 package com.intesasanpaolo.bear.mpab0.corsobearesercizi.controller;
 
 import com.intesasanpaolo.bear.core.controller.CoreController;
-import com.intesasanpaolo.bear.mpab0.corsobearesercizi.command.CountryCommand;
-import com.intesasanpaolo.bear.mpab0.corsobearesercizi.command.CountryCommandService;
-import com.intesasanpaolo.bear.mpab0.corsobearesercizi.command.CountryCommandServiceJDBC;
-import com.intesasanpaolo.bear.mpab0.corsobearesercizi.command.CountryCommandServiceParam;
+import com.intesasanpaolo.bear.mpab0.corsobearesercizi.command.*;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.factory.Mapper;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.model.CountryModel;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.resource.CountryResource;
@@ -12,9 +9,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +39,6 @@ public class CountryController extends CoreController {
     //@GetMapping(value = "/countries")
     public ResponseEntity<List<CountryResource>> getCountriesCommand() throws Exception {
         List<CountryModel> countryModelList = beanFactory.getBean(CountryCommand.class).execute();
-
         return ResponseEntity.ok(mapper.countryModelsToResources(countryModelList));
     }
 
@@ -61,9 +55,15 @@ public class CountryController extends CoreController {
         return ResponseEntity.ok(mapper.countryModelsToResources(countryModelList));
     }
 
-    @GetMapping(value = "/countries")
+    //@GetMapping(value = "/countries")
     public ResponseEntity<List<CountryResource>> getCountriesCountryCommandServiceJDBC() throws Exception {
         List<CountryModel> countryModelList = beanFactory.getBean(CountryCommandServiceJDBC.class).execute();
         return ResponseEntity.ok(mapper.countryModelsToResources(countryModelList));
+    }
+
+    @PostMapping(value = "/country")
+    public ResponseEntity<CountryResource> postCountryJpa(@RequestParam Long id) throws Exception {
+        CountryModel countryModel = beanFactory.getBean(CountryCommandServiceJPA.class, id).execute();
+        return ResponseEntity.ok(mapper.countryModelsToResource(countryModel));
     }
 }

@@ -20,6 +20,20 @@ connectors:
         username: postgres
         password: example
 
+  jpaConfigurations:
+    connection:
+      url: jdbc:postgresql://localhost:5432/bear
+      driver-class-name: org.postgresql.Driver
+      username: postgres
+      password: example
+      connectionPoolSize: 5
+      timeout: 30000
+      mocked: false
+      hbm2ddl: none
+      hibernateDialect: org.hibernate.dialect.PostgreSQLDialect
+    repositories:
+     - CountryJpaRepositoryConnector
+
 #### Security configuration
 keycloak:
   enabled: false
