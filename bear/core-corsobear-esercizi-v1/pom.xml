@@ -23,6 +23,7 @@
 
     <dependencies>
 
+
         <dependency>
             <groupId>com.intesasanpaolo.bear</groupId>
             <artifactId>bear-arch-jdbc</artifactId>
@@ -52,6 +53,18 @@
         <dependency>
             <artifactId>bear-arch-jpa-mock</artifactId>
             <groupId>com.intesasanpaolo.bear</groupId>
+            <version>${bear.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.intesasanpaolo.bear</groupId>
+            <artifactId>bear-arch-rest</artifactId>
+            <version>${bear.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.intesasanpaolo.bear</groupId>
+            <artifactId>bear-arch-rest-mock</artifactId>
             <version>${bear.version}</version>
             <scope>test</scope>
         </dependency>

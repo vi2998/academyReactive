@@ -17,6 +17,19 @@
 		<bear.version>0.14.57</bear.version>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>com.intesasanpaolo.bear</groupId>
+			<artifactId>bear-arch-rest</artifactId>
+			<version>${bear.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.intesasanpaolo.bear</groupId>
+			<artifactId>bear-arch-rest-mock</artifactId>
+			<version>${bear.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!--<dependency>
           <artifactId>simpleapp-arch</artifactId>
           <groupId>com.intesasanpaolo.bear</groupId>

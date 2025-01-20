@@ -5,7 +5,6 @@ import com.intesasanpaolo.bear.mpab0.corsobearesercizi.command.*;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.factory.Mapper;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.model.CountryModel;
 import com.intesasanpaolo.bear.mpab0.corsobearesercizi.resource.CountryResource;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -61,8 +60,8 @@ public class CountryController extends CoreController {
         return ResponseEntity.ok(mapper.countryModelsToResources(countryModelList));
     }
 
-    @PostMapping(value = "/country")
-    public ResponseEntity<CountryResource> postCountryJpa(@RequestParam Long id) throws Exception {
+    @PostMapping(value = "/{id}")
+    public ResponseEntity<CountryResource> postCountryJpa(@PathVariable Long id) throws Exception {
         CountryModel countryModel = beanFactory.getBean(CountryCommandServiceJPA.class, id).execute();
         return ResponseEntity.ok(mapper.countryModelsToResource(countryModel));
     }

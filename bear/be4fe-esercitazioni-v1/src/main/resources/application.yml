@@ -7,6 +7,16 @@ spring:
 error-manager:
   enabled: true
 
+connectors:
+  bearInternalConfigurations:
+    items:
+      CountryRestConnector:
+        url: http://localhost:8080/country/{id}
+        enabledTracing: true
+        timeout: 5000
+        mocked: false
+        method: POST
+
 error-handling:
   #enable exception logging
   enableExceptionLogging: true
