@@ -104,11 +104,14 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         SquadraModel squadraModel = new SquadraModel();
         TifoseriaModel tifoseriaModel = new TifoseriaModel();
 
-        Connection con = configurazioneDB.init();
+        Connection con = null;
         Statement st = con.createStatement();
         ResultSet rs = null;
 
         try {
+            con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            st = con.createStatement();
+
             String querySelect = "SELECT id, nome_tifoseria FROM tifoseria WHERE id_squadra = " + idSquadra;
             rs = st.executeQuery(querySelect);
 
@@ -139,7 +142,9 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
                 squadraModel.setTifoseria(tifoseriaModel);
             }
 
-
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -241,55 +246,55 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
 
     }
 
-        private Set<GiocatoreModel> getGiocatoriBySquadra ( int idSquadra) throws SQLException {
-            Connection con = null;
-            ResultSet rs = null;
-            Statement st = null;
-            Set<GiocatoreModel> giocatoreModelSet = new HashSet<>();
+    private Set<GiocatoreModel> getGiocatoriBySquadra(int idSquadra) throws SQLException {
+        Connection con = null;
+        ResultSet rs = null;
+        Statement st = null;
+        Set<GiocatoreModel> giocatoreModelSet = new HashSet<>();
 
-            try {
-                con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
-                st = con.createStatement();
-                String query = "SELECT g.id, g.nome_cognome FROM giocatore as g JOIN squadra as sq ON g.id_squadra = sq.id WHERE g.id_squadra = " + idSquadra;
-                rs = st.executeQuery(query);
-                while (rs.next()) {
-                    GiocatoreModel giocatoreModel = new GiocatoreModel();
-                    giocatoreModel.setIdGiocatore(rs.getInt("id"));
-                    giocatoreModel.setNomeCognome(rs.getString("nome_cognome"));
-                    giocatoreModelSet.add(giocatoreModel);
-                }
-                if (con != null) {
-                    DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+        try {
+            con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            st = con.createStatement();
+            String query = "SELECT g.id, g.nome_cognome FROM giocatore as g JOIN squadra as sq ON g.id_squadra = sq.id WHERE g.id_squadra = " + idSquadra;
+            rs = st.executeQuery(query);
+            while (rs.next()) {
+                GiocatoreModel giocatoreModel = new GiocatoreModel();
+                giocatoreModel.setIdGiocatore(rs.getInt("id"));
+                giocatoreModel.setNomeCognome(rs.getString("nome_cognome"));
+                giocatoreModelSet.add(giocatoreModel);
             }
-            return giocatoreModelSet;
-        }
-
-        public TifoseriaModel getTifoseriaSquadraBySquadra ( int idSquadra) throws SQLException {
-            Connection con = null;
-            ResultSet rs = null;
-            Statement st = null;
-
-            TifoseriaModel tifoseriaModel = null;
-            try {
-                st = con.createStatement();
-                tifoseriaModel = new TifoseriaModel();
-
-                String query = "select * from tifoseria where id_squadra = " + idSquadra;
-                rs = st.executeQuery(query);
-                if (rs.next()) {
-                    tifoseriaModel.setIdTifoseria(rs.getInt("id"));
-                    tifoseriaModel.setNomeTifoseria(rs.getString("nome_tifoseria"));
-                }
-                if (con != null) {
-                    DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
-            return tifoseriaModel;
-
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+        return giocatoreModelSet;
     }
+
+    public TifoseriaModel getTifoseriaSquadraBySquadra(int idSquadra) throws SQLException {
+        Connection con = null;
+        ResultSet rs = null;
+        Statement st = null;
+
+        TifoseriaModel tifoseriaModel = null;
+        try {
+            st = con.createStatement();
+            tifoseriaModel = new TifoseriaModel();
+
+            String query = "select * from tifoseria where id_squadra = " + idSquadra;
+            rs = st.executeQuery(query);
+            if (rs.next()) {
+                tifoseriaModel.setIdTifoseria(rs.getInt("id"));
+                tifoseriaModel.setNomeTifoseria(rs.getString("nome_tifoseria"));
+            }
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return tifoseriaModel;
+
+    }
+}

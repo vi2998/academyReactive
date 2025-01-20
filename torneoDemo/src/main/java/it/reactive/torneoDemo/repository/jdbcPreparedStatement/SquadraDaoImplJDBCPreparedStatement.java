@@ -1,6 +1,5 @@
-package it.reactive.torneoDemo.repository.jdbcStatement;
+package it.reactive.torneoDemo.repository.jdbcPreparedStatement;
 
-import it.reactive.torneoDemo.configuration.ConfigurazioneDB;
 import it.reactive.torneoDemo.dto.GiocatoreDTO;
 import it.reactive.torneoDemo.dto.SquadraDTO;
 import it.reactive.torneoDemo.dto.TifoseriaDTO;
@@ -39,6 +38,9 @@ public class SquadraDaoImplJDBCPreparedStatement implements ISquadraDao {
 
         try {
             con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
 
             // Verifica se è duplicato
             String query = "SELECT COUNT(*) FROM giocatore WHERE id_squadra = ? AND nome_cognome = ?";
@@ -92,14 +94,9 @@ public class SquadraDaoImplJDBCPreparedStatement implements ISquadraDao {
             squadraModel.setIdSquadra(idSquadra);
             return squadraModel;
 
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            if (rs != null) try { rs.close(); } catch (SQLException e) { /* ignore */ }
-            if (ps != null) try { ps.close(); } catch (SQLException e) { /* ignore */ }
-            if (con != null) {
-                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-            }
         }
     }
 
@@ -108,11 +105,16 @@ public class SquadraDaoImplJDBCPreparedStatement implements ISquadraDao {
         SquadraModel squadraModel = new SquadraModel();
         TifoseriaModel tifoseriaModel = new TifoseriaModel();
 
-        Connection con = configurazioneDB.init();//FIXME
-        PreparedStatement ps = null;
+        Connection con = null;
         ResultSet rs = null;
+        PreparedStatement ps = null;
 
         try {
+            con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
+
             // Controlla se la tifoseria esiste
             String querySelect = "SELECT id, nome_tifoseria FROM tifoseria WHERE id_squadra = ?";
             ps = con.prepareStatement(querySelect);
@@ -154,18 +156,10 @@ public class SquadraDaoImplJDBCPreparedStatement implements ISquadraDao {
                 squadraModel.setColoriSociali(rs.getString("colori_sociali"));
                 squadraModel.setTifoseria(tifoseriaModel);
             }
-
+            return squadraModel;
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            if (rs != null) try { rs.close(); } catch (SQLException e) { /* ignore */ }
-            if (ps != null) try { ps.close(); } catch (SQLException e) { /* ignore */ }
-            if (con != null) {
-                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-            }
         }
-
-        return squadraModel;
     }
 
     @Override
@@ -190,12 +184,9 @@ public class SquadraDaoImplJDBCPreparedStatement implements ISquadraDao {
 
         } catch (SQLException e) {
             throw new SquadraDuplicataException();
-        } finally {
-            if (rs != null) try { rs.close(); } catch (SQLException e) { /* ignore */ }
-            if (ps != null) try { ps.close(); } catch (SQLException e) { /* ignore */ }
-            if (con != null) {
-                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-            }
+        }
+        if (con != null) {
+            DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
         }
 
         if (numeroRiga != 1) {
@@ -236,11 +227,9 @@ public class SquadraDaoImplJDBCPreparedStatement implements ISquadraDao {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            if (ps != null) try { ps.close(); } catch (SQLException e) { /* ignore */ }
-            if (con != null) {
-                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-            }
+        }
+        if (con != null) {
+            DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
         }
     }
 
@@ -275,14 +264,10 @@ public class SquadraDaoImplJDBCPreparedStatement implements ISquadraDao {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            if (rs != null) try { rs.close(); } catch (SQLException e) { /* ignore */ }
-            if (ps != null) try { ps.close(); } catch (SQLException e) { /* ignore */ }
-            if (con != null) {
-                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-            }
         }
-
+        if (con != null) {
+            DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+        }
         return squadraModelList;
     }
 
@@ -307,12 +292,9 @@ public class SquadraDaoImplJDBCPreparedStatement implements ISquadraDao {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            if (rs != null) try { rs.close(); } catch (SQLException e) { /* ignore */ }
-            if (ps != null) try { ps.close(); } catch (SQLException e) { /* ignore */ }
-            if (con != null) {
-                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-            }
+        }
+        if (con != null) {
+            DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
         }
 
         return giocatoreModelSet;
@@ -339,14 +321,10 @@ public class SquadraDaoImplJDBCPreparedStatement implements ISquadraDao {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            if (rs != null) try { rs.close(); } catch (SQLException e) { /* ignore */ }
-            if (ps != null) try { ps.close(); } catch (SQLException e) { /* ignore */ }
+        }
             if (con != null) {
                 DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
-        }
-
         return tifoseriaModel;
     }
 }
