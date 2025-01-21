@@ -23,6 +23,22 @@
 
     <dependencies>
 
+        <dependency>
+            <artifactId>bear-arch-event-listener-jel</artifactId>
+            <groupId>com.intesasanpaolo.bear</groupId>
+            <version>${bear.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>bear-arch-event-listener-raw</artifactId>
+            <groupId>com.intesasanpaolo.bear</groupId>
+            <version>${bear.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>bear-arch-event-raw</artifactId>
+        <groupId>com.intesasanpaolo.bear</groupId>
+        <version>${bear.version}</version>
+    </dependency>
+
 
         <dependency>
             <groupId>com.intesasanpaolo.bear</groupId>

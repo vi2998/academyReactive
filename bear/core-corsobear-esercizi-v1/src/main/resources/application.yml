@@ -34,6 +34,28 @@ connectors:
     repositories:
      - CountryJpaRepositoryConnector
 
+listeners:
+  eventConfigurations:
+    items:
+      DemoListeners:
+        bootstrapServers: ${KAFKA_STRATEGIA_BROKERS}
+        topic: ${KAFKA_TOPIC_DEMO}
+        groupId: ${KAFKA_STRATEGIA_GROUPID}
+        clientId: DEMO
+        concurrency: 3
+        enable.auto.commit: true
+        max.poll.records: 10
+        security:
+          protocol: ${KAFKA_STRATEGIA_SECURITY_PROTOCOL}
+        sasl:
+          kerberos:
+            service:
+              name: ${KAFKA_STRATEGIA_SERVICE_NAME:xx}
+          jaas:
+            config: "com.sun.security.auth.module.Krb5LoginModule required
+useKeyTab=true keyTab=\"${KEYTAB_STRATEGIA_KERB_FILE_PATH}\"
+principal=\"${KEYTAB_STRATEGIA_KERB_USERNAME}@${KEYTAB_STRATEGIA_KERB_REALM_DOMAIN}\";"
+
 #### Security configuration
 keycloak:
   enabled: false

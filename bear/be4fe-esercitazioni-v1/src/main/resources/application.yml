@@ -17,6 +17,22 @@ connectors:
         mocked: false
         method: POST
 
+  eventConfigurations:
+    items:
+      KafkaEventConnector:
+        topic: ${KAFKA_TOPIC_DEMO}
+        bootstrapServers: ${KAFKA_STRATEGIA_BROKERS}
+        groupId: ${KAFKA_STRATEGIA_GROUPID}
+        concurrency: 3
+        security:
+          protocol: ${KAFKA_STRATEGIA_SECURITY_PROTOCOL}
+        sasl:
+          kerberos:
+            service:
+              name: ${KAFKA_STRATEGIA_SERVICE_NAME:xx}
+          jaas:
+            config: "com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true keyTab=\"${KEYTAB_STRATEGIA_KERB_FILE_PATH}\" principal=\"${KEYTAB_STRATEGIA_KERB_USERNAME}@${KEYTAB_STRATEGIA_KERB_REALM_DOMAIN}\";"
+
 error-handling:
   #enable exception logging
   enableExceptionLogging: true
