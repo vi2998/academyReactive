@@ -59,9 +59,13 @@ public class CountryService extends BaseService {
         return response;
     }
 
-    public Optional<CountryModel> getJpa(Long id){
+    public Optional<CountryModel> getJpa(Long id) {
         Optional<CountryModel> countryModelOptional = countriesJpaRepositoryConnector.findById(id);
         return countryModelOptional;
+    }
 
+    public List<CountryModel> getLanguage(String lingua) {
+        String query = "select * from countries where info like '%" + lingua + "%'";
+        return getCountriesJdbcConnector.call(query, getCountriesJDBCRequestTransformer, getCountriesJDBCResponseTransformer);
     }
 }

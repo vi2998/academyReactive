@@ -35,4 +35,12 @@ public class CountryModel {
     public void setInfo(String info) {
         this.info = info;
     }
+
+    @Override
+    public String toString() {
+        return "CountryModel{" +
+                "id=" + id +
+                ", info='" + info + '\'' +
+                '}';
+    }
 }

@@ -37,7 +37,7 @@ connectors:
 listeners:
   eventConfigurations:
     items:
-      DemoListeners:
+      CountryEventListeners:
         bootstrapServers: ${KAFKA_STRATEGIA_BROKERS}
         topic: ${KAFKA_TOPIC_DEMO}
         groupId: ${KAFKA_STRATEGIA_GROUPID}

@@ -38,7 +38,7 @@ public class GetCountriesJDBCRequestTransformer implements IJDBCRequestTransform
         JDBCRequest<Void> jdbcConnectorRequest = new JDBCRequest<>();
         jdbcConnectorRequest.setQuery(query);
         jdbcConnectorRequest.setRowMapper(new BeanPropertyRowMapper(CountryModel.class));
-        jdbcConnectorRequest.setType((JDBCQueryType) args[0]);
+        jdbcConnectorRequest.setType(JDBCQueryType.FIND);
         if (args.length > 1) jdbcConnectorRequest.setParams(Arrays.copyOfRange(args, 1, args.length));
         return jdbcConnectorRequest;
     }
