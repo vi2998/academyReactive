@@ -60,20 +60,23 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
             int idGiocatore = rs.getInt("id");
 
             // Recupera la squadra
-            String selectQuerySquadra = "SELECT * FROM squadra WHERE id = " + idSquadra;
+            String selectQuerySquadra = "SELECT s.nome, s.colori_sociali, t.id AS tifoseria_id, t.nome_tifoseria " +
+                    "FROM squadra s LEFT JOIN tifoseria t ON s.id = t.id_squadra WHERE s.id = " + idSquadra;
             rs = st.executeQuery(selectQuerySquadra);
             SquadraModel squadraModel = new SquadraModel();
+            TifoseriaModel tifoseriaModel = new TifoseriaModel();
             if (rs.next()) {
                 squadraModel.setNome(rs.getString("nome"));
                 squadraModel.setColoriSociali(rs.getString("colori_sociali"));
+                tifoseriaModel.setIdTifoseria(rs.getInt("tifoseria_id"));
+                tifoseriaModel.setNomeTifoseria(rs.getString("nome_tifoseria"));
+                squadraModel.setTifoseria(tifoseriaModel);
             } else {
                 throw new SquadraNonPresenteException();
             }
 
-            String selectQuery = "select g.* " +
-                    "from giocatore g " +
-                    "join squadra s on s.id = g.id_squadra where id_squadra = " + idSquadra;
-            rs = st.executeQuery(selectQuery);
+            String selectGiocatore = "SELECT id, nome_cognome, numero_ammonizioni FROM giocatore WHERE id_squadra = " + idSquadra;
+            rs = st.executeQuery(selectGiocatore);
 
             Set<GiocatoreModel> giocatoriGiaPresenti = new HashSet<>();
 
@@ -105,7 +108,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         TifoseriaModel tifoseriaModel = new TifoseriaModel();
 
         Connection con = null;
-        Statement st = con.createStatement();
+        Statement st = null;
         ResultSet rs = null;
 
         try {
@@ -139,8 +142,23 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
                 squadraModel.setIdSquadra(idSquadra);
                 squadraModel.setNome(rs.getString("nome"));
                 squadraModel.setColoriSociali(rs.getString("colori_sociali"));
-                squadraModel.setTifoseria(tifoseriaModel);
             }
+
+            String selectGiocatore = "SELECT id, nome_cognome, numero_ammonizioni FROM giocatore WHERE id_squadra = " + idSquadra;
+            rs = st.executeQuery(selectGiocatore);
+
+            Set<GiocatoreModel> giocatoriPresenti = new HashSet<>();
+
+            while (rs.next()) {
+                GiocatoreModel giocatoreModel = new GiocatoreModel();
+                giocatoreModel.setIdGiocatore(rs.getInt("id"));
+                giocatoreModel.setNomeCognome(rs.getString("nome_cognome"));
+                giocatoreModel.setNumeroAmmonizioni(rs.getInt("numero_ammonizioni"));
+                giocatoriPresenti.add(giocatoreModel);
+            }
+            squadraModel.setTifoseria(tifoseriaModel);
+            squadraModel.setGiocatori(giocatoriPresenti);
+
 
             if (con != null) {
                 DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
@@ -220,7 +238,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
             st = con.createStatement();
 
             st = con.createStatement();
-            String query = "select s.id, nome, colori_sociali, t.nome_tifoseria from squadra s join tifoseria t on s.id = t.id_squadra";
+            String query = "select s.id, nome, colori_sociali, t.nome_tifoseria from squadra s left join tifoseria t on s.id = t.id_squadra";
             rs = st.executeQuery(query);
             while (rs.next()) {
                 int idSquadra = rs.getInt("id");
@@ -255,12 +273,13 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         try {
             con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
             st = con.createStatement();
-            String query = "SELECT g.id, g.nome_cognome FROM giocatore as g JOIN squadra as sq ON g.id_squadra = sq.id WHERE g.id_squadra = " + idSquadra;
+            String query = "SELECT g.id, g.nome_cognome, g.numero_ammonizioni FROM giocatore as g JOIN squadra as sq ON g.id_squadra = sq.id WHERE g.id_squadra = " + idSquadra;
             rs = st.executeQuery(query);
             while (rs.next()) {
                 GiocatoreModel giocatoreModel = new GiocatoreModel();
                 giocatoreModel.setIdGiocatore(rs.getInt("id"));
                 giocatoreModel.setNomeCognome(rs.getString("nome_cognome"));
+                giocatoreModel.setNumeroAmmonizioni(rs.getInt("numero_ammonizioni"));
                 giocatoreModelSet.add(giocatoreModel);
             }
             if (con != null) {
@@ -279,6 +298,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
 
         TifoseriaModel tifoseriaModel = null;
         try {
+            con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
             st = con.createStatement();
             tifoseriaModel = new TifoseriaModel();
 

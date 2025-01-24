@@ -15,28 +15,28 @@ import java.sql.SQLException;
 @Configuration
 public class ConfigurazioneDB {
 
-    @Value("${spring.datasource.username}")
-    private String user;
-
-    @Value("${spring.datasource.password}")
-    private String psw;
-
-    @Value("${spring.datasource.url}")
-    private String url;
-
-    Connection con;
-
-    @Bean
-    @Scope("prototype")
-    public Connection init(){
-        try {
-            con = DriverManager.getConnection(url, user, psw);
-            con.setAutoCommit(false);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return con;
-    }
+//    @Value("${spring.datasource.username}")
+//    private String user;
+//
+//    @Value("${spring.datasource.password}")
+//    private String psw;
+//
+//    @Value("${spring.datasource.url}")
+//    private String url;
+//
+//    Connection con;
+//
+//    @Bean
+//    @Scope("prototype")
+//    public Connection init(){
+//        try {
+//            con = DriverManager.getConnection(url, user, psw);
+//            con.setAutoCommit(false);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return con;
+//    }
 
     @Bean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
