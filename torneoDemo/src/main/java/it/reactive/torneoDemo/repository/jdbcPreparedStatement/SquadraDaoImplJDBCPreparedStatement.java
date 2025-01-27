@@ -1,4 +1,4 @@
-package it.reactive.torneoDemo.repository.jdbcStatement;
+package it.reactive.torneoDemo.repository.jdbcPreparedStatement;
 
 import it.reactive.torneoDemo.configuration.ConfigurazioneDB;
 import it.reactive.torneoDemo.dto.GiocatoreDTO;
