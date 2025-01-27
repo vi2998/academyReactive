@@ -41,7 +41,6 @@ public class TorneoService {
         List<TorneoResponse> torneoResponseList = new ArrayList<>();
         for (TorneoModel torneoModel : torneoModelList) {
             torneoResponseList.add(torneoMapper.fromModelToResponse(torneoModel));
-            //FIXME
         }
         return torneoResponseList;
     }

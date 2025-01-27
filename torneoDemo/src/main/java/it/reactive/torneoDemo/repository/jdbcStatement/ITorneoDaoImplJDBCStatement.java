@@ -1,15 +1,22 @@
 package it.reactive.torneoDemo.repository.jdbcStatement;
 
-import it.reactive.torneoDemo.Costanti;
-import it.reactive.torneoDemo.configuration.ConfigurazioneDB;
 import it.reactive.torneoDemo.dto.TorneoDTO;
+import it.reactive.torneoDemo.exception.CustomException;
+import it.reactive.torneoDemo.exception.SquadraDuplicataException;
 import it.reactive.torneoDemo.exception.SquadraNonPresenteException;
 import it.reactive.torneoDemo.exception.TorneoNonTrovatoException;
+import it.reactive.torneoDemo.mapper.TorneoMapper;
+import it.reactive.torneoDemo.model.GiocatoreModel;
 import it.reactive.torneoDemo.model.SquadraModel;
+import it.reactive.torneoDemo.model.TifoseriaModel;
 import it.reactive.torneoDemo.model.TorneoModel;
+import it.reactive.torneoDemo.repository.dao.IGiocatoreDao;
+import it.reactive.torneoDemo.repository.dao.ISquadraDao;
 import it.reactive.torneoDemo.repository.dao.ITorneoDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
@@ -19,10 +26,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static it.reactive.torneoDemo.Costanti.TORNEO_DAO_JDBC_STATEMENT;
 
@@ -34,6 +38,12 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
 
     @Autowired
     PlatformTransactionManager transactionManager;
+
+    @Autowired
+    ISquadraDaoImplJDBCStatement iSquadraDaoImplJDBCStatement;
+
+    @Autowired
+    IGiocatoreDao iGiocatoreDao;
 
     @Override
     public TorneoModel aggiungiTorneo(TorneoDTO torneoDTO) throws SQLException {
@@ -63,30 +73,57 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
             }
 
             return torneoModel;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
 
+        } catch (SQLException e) {
+            if ("23505".equalsIgnoreCase(e.getSQLState())) {
+                throw new CustomException("C1", "Torneo già censito");
+            } else {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override
     public void eliminaTorneo(int idTorneo) throws SQLException {
-        //FIXME: cancella TORNEO, squadra e giocatori per IL TORNEO cancellatO SE LA SQUADRA NON è PRESENTE IN ALTRI TORNEI
         Connection con = null;
         ResultSet rs = null;
         Statement st = null;
 
-        con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
-        st = con.createStatement();
+        try {
+            con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            st = con.createStatement();
 
-        st.executeUpdate("DELETE FROM squadra_torneo WHERE id_torneo = " + idTorneo);
-        st.executeUpdate("DELETE FROM giocatore WHERE id_squadra IN (SELECT id_squadra FROM squadra_torneo WHERE id_torneo = " + idTorneo + ")");
-        st.executeUpdate("DELETE FROM tifoseria WHERE id_squadra IN (SELECT id_squadra FROM squadra_torneo WHERE id_torneo = " + idTorneo + ")");
-        st.executeUpdate("DELETE FROM squadra WHERE id IN (SELECT id_squadra FROM squadra_torneo WHERE id_torneo = " + idTorneo + ")");
+            String query = "select id_squadra from squadra_torneo where id_torneo=" + idTorneo;
+            rs = st.executeQuery(query);
+            while (rs.next()) {
+                int idSquadra = rs.getInt("id_squadra");
+                query = "select count(*) as presenza_squadra from squadra_torneo where id_squadra =" + idSquadra;
+                st = con.createStatement();
+                ResultSet rsSquadra = st.executeQuery(query);
+                if (rsSquadra.next()) {
+                    if (rsSquadra.getInt("presenza_squadra") == 1) {
+                        query = "delete from giocatore where id_squadra=" + idSquadra;
+                        st.executeUpdate(query);
+                        query = "delete from tifoseria where id_squadra=" + idSquadra;
+                        st.executeUpdate(query);
+                        query = "delete from squadra_torneo where id_squadra=" + idSquadra;
+                        st.executeUpdate(query);
+                        query = "delete from squadra where id=" + idSquadra;
+                        st.executeUpdate(query);
+                    } else {
+                        query = "delete from squadra_torneo where id_squadra=" + idSquadra + " and id_torneo=" + idTorneo;
+                        st.executeUpdate(query);
+                    }
+                }
+            }
+            query = "delete from torneo where id=" + idTorneo;
+            st.executeUpdate(query);
 
-        int nRow = st.executeUpdate("delete from torneo where id= " + idTorneo);
-        if (nRow == 0) {
-            System.out.println("Qualcosa è andato storto");
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -145,44 +182,60 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
 
     @Override
     public List<TorneoModel> cercaTorneiAndSquadre() throws SQLException {
-        /* TODO: senza input restituisce l'elenco di tutti i torneo con la lista delle squadre partecipanti ad ogni torneo.
-            Per ogni squadra le informazioni sul nome della tifoseria e la lista dei giocatori con nome e numero di ammonizioni
-            (usare una nativequery con le join tra le tabelle).
-            Prima di fornire la risposta dovrà essere contatta
-            la banca nazionale TransferMarket all'indirizzo http://85.235.148.177:8872/transfer/{nomegiocatore}
-            che restituirà lo storico dei trasferimenti del giocatore. Quindi nella risorsa giocatore predisporsi
-            quindi per ottenere anche una lista di oggetti con attributi anno e squadra. */
-
         Connection con = null;
         ResultSet rs = null;
         Statement st = null;
 
+        List<TorneoModel> torneoModelList = new ArrayList<>();
+
         try {
             con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            String query = "select * from torneo";
             st = con.createStatement();
-            String query = "\n" +
-                    "SELECT \n" +
-                    "    t.nome_torneo,\n" +
-                    "    s.nome AS nome_squadra,\n" +
-                    "    ts.nome_tifoseria,\n" +
-                    "    g.nome_cognome AS nome_giocatore,\n" +
-                    "    g.numero_ammonizioni\n" +
-                    "FROM torneo t\n" +
-                    "JOIN squadra_torneo st ON t.id = st.id_torneo\n" +
-                    "JOIN squadra s ON st.id_squadra = s.id\n" +
-                    "LEFT JOIN tifoseria ts ON s.id = ts.id_squadra\n" +
-                    "LEFT JOIN giocatore g ON s.id = g.id_squadra\n" +
-                    "ORDER BY t.nome_torneo, s.nome, g.numero_ammonizioni;";
+            rs = st.executeQuery(query);
+            while (rs.next()) {
+                TorneoModel torneo = new TorneoModel();
+                torneo.setIdTorneo(rs.getInt("id"));
+                torneo.setNomeTorneo(rs.getString("nome_torneo"));
+                torneo.setSquadre(recuperaSquadreByIdTorneo(rs.getInt("id")));
+                torneoModelList.add(torneo);
 
 
+            }
             if (con != null) {
                 DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
-        }catch (SQLException e){
+            return torneoModelList;
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
-        return Collections.emptyList();
+    public Set<SquadraModel> recuperaSquadreByIdTorneo(int id) {
+        Connection con = null;
+        Set<SquadraModel> squadraModelList = new HashSet<>();
+        try {
+            con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            Statement st = con.createStatement();
+            ResultSet rsSquadre = st.executeQuery("SELECT s.nome, s.id,s.colori_sociali FROM squadra_torneo st JOIN " +
+                    "squadra s ON s.id = st" +
+                    ".id_squadra WHERE st.id_torneo = " + id);
+            while (rsSquadre.next()) {
+                SquadraModel squadraModel = new SquadraModel();
+                squadraModel.setNome(rsSquadre.getString("nome"));
+                squadraModel.setIdSquadra(rsSquadre.getInt("id"));
+                squadraModel.setColoriSociali(rsSquadre.getString("colori_sociali"));
+                squadraModel.setGiocatori(iSquadraDaoImplJDBCStatement.getGiocatoriBySquadra(rsSquadre.getInt("id")));
+                squadraModelList.add(squadraModel);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
+        }
+        return squadraModelList;
     }
 
 

@@ -59,7 +59,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
             rs.next();
             int idGiocatore = rs.getInt("id");
 
-            // Recupera la squadra
+            // Recupera la squadra con tifoseria
             String selectQuerySquadra = "SELECT s.nome, s.colori_sociali, t.id AS tifoseria_id, t.nome_tifoseria " +
                     "FROM squadra s LEFT JOIN tifoseria t ON s.id = t.id_squadra WHERE s.id = " + idSquadra;
             rs = st.executeQuery(selectQuerySquadra);
@@ -236,8 +236,6 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         try {
             con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
             st = con.createStatement();
-
-            st = con.createStatement();
             String query = "select s.id, nome, colori_sociali, t.nome_tifoseria from squadra s left join tifoseria t on s.id = t.id_squadra";
             rs = st.executeQuery(query);
             while (rs.next()) {
@@ -264,7 +262,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
 
     }
 
-    private Set<GiocatoreModel> getGiocatoriBySquadra(int idSquadra) throws SQLException {
+    public Set<GiocatoreModel> getGiocatoriBySquadra(int idSquadra) throws SQLException {
         Connection con = null;
         ResultSet rs = null;
         Statement st = null;

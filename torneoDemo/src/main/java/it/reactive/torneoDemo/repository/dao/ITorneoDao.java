@@ -11,5 +11,4 @@ public interface ITorneoDao {
     void eliminaTorneo(int id) throws SQLException;
     TorneoModel associaTorneoASquadra(int idTorneo, int idSquadra) throws SQLException;
     List<TorneoModel> cercaTorneiAndSquadre() throws SQLException;
-
 }
