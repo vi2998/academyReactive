@@ -206,12 +206,11 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
 
     @Override
     public void rimuoviSquadra(int id) throws SQLException {
-        Connection con;
-        ResultSet rs = null;
+        Connection connection;
         Statement st;
         try {
-            con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
-            st = con.createStatement();
+            connection = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
+            st = connection.createStatement();
 
             st.executeUpdate("delete from giocatore where id_squadra='" + id + "'");
             st.executeUpdate("delete from tifoseria where id_squadra='" + id + "'");
@@ -219,9 +218,7 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
             if (nRow == 0) {
                 throw new SquadraNonPresenteException();
             }
-            if (con != null) {
-                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-            }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

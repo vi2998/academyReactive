@@ -27,7 +27,7 @@ public class TorneoService {
     public TorneoResponse aggiungiTorneo(TorneoDTO torneoDTO) throws SQLException {
         return torneoMapper.fromModelToResponse(iTorneoDao.aggiungiTorneo(torneoDTO));
     }
-
+    @Transactional
     public void eliminaTorneo(int id) throws SQLException {
         iTorneoDao.eliminaTorneo(id);
     }

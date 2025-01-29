@@ -21,6 +21,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -44,6 +45,9 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
 
     @Autowired
     IGiocatoreDao iGiocatoreDao;
+
+    @Autowired
+    ISquadraDao iSquadraDao;
 
     @Override
     public TorneoModel aggiungiTorneo(TorneoDTO torneoDTO) throws SQLException {
@@ -84,48 +88,52 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
     }
 
     @Override
+    @Transactional
     public void eliminaTorneo(int idTorneo) throws SQLException {
         Connection con = null;
-        ResultSet rs = null;
         Statement st = null;
+        Statement statementSquadra = null;
+        Statement statementSquadraTorneo = null;
 
         try {
             con = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
-            st = con.createStatement();
 
-            String query = "select id_squadra from squadra_torneo where id_torneo=" + idTorneo;
-            rs = st.executeQuery(query);
+            String querySquadre = "select id_squadra from squadra_torneo where id_torneo = " + idTorneo;
+            st = con.createStatement();
+            statementSquadra = con.createStatement();
+            statementSquadraTorneo = con.createStatement();
+            ResultSet rs = st.executeQuery(querySquadre);
+
             while (rs.next()) {
                 int idSquadra = rs.getInt("id_squadra");
-                query = "select count(*) as presenza_squadra from squadra_torneo where id_squadra =" + idSquadra;
-                st = con.createStatement();
-                ResultSet rsSquadra = st.executeQuery(query);
-                if (rsSquadra.next()) {
-                    if (rsSquadra.getInt("presenza_squadra") == 1) {
-                        query = "delete from giocatore where id_squadra=" + idSquadra;
-                        st.executeUpdate(query);
-                        query = "delete from tifoseria where id_squadra=" + idSquadra;
-                        st.executeUpdate(query);
-                        query = "delete from squadra_torneo where id_squadra=" + idSquadra;
-                        st.executeUpdate(query);
-                        query = "delete from squadra where id=" + idSquadra;
-                        st.executeUpdate(query);
-                    } else {
-                        query = "delete from squadra_torneo where id_squadra=" + idSquadra + " and id_torneo=" + idTorneo;
-                        st.executeUpdate(query);
-                    }
+
+                String queryPresenzaSquadra = "select count(*) from squadra_torneo where id_squadra = " + idSquadra;
+                ResultSet rsSquadra = statementSquadra.executeQuery(queryPresenzaSquadra);
+
+                if (rsSquadra.next() && rsSquadra.getInt(1) == 1) {
+                    statementSquadraTorneo.executeUpdate("delete from squadra_torneo where id_squadra='" + idSquadra + "'");
+                    iSquadraDao.rimuoviSquadra(idSquadra);
+                } else {
+                    // Se la squadra appare in altri tornei, rimuovi solo la relazione con questo torneo
+                    String queryDeleteSquadraTorneo = "delete from squadra_torneo where id_squadra = " + idSquadra + " and id_torneo = " + idTorneo;
+                    statementSquadraTorneo.executeUpdate(queryDeleteSquadraTorneo);
                 }
             }
-            query = "delete from torneo where id=" + idTorneo;
-            st.executeUpdate(query);
 
+            String queryDeleteTorneo = "delete from torneo where id = " + idTorneo;
+            st.executeUpdate(queryDeleteTorneo);
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Errore durante l'eliminazione del torneo", e);
+        }finally {
             if (con != null) {
                 DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
+
+
 
     @Override
     public TorneoModel associaTorneoASquadra(int idTorneo, int idSquadra) throws SQLException {
