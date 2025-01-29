@@ -88,7 +88,6 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
     }
 
     @Override
-    @Transactional
     public void eliminaTorneo(int idTorneo) throws SQLException {
         Connection con = null;
         Statement st = null;
