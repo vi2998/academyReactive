@@ -92,12 +92,13 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
             squadraModel.setGiocatori(giocatoriGiaPresenti);
             squadraModel.setIdSquadra(idSquadra);
 
-            if (con != null) {
-                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-            }
             return squadraModel;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         }
     }
 
@@ -159,12 +160,12 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
             squadraModel.setTifoseria(tifoseriaModel);
             squadraModel.setGiocatori(giocatoriPresenti);
 
-
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
             if (con != null) {
                 DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         return squadraModel;
     }
@@ -190,6 +191,10 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
             }
         } catch (SQLException e) {
             throw new SquadraDuplicataException();
+        } finally {
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         }
         if (numeroRiga != 1) {
             System.out.println("Qualcosa è andato storto");
@@ -198,15 +203,13 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
         squadraModel.setIdSquadra(idSquadra);
         squadraModel.setNome(squadraDTO.getNome());
         squadraModel.setColoriSociali(squadraDTO.getColoriSociali());
-        if (con != null) {
-            DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-        }
+
         return squadraModel;
     }
 
     @Override
     public void rimuoviSquadra(int id) throws SQLException {
-        Connection connection;
+        Connection connection = null;
         Statement st;
         try {
             connection = DataSourceUtils.getConnection(((DataSourceTransactionManager) transactionManager).getDataSource());
@@ -221,6 +224,10 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            if (connection != null) {
+                DataSourceUtils.releaseConnection(connection, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         }
     }
 
@@ -249,11 +256,13 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
                 }
                 squadraModelList.add(squadraModel);
             }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
             if (con != null) {
                 DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         return squadraModelList;
 
@@ -277,11 +286,13 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
                 giocatoreModel.setNumeroAmmonizioni(rs.getInt("numero_ammonizioni"));
                 giocatoreModelSet.add(giocatoreModel);
             }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
             if (con != null) {
                 DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         return giocatoreModelSet;
     }
@@ -303,11 +314,13 @@ public class ISquadraDaoImplJDBCStatement implements ISquadraDao {
                 tifoseriaModel.setIdTifoseria(rs.getInt("id"));
                 tifoseriaModel.setNomeTifoseria(rs.getString("nome_tifoseria"));
             }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
             if (con != null) {
                 DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         return tifoseriaModel;
 

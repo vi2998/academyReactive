@@ -65,11 +65,12 @@ public class GiocatoreDaoImplJDBCPreparedStatement implements IGiocatoreDao {
                 return null;
             }
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
             if (con != null) {
                 DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         return giocatoreModel;
     }

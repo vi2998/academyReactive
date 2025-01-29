@@ -72,10 +72,6 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
                 System.out.println("Qualcosa è andato storto. La chiave non è stata generata.");
             }
 
-            if (con != null) {
-                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-            }
-
             return torneoModel;
 
         } catch (SQLException e) {
@@ -83,6 +79,10 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
                 throw new CustomException("C1", "Torneo già censito");
             } else {
                 throw new RuntimeException(e);
+            }
+        } finally {
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
             }
         }
     }
@@ -178,12 +178,13 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
                 throw new SQLException("Qualcosa è andato storto nell'inserimento nella tabella squadra_torneo.");
             }
 
-            if (con != null) {
-                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-            }
             return torneoModel;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         }
     }
 
@@ -210,12 +211,14 @@ public class ITorneoDaoImplJDBCStatement implements ITorneoDao {
 
 
             }
-            if (con != null) {
-                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
-            }
+
             return torneoModelList;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            if (con != null) {
+                DataSourceUtils.releaseConnection(con, ((DataSourceTransactionManager) transactionManager).getDataSource());
+            }
         }
     }
 
