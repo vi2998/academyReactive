@@ -45,13 +45,13 @@ public class GiocatoreDaoImplJDBCQueryPSC implements IGiocatoreDao {
             }
         };
 
-        // Eseguiamo la SELECT per ottenere il giocatore
+        // SELECT per ottenere il giocatore
         GiocatoreModel giocatoreModel = jdbcTemplate.query(pscSelect, rse);
 
         int nuoveAmmonizioni = giocatoreModel.getNumeroAmmonizioni() + 1;
         giocatoreModel.setNumeroAmmonizioni(nuoveAmmonizioni);
 
-        // PreparedStatementCreator per l'operazione di UPDATE
+        // PreparedStatementCreator per l'UPDATE
         PreparedStatementCreator pscUpdate = con -> {
             String query = "UPDATE giocatore SET numero_ammonizioni = ? WHERE id = ?";
             PreparedStatement ps = con.prepareStatement(query);
@@ -60,7 +60,7 @@ public class GiocatoreDaoImplJDBCQueryPSC implements IGiocatoreDao {
             return ps;
         };
 
-        // Eseguiamo l'UPDATE
+        // Eseguo l'UPDATE
         int rowsUpdated = jdbcTemplate.update(pscUpdate);
         if (rowsUpdated != 1) {
             throw new SQLException("Errore nell'aggiornamento del numero di ammonizioni per il giocatore con ID: " + idGiocatore);

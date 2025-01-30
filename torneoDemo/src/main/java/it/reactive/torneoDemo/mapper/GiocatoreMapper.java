@@ -14,4 +14,10 @@ public class GiocatoreMapper {
         giocatoreResponse.setNumeroAmmonizioni(giocatoreModel.getNumeroAmmonizioni());
         return giocatoreResponse;
     }
+
+    public GiocatoreModel fromDtoToModel(GiocatoreDTO giocatoreDTO){
+        GiocatoreModel giocatoreModel = new GiocatoreModel();
+        giocatoreModel.setNomeCognome(giocatoreDTO.getNomeCognome());
+        return giocatoreModel;
+    }
 }
