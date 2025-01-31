@@ -124,11 +124,10 @@ public class SquadraDaoImplJDBCQueryPSC implements ISquadraDao {
         int rowsUpdatedTifoseria = jdbcTemplate.update("delete from tifoseria where id_squadra = ?", id);
         int rowsUpdatedGiocatori = jdbcTemplate.update("delete from giocatore where id_squadra = ?", id);
         int rowUpdatedSquadraTorneo = jdbcTemplate.update("delete from squadra_torneo where id_squadra = ?", id);
+
         int rowsUpdatedSquadra = jdbcTemplate.update("delete from squadra where id = ?", id);
         if (rowsUpdatedSquadra == 0) {
             throw new SquadraNonPresenteException();
-        } else {
-            throw new SQLException();
         }
     }
 }
