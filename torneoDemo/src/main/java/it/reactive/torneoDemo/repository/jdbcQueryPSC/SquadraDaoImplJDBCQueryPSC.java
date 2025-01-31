@@ -40,8 +40,6 @@ public class SquadraDaoImplJDBCQueryPSC implements ISquadraDao {
     @Autowired
     GiocatoreMapper giocatoreMapper;
 
-    @Autowired
-    TifoseriaMapper tifoseriaMapper;
 
     @Override
     public SquadraModel salvaSquadra(SquadraDTO squadraDTO) throws SQLException {
