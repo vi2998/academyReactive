@@ -1,5 +1,8 @@
 package it.reactive.torneoDemo.mapper;
 
+import it.reactive.torneoDemo.dto.GiocatoreDTO;
+import it.reactive.torneoDemo.dto.TifoseriaDTO;
+import it.reactive.torneoDemo.model.GiocatoreModel;
 import it.reactive.torneoDemo.model.TifoseriaModel;
 import it.reactive.torneoDemo.resource.TifoseriaResponse;
 import org.springframework.stereotype.Component;
