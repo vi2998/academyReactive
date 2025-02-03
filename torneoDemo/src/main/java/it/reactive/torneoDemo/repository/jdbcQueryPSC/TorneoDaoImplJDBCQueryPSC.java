@@ -16,9 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static it.reactive.torneoDemo.Costanti.TORNEO_DAO_SPRING_JDBC_QUERY_PSC;
 
@@ -117,13 +115,6 @@ public class TorneoDaoImplJDBCQueryPSC implements ITorneoDao {
         return presenzaSquadra;
     }
 
-        /* torneo con lista di squadre che mi recupero tramite la tabella di relazione
-        per ogni squadra faccio una count in quanti tornei sta
-        se il conteggio == 1 allora faccio rimuovi squadra
-        se è >1  faccio delete from squadra_torneo where id_squadra = ? and id_torneo = idtorneo
-        * */
-
-
     private List<Integer> listaSquadrePerTorneo(Integer idTorneo) {
 
         PreparedStatementCreator pscSelectCount = con -> {
@@ -152,6 +143,55 @@ public class TorneoDaoImplJDBCQueryPSC implements ITorneoDao {
 
     @Override
     public List<TorneoModel> cercaTorneiAndSquadre() throws SQLException {
-        return Collections.emptyList();
+
+        PreparedStatementCreator pscSelectCount = con -> {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM torneo");
+
+            return ps;
+        };
+        ResultSetExtractor<List<TorneoModel>> rse = rs -> {
+
+            List<TorneoModel> torneoModelList = new ArrayList<>();
+
+            while (rs.next()) {
+                TorneoModel torneo = new TorneoModel();
+                torneo.setIdTorneo(rs.getInt("id"));
+                torneo.setNomeTorneo(rs.getString("nome_torneo"));
+                torneo.setSquadre(recuperaSquadreByIdTorneo(rs.getInt("id")));
+                torneoModelList.add(torneo);
+
+            }
+            return torneoModelList;
+        };
+
+        List<TorneoModel> torneoModelList = jdbcTemplate.query(pscSelectCount, rse);
+        return torneoModelList;
+    }
+
+    private Set<SquadraModel> recuperaSquadreByIdTorneo(int id) {
+        PreparedStatementCreator pscSelectCount = con -> {
+            String query = "SELECT s.nome, s.id, s.colori_sociali FROM squadra_torneo st JOIN squadra s ON s.id = st.id_squadra WHERE st.id_torneo = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, id);
+            return ps;
+        };
+        ResultSetExtractor<Set<SquadraModel>> rse = rs -> {
+            Set<SquadraModel> squadraModelSet = new HashSet<>();
+            while (rs.next()) {
+                SquadraModel squadraModel = new SquadraModel();
+                squadraModel.setNome(rs.getString("nome"));
+                squadraModel.setIdSquadra(rs.getInt("id"));
+                squadraModel.setColoriSociali(rs.getString("colori_sociali"));
+                squadraModel.setGiocatori(squadraDaoImplJDBCQueryPSC.getGiocatoriBySquadra(rs.getInt("id")));
+                squadraModel.setTifoseria(squadraDaoImplJDBCQueryPSC.getTifoseriaSquadraBySquadra(rs.getInt("id")));
+                squadraModelSet.add(squadraModel);
+
+            }
+            return squadraModelSet;
+        };
+
+        Set<SquadraModel> squadraModelSet = new HashSet<>();
+        squadraModelSet = jdbcTemplate.query(pscSelectCount, rse);
+        return squadraModelSet;
     }
 }
