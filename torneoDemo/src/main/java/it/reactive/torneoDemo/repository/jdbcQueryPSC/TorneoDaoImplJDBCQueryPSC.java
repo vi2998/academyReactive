@@ -1,6 +1,7 @@
 package it.reactive.torneoDemo.repository.jdbcQueryPSC;
 
 import it.reactive.torneoDemo.dto.TorneoDTO;
+import it.reactive.torneoDemo.exception.SquadraNonPresenteException;
 import it.reactive.torneoDemo.exception.TorneoDuplicatoException;
 import it.reactive.torneoDemo.exception.TorneoNonTrovatoException;
 import it.reactive.torneoDemo.model.SquadraModel;
@@ -138,8 +139,63 @@ public class TorneoDaoImplJDBCQueryPSC implements ITorneoDao {
 
     @Override
     public TorneoModel associaTorneoASquadra(int idTorneo, int idSquadra) throws SQLException {
-        return null;
+
+
+        // recupero la squadta con id
+        PreparedStatementCreator pscSelectCount = con -> {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM squadra WHERE id = ?");
+            ps.setInt(1, idSquadra);
+            return ps;
+        };
+        ResultSetExtractor<Set<SquadraModel>> rse = rs -> {
+            Set<SquadraModel> squadraModelSet = new HashSet<>();
+            if (!rs.next()) {
+                throw new SquadraNonPresenteException();
+            }
+            SquadraModel squadraModel = new SquadraModel();
+            squadraModel.setIdSquadra(rs.getInt("id"));
+            squadraModel.setNome(rs.getString("nome"));
+            squadraModel.setColoriSociali(rs.getString("colori_sociali"));
+            squadraModel.setGiocatori(squadraDaoImplJDBCQueryPSC.getGiocatoriBySquadra(rs.getInt("id")));
+            squadraModel.setTifoseria(squadraDaoImplJDBCQueryPSC.getTifoseriaSquadraBySquadra(rs.getInt("id")));
+
+            squadraModelSet.add(squadraModel);
+
+            return squadraModelSet;
+        };
+
+
+        Set<SquadraModel> squadraModelSet = jdbcTemplate.query(pscSelectCount, rse);
+
+
+        // recupero il torneo con id
+        PreparedStatementCreator psc = con -> {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM torneo WHERE id = ?");
+            ps.setInt(1, idTorneo);
+            return ps;
+        };
+        ResultSetExtractor<TorneoModel> rseTorneo = rs -> {
+
+            TorneoModel torneoModel = new TorneoModel();
+
+            if (rs.next()) {
+                torneoModel.setIdTorneo(rs.getInt("id"));
+                torneoModel.setNomeTorneo(rs.getString("nome_torneo"));
+                torneoModel.setSquadre(squadraModelSet);
+            }
+            return torneoModel;
+        };
+
+        TorneoModel torneoModel = jdbcTemplate.query(psc, rseTorneo);
+
+        int numeroRiga = jdbcTemplate.update("INSERT INTO squadra_torneo (id_torneo, id_squadra) VALUES (?, ?)", idTorneo, idSquadra);
+        if (numeroRiga != 1) {
+            throw new SQLException("Qualcosa è andato storto nell'inserimento nella tabella squadra_torneo.");
+        }
+
+        return torneoModel;
     }
+
 
     @Override
     public List<TorneoModel> cercaTorneiAndSquadre() throws SQLException {
