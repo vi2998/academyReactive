@@ -1,0 +1,3 @@
+id,name,age,salary
+102,Jane Smith,32,6000
+104,Alice White,29,7200
