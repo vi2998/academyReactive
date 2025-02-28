@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -30,11 +33,17 @@ public class RunnerJob implements CommandLineRunner {
     public void run(String... args) throws Exception {
         String nomeJob = args[0];
         System.out.println("nomeJob = " + nomeJob);
+        List<String> listaNomi = new ArrayList<>();
+        for (int i = 1; i < args.length; i++) {
+           listaNomi.add(args[i]);
+        }
         JobParameters jobParameters = new JobParametersBuilder()
-                .addString("UUID", "NEW_UUID_BIS", true)
-                .addString("nome", args[1])
-                .toJobParameters();
+                .addString("UUID", UUID.randomUUID().toString(), true) // addString se voglio insererire una stringa
+                // ma se volessi usare un'altra classe uso addJobParameter con ("nomevarialibe", variabile,classe)
+                .addJobParameter("nomi", listaNomi, List.class)
+                .addString("nome", listaNomi.get(0))
 
+                .toJobParameters();
         Job job = (Job) beanFactory.getBean(nomeJob);
         jobLauncher.run(job, jobParameters);
     }
