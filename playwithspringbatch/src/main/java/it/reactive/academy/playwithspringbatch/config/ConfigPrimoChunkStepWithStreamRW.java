@@ -28,7 +28,7 @@ public class ConfigPrimoChunkStepWithStreamRW {
     public static final String PRIMOSTEP_CHUNK_WITH_STREAM_RW = "PRIMOSTEP_CHUNK_WITH_STREAM_RW";
     public static final String PRIMOJOB_CHUNK_WITH_STREAM_RW = "PRIMOJOB_CHUNK_WITH_STREAM_RW";
     public static final int CHUNK_SIZE = 2;
-    private static final String ITEM_STREAM_READER = "ITEM_STREAM_READER";
+    public static final String ITEM_STREAM_READER = "ITEM_STREAM_READER";
     private static final String ITEM_STREAM_WRITER = "ITEM_STREAM_WRITER";
 
     @Bean(PRIMOJOB_CHUNK_WITH_STREAM_RW)
