@@ -45,13 +45,15 @@ public class ConfigPrimoBatch {
     public Tasklet creaTasklet() {
         return (contribution, chunkContext) -> {
             System.out.println("Inizio cancellazione dati...");
-            jdbcTemplate.execute("DROP TABLE IF EXISTS squadra_torneo CASCADE");
-            jdbcTemplate.execute("DROP TABLE IF EXISTS tifoseria CASCADE");
-            jdbcTemplate.execute("DROP TABLE IF EXISTS giocatore CASCADE");
-            jdbcTemplate.execute("DROP TABLE IF EXISTS torneo CASCADE");
-            jdbcTemplate.execute("DROP TABLE IF EXISTS squadra CASCADE");
 
-            System.out.println("Database cancellato con successo!");
+            jdbcTemplate.execute("DELETE FROM squadra_torneo");
+            jdbcTemplate.execute("DELETE FROM tifoseria");
+            jdbcTemplate.execute("DELETE FROM giocatore");
+            jdbcTemplate.execute("DELETE FROM torneo");
+            jdbcTemplate.execute("DELETE FROM squadra");
+
+            System.out.println("Dati cancellati con successo!");
+
             return RepeatStatus.FINISHED;
         };
     }
