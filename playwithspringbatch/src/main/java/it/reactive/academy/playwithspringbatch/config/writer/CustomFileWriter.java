@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 
-import static it.reactive.academy.playwithspringbatch.config.reader.ConfigPrimoFileReader.ITEM_STREAM_WRITER_FILE;
+import static it.reactive.academy.playwithspringbatch.config.ConfigPrimoFileReader.ITEM_STREAM_WRITER_FILE;
 
 @Component(ITEM_STREAM_WRITER_FILE)
 public class CustomFileWriter implements ItemStreamWriter<String> {

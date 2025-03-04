@@ -1,4 +1,4 @@
-package it.reactive.academy.playwithspringbatch.config.reader;
+package it.reactive.academy.playwithspringbatch.config;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;

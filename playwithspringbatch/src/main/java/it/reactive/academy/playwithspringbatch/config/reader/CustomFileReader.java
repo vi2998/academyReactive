@@ -1,7 +1,6 @@
-package it.reactive.academy.playwithspringbatch.config;
+package it.reactive.academy.playwithspringbatch.config.reader;
 
 import org.springframework.batch.item.*;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -9,7 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import static it.reactive.academy.playwithspringbatch.config.reader.ConfigPrimoFileReader.CUSTOM_ITEM_STREAM_READER;
+import static it.reactive.academy.playwithspringbatch.config.ConfigPrimoFileReader.CUSTOM_ITEM_STREAM_READER;
 
 @Component(CUSTOM_ITEM_STREAM_READER)
 public class CustomFileReader implements ItemStreamReader<String>{
