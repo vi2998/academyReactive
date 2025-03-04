@@ -8,7 +8,6 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemStreamReader;
-import org.springframework.batch.item.ItemStreamWriter;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -17,29 +16,29 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 
-public class ConfigJobFlatFileFileReader {
+public class ConfigJobFlatJdbcReader {
 
-    public static final String PRIMOSTEP_CHUNK_FILE_READER_FLAT = "PRIMOSTEP_CHUNK_FILE_READER_FLAT";
-    public static final String PRIMOJOB_CHUNK_FILE_READER_FLAT = "PRIMOJOB_CHUNK_FILE_READER_FLAT";
+    public static final String PRIMOSTEP_CHUNK_JDBC_READER = "PRIMOSTEP_CHUNK_JDBC_READER";
+    public static final String PRIMOJOB_CHUNK_JDBC_READER = "PRIMOJOB_CHUNK_JDBC_READER";
     public static final int CHUNK_SIZE = 2;
-    public static final String FLAT_ITEM_STREAM_READER = "FLAT_ITEM_STREAM_READER";
+    public static final String JDBC_READER = "JDBC_READER";
 
-    @Bean(PRIMOJOB_CHUNK_FILE_READER_FLAT)
+    @Bean(PRIMOJOB_CHUNK_JDBC_READER)
     public Job creaPrimoJobChunk(JobRepository jobRepository
-            , @Qualifier(PRIMOSTEP_CHUNK_FILE_READER_FLAT) Step step
+            , @Qualifier(PRIMOSTEP_CHUNK_JDBC_READER) Step step
     ) {
-        return new JobBuilder(PRIMOJOB_CHUNK_FILE_READER_FLAT, jobRepository)
+        return new JobBuilder(PRIMOJOB_CHUNK_JDBC_READER, jobRepository)
                 .start(step)
                 .build();
     }
 
 
-    @Bean(PRIMOSTEP_CHUNK_FILE_READER_FLAT)
+    @Bean(PRIMOSTEP_CHUNK_JDBC_READER)
     public Step creaPrimoStepChunk(JobRepository jobRepository
             , PlatformTransactionManager transactionManager
-            , @Qualifier(FLAT_ITEM_STREAM_READER)ItemStreamReader<Persona> reader
+            , @Qualifier(JDBC_READER)ItemStreamReader<Persona> reader
     ) {
-        return new StepBuilder(PRIMOSTEP_CHUNK_FILE_READER_FLAT, jobRepository)
+        return new StepBuilder(PRIMOSTEP_CHUNK_JDBC_READER, jobRepository)
                 .<Persona, Persona>chunk(CHUNK_SIZE, transactionManager)
                 .reader(reader)
                 .writer(new ItemWriter<Persona>() {
