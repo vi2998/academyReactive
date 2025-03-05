@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static it.reactive.academy.playwithspringbatch.config.ConfigJobJdbcReader.JDBC_READER;
-import static it.reactive.academy.playwithspringbatch.config.ConfigurazioniDatasource.DATA_SOURCE_CLIENTI;
+import static it.reactive.academy.playwithspringbatch.config.datasource.ConfigurazioniDatasource.DATA_SOURCE_CLIENTI;
 
 @Component(JDBC_READER)
 public class JdbcReaderPersona extends JdbcCursorItemReader<Persona> {

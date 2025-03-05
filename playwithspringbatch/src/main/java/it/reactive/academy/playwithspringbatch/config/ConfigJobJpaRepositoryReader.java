@@ -2,6 +2,8 @@ package it.reactive.academy.playwithspringbatch.config;
 
 import it.reactive.academy.playwithspringbatch.config.datasource.ConfigurazioniDatasource;
 import it.reactive.academy.playwithspringbatch.config.dto.Persona;
+import it.reactive.academy.playwithspringbatch.entity.PersonaModel;
+import it.reactive.academy.playwithspringbatch.repository.PersonaRepository;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobScope;
@@ -9,41 +11,43 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.Chunk;
-import org.springframework.batch.item.ItemStreamReader;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.JdbcCursorItemReader;
+import org.springframework.batch.item.data.RepositoryItemReader;
+import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Configuration
-public class ConfigJobJdbcReaderWithArgumentSetter {
+public class ConfigJobJpaRepositoryReader {
 
-    public static final String PRIMOSTEP_CHUNK_JDBC_READER_WITH_ARGUMENT_SETTER = "PRIMOSTEP_CHUNK_JDBC_READER_WITH_ARGUMENT_SETTER";
-    public static final String PRIMOJOB_CHUNK_JDBC_READER_WITH_ARGUMENT_SETTER = "PRIMOJOB_CHUNK_JDBC_READER_WITH_ARGUMENT_SETTER";
-    public static final String JDBC_ARGUMENT_SETTER = "JDBC_ARGUMENT_SETTER";
+    public static final String PRIMOSTEP_CHUNK_READER_WITH_JPA_REPOSITORY = "PRIMOSTEP_CHUNK_READER_WITH_JPA_REPOSITORY";
+    public static final String PRIMOJOB_CHUNK_READER_WITH_JPA_REPOSITORY = "PRIMOJOB_CHUNK_READER_WITH_JPA_REPOSITORY";
+    public static final String READER_JPAREPOSITORY = "READER_JPAREPOSITORY";
     public static final int CHUNK_SIZE = 2;
 
-    @Bean(PRIMOJOB_CHUNK_JDBC_READER_WITH_ARGUMENT_SETTER)
+    @Bean(PRIMOJOB_CHUNK_READER_WITH_JPA_REPOSITORY)
     public Job creaPrimoJobChunk(JobRepository jobRepository
-            , @Qualifier(PRIMOSTEP_CHUNK_JDBC_READER_WITH_ARGUMENT_SETTER) Step step
+            , @Qualifier(PRIMOSTEP_CHUNK_READER_WITH_JPA_REPOSITORY) Step step
     ) {
-        return new JobBuilder(PRIMOJOB_CHUNK_JDBC_READER_WITH_ARGUMENT_SETTER, jobRepository)
+        return new JobBuilder(PRIMOJOB_CHUNK_READER_WITH_JPA_REPOSITORY, jobRepository)
                 .start(step)
                 .build();
     }
 
 
-    @Bean(PRIMOSTEP_CHUNK_JDBC_READER_WITH_ARGUMENT_SETTER)
+    @Bean(PRIMOSTEP_CHUNK_READER_WITH_JPA_REPOSITORY)
     @JobScope // lo step viene creato solo quando viene creato il job perchè jobParameters non era stato ancora creato
     public Step creaPrimoStepChunk(JobRepository jobRepository
             , PlatformTransactionManager transactionManager
@@ -51,6 +55,7 @@ public class ConfigJobJdbcReaderWithArgumentSetter {
             , @Value("#{jobParameters['nomi']}") List<String> nomi
 
             , @Value("#{jobParameters['nome']}") String nome    // espressione SpEL (spring expression language)
+            , PersonaRepository personaRepository
     ) {
         System.out.println("nomi = " + nomi);
 
@@ -61,22 +66,28 @@ public class ConfigJobJdbcReaderWithArgumentSetter {
 //            }
 //        };    // lo cancello perchè uso la lambda
 
-        return new StepBuilder(PRIMOSTEP_CHUNK_JDBC_READER_WITH_ARGUMENT_SETTER, jobRepository)
-                .<Persona, Persona>chunk(CHUNK_SIZE, transactionManager)
-                .reader(new JdbcCursorItemReaderBuilder<Persona>()
-                        .name(JDBC_ARGUMENT_SETTER)
-                        .sql("select * from persona where nome = ?")
-                        .preparedStatementSetter(ps -> ps.setString(1, nome))
-                        .rowMapper((rs, intero) -> {
-                            Persona persona = new Persona();
-                            persona.setCognome(rs.getString("cognome"));
-                            persona.setNome(rs.getString("nome"));
-                            persona.setEta(rs.getInt("eta"));
-                            return persona;
-                        })
-                        .dataSource(dataSource)
+        Map<String, Sort.Direction> sortMap= new HashMap<>();
+        sortMap.put("cognome", Sort.Direction.DESC);
+        return new StepBuilder(PRIMOSTEP_CHUNK_READER_WITH_JPA_REPOSITORY, jobRepository)
+                .<PersonaModel, Persona>chunk(CHUNK_SIZE, transactionManager)
+                .reader(new RepositoryItemReaderBuilder<PersonaModel>()
+                        .name(READER_JPAREPOSITORY)
+                        .sorts(sortMap)
+                        .repository(personaRepository)
+                        .arguments(Collections.singletonList(nome))
+                        .methodName("findByNome")
                         .build()
                 )
+                .processor(new ItemProcessor<PersonaModel, Persona>() {
+                    @Override
+                    public Persona process(PersonaModel item) throws Exception {
+                        Persona persona = new Persona();
+                        persona.setNome(item.getNome());
+                        persona.setCognome(item.getCognome());
+                        persona.setEta(item.getEta());
+                        return persona;
+                    }
+                })
                 .writer(new ItemWriter<Persona>() {
                     @Override
                     public void write(Chunk<? extends Persona> chunk) throws Exception {
