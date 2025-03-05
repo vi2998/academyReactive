@@ -16,7 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 
-public class ConfigJobFlatJdbcReader {
+public class ConfigJobJdbcReader {
 
     public static final String PRIMOSTEP_CHUNK_JDBC_READER = "PRIMOSTEP_CHUNK_JDBC_READER";
     public static final String PRIMOJOB_CHUNK_JDBC_READER = "PRIMOJOB_CHUNK_JDBC_READER";

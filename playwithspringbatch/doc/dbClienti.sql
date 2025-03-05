@@ -25,7 +25,9 @@ insert into persona (nome, cognome, eta) values ('MARIO', 'BIANCHI', 15);
 insert into persona (nome, cognome, eta) values ('ANNA', 'VERDI', 23);
 insert into persona (nome, cognome, eta) values ('SERGIO', 'GIALLI', 8);
 insert into persona (nome, cognome, eta) values ('ALDO', 'ROSSI', 75);
+
 insert into persona (nome, cognome, eta) values ('MARIO', 'FERRERO', 23);
+
 
 
 CREATE TABLE personacensita(
