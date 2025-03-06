@@ -1,7 +1,7 @@
 package it.reactive.academy.playwithspringbatch.config;
 
 import it.reactive.academy.playwithspringbatch.config.datasource.ConfigurazioniDatasourceApplicativa;
-import it.reactive.academy.playwithspringbatch.config.dto.Persona;
+import it.reactive.academy.playwithspringbatch.dto.Persona;
 import it.reactive.academy.playwithspringbatch.entity.PersonaModel;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.batch.core.Job;
@@ -10,11 +10,8 @@ import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
-import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
 import org.springframework.batch.item.file.transform.*;
 import org.springframework.batch.item.support.CompositeItemWriter;
@@ -26,7 +23,6 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.Collections;
-import java.util.Map;
 
 @Configuration
 

@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 public class ConfigurazioniDatasourceSpringBatch {
 
     public static final String DATA_SOURCE = "dataSource";
-    public static final String DATA_SOURCE_APPLICATIVA="DATA_SOURCE_APPLICATIVA";
+    public static final String JDBC_TEMPLATE_APPLICATIVO="JDBC_TEMPLATE_APPLICATIVO";
 
     @Primary
     @Bean(name = DATA_SOURCE)
@@ -51,9 +51,5 @@ public class ConfigurazioniDatasourceSpringBatch {
         return em;
     }
 
-    @Bean(DATA_SOURCE_APPLICATIVA)
-    @ConfigurationProperties(prefix = "spring.datasource-applicativa")
-    public DataSource applicativaDatasource(){
-        return DataSourceBuilder.create().build();
-    }
+
 }

@@ -1,4 +1,4 @@
-package it.reactive.academy.playwithspringbatch.config.dto;
+package it.reactive.academy.playwithspringbatch.dto;
 
 public class Persona {
     private String nome;

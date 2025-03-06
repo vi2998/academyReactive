@@ -1,7 +1,7 @@
 package it.reactive.academy.playwithspringbatch.config;
 
 import it.reactive.academy.playwithspringbatch.config.datasource.ConfigurazioniDatasourceApplicativa;
-import it.reactive.academy.playwithspringbatch.config.dto.Persona;
+import it.reactive.academy.playwithspringbatch.dto.Persona;
 import it.reactive.academy.playwithspringbatch.entity.PersonaModel;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.batch.core.Job;

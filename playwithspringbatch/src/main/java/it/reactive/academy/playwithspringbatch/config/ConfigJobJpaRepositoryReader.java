@@ -1,7 +1,7 @@
 package it.reactive.academy.playwithspringbatch.config;
 
 import it.reactive.academy.playwithspringbatch.config.datasource.ConfigurazioniDatasource;
-import it.reactive.academy.playwithspringbatch.config.dto.Persona;
+import it.reactive.academy.playwithspringbatch.dto.Persona;
 import it.reactive.academy.playwithspringbatch.entity.PersonaModel;
 import it.reactive.academy.playwithspringbatch.repository.PersonaRepository;
 import org.springframework.batch.core.Job;
@@ -13,9 +13,7 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.data.RepositoryItemReader;
 import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
-import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
