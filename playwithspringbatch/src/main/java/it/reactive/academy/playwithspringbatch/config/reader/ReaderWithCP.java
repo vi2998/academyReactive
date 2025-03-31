@@ -11,7 +11,7 @@ import org.springframework.core.io.FileSystemResource;
 
 import static it.reactive.academy.playwithspringbatch.config.ConfigJobWithCP.READER_CP;
 
-
+//CompletionPolicy
 public class ReaderWithCP implements ItemStreamReader<String>, CompletionPolicy {
 
     private final FlatFileItemReader<String> delegate;

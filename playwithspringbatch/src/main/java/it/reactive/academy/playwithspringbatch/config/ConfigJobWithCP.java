@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-
+//CompletionPolicy
 public class ConfigJobWithCP {
 
     public static final String PRIMOSTEP_CHUNK_CP = "PRIMOSTEP_CHUNK_CP";
